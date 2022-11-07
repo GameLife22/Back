@@ -8,7 +8,7 @@ import javax.persistence.*;
  * 
  */
 @Embeddable
-public class PanierPKEntity implements Serializable {
+public class PanierPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
@@ -18,7 +18,7 @@ public class PanierPKEntity implements Serializable {
 	@Column(name="id_produit", insertable=false, updatable=false, unique=true, nullable=false)
 	private int idProduit;
 
-	public PanierPKEntity() {
+	public PanierPK() {
 	}
 	public int getIdCommande() {
 		return this.idCommande;
@@ -37,10 +37,10 @@ public class PanierPKEntity implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof PanierPKEntity)) {
+		if (!(other instanceof PanierPK)) {
 			return false;
 		}
-		PanierPKEntity castOther = (PanierPKEntity)other;
+		PanierPK castOther = (PanierPK)other;
 		return 
 			(this.idCommande == castOther.idCommande)
 			&& (this.idProduit == castOther.idProduit);

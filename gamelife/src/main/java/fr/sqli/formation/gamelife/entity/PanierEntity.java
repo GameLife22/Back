@@ -15,7 +15,7 @@ public class PanierEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private PanierPKEntity id;
+	private PanierPK id;
 
 	@Column(nullable=false)
 	private int quantite;
@@ -33,11 +33,11 @@ public class PanierEntity implements Serializable {
 	public PanierEntity() {
 	}
 
-	public PanierPKEntity getId() {
+	public PanierPK getId() {
 		return this.id;
 	}
 
-	public void setId(PanierPKEntity id) {
+	public void setId(PanierPK id) {
 		this.id = id;
 	}
 
