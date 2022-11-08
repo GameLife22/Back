@@ -23,8 +23,21 @@ class UtilisateurRepositoryTest {
 
     @Test
     void testInsert01(){
-        Optional<UtilisateurEntity> entiteFound = this.dao.findUtilisateurEntityByEmail("Test-email");
+        Optional<UtilisateurEntity> entiteFound = this.dao.findUtilisateurEntityByEmail("test@test.com");
         String unNom = entiteFound.get().getNom();
-        Assertions.assertEquals("Test-nom", unNom);
+        Assertions.assertEquals("Test", unNom);
+    }
+    @Test
+    void trouverEmailTest(){
+        var utilisateurInserted = this.dao.findUtilisateurEntityByEmail("test@test.com");
+        Assertions.assertNotNull(utilisateurInserted);
+        Assertions.assertEquals("test@test.com",utilisateurInserted.get().getEmail());
+    }
+
+    @Test
+    void testSelect01(){
+        Optional<UtilisateurEntity> opUtilisateurFound = this.dao.findById(1);
+        Assertions.assertTrue(opUtilisateurFound.isPresent());
+        Assertions.assertEquals("test@test.com",opUtilisateurFound.get().getEmail());
     }
 }

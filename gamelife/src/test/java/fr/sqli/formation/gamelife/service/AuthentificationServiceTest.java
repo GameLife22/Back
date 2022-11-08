@@ -19,11 +19,11 @@ class AuthentificationServiceTest {
 
     @Test
     void test01() throws Exception {
-        String login = "sa@gmail.com";
-        String pwd = "sa";
+        String login = "test@test.com";
+        String pwd = "test";
         UtilisateurEntity u = service.authentifier(login,pwd);
         Assertions.assertNotNull(u);
-        Assertions.assertEquals(6,u.getId());
+        Assertions.assertEquals(1,u.getId());
     }
 
 }
