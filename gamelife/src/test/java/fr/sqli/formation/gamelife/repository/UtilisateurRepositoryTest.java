@@ -9,6 +9,8 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -21,8 +23,8 @@ class UtilisateurRepositoryTest {
 
     @Test
     void testInsert01(){
-        UtilisateurEntity entiteFound = this.dao.findUtilisateurEntityByEmail("Test-email");
-        String unNom = entiteFound.getNom();
+        Optional<UtilisateurEntity> entiteFound = this.dao.findUtilisateurEntityByEmail("Test-email");
+        String unNom = entiteFound.get().getNom();
         Assertions.assertEquals("Test-nom", unNom);
     }
 }
