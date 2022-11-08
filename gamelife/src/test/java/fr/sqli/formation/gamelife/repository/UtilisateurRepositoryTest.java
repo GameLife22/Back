@@ -11,8 +11,6 @@ import javax.transaction.Transactional;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Rollback()
 @Transactional
@@ -23,13 +21,13 @@ class UtilisateurRepositoryTest {
 
     @Test
     void testInsert01(){
-        Optional<UtilisateurEntity> entiteFound = this.dao.findUtilisateurEntityByEmail("test@test.com");
+        Optional<UtilisateurEntity> entiteFound = this.dao.findByEmail("test@test.com");
         String unNom = entiteFound.get().getNom();
         Assertions.assertEquals("Test", unNom);
     }
     @Test
     void trouverEmailTest(){
-        var utilisateurInserted = this.dao.findUtilisateurEntityByEmail("test@test.com");
+        var utilisateurInserted = this.dao.findByEmail("test@test.com");
         Assertions.assertNotNull(utilisateurInserted);
         Assertions.assertEquals("test@test.com",utilisateurInserted.get().getEmail());
     }

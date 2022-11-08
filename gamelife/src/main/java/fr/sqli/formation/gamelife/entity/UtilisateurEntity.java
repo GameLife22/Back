@@ -1,5 +1,7 @@
 package fr.sqli.formation.gamelife.entity;
 
+import fr.sqli.formation.gamelife.ex.AuthentificationException;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
@@ -182,6 +184,20 @@ public class UtilisateurEntity implements Serializable {
 		produit.setUtilisateur(null);
 
 		return produit;
+	}
+	public static void validate(String nom,String prenom,String pwd,String email,String ville,Integer num_rue,String rue,String role,String num_Siren,String etat) throws Exception{
+		if(!(nom != null && !nom.trim().isEmpty() &&
+				prenom != null && !prenom.trim().isEmpty() &&
+				email != null && !email.trim().isEmpty() &&
+				pwd != null && !pwd.trim().isEmpty() &&
+				num_rue != null && num_rue > 0 &&
+				rue != null && !rue.trim().isEmpty() &&
+				role != null && !role.trim().isEmpty() &&
+				etat != null && !etat.trim().isEmpty() &&
+				ville != null && !ville.trim().isEmpty()) ){
+			throw new IllegalArgumentException("Champs vide ou null");
+
+		}
 	}
 
 }
