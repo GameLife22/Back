@@ -14,7 +14,7 @@ public class AuthentificationService {
     public UtilisateurEntity authentifier(String login, String pwd) throws Exception {
         if(login != null && !login.trim().isEmpty() && pwd!= null && !pwd.trim().isEmpty()){
             //ok
-            var monUser = uDao.findUtilisateurEntityByEmail(login);
+            var monUser = uDao.findByEmail(login);
             if(monUser.isPresent()){
                 //ok
                 if(monUser.get().getMdp().equals(pwd)){
