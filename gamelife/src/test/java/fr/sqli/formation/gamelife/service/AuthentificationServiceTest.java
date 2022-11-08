@@ -18,7 +18,7 @@ class AuthentificationServiceTest {
     private AuthentificationService service;
 
     @Test
-    void test01() throws Exception {
+    void testAuthentification01() throws Exception {
         String login = "test@test.com";
         String pwd = "test";
         UtilisateurEntity u = service.authentifier(login,pwd);
