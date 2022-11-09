@@ -3,30 +3,27 @@ package fr.sqli.formation.gamelife.service;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class AuthentificationService {
-    @Autowired
-    private static final Logger LOG = LogManager.getLogger();
-    private UtilisateurRepository uDao;
 
+    @Autowired
+    private UtilisateurRepository uDao;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     public UtilisateurEntity authentifier(String login, String pwd) throws Exception {
         if(login != null && !login.trim().isEmpty() && pwd!= null && !pwd.trim().isEmpty()){
             //ok
-
             var monUser = uDao.findByEmail(login);
 
             if(monUser.isPresent()){
-                LOG.debug("Email OK");
                 //ok
-                if(monUser.get().getMdp().equals(pwd)){
-                    LOG.debug("Password OK");
+                if(encoder.matches(pwd, monUser.get().getMdp())){
                     return monUser.get();
                 }
                 else {
