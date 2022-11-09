@@ -9,10 +9,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class GamelifeApplication {
 
-  @Bean
-	public BCryptPasswordEncoder passwordEncoder(){
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y);
 	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(GamelifeApplication.class, args);
 	}
