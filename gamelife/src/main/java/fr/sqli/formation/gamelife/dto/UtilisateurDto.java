@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.controler.dto;
+package fr.sqli.formation.gamelife.dto;
 
 public class UtilisateurDto {
     private int id;

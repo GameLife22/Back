@@ -1,7 +1,7 @@
 package fr.sqli.formation.gamelife.controler;
 
-import fr.sqli.formation.gamelife.controler.dto.LoginDto;
-import fr.sqli.formation.gamelife.controler.dto.UtilisateurDto;
+import fr.sqli.formation.gamelife.dto.LoginDto;
+import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.service.AuthentificationService;
 import org.springframework.beans.factory.annotation.Autowired;
