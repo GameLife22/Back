@@ -16,7 +16,10 @@
 	<description>Mon projet Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
+		<version.log4j2>2.19.0</version.log4j2>
 	</properties>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -47,7 +50,19 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-bom</artifactId>
+			<version>${version.log4j2}</version>
+			<scope>import</scope>
+			<type>pom</type>
+		</dependency>
 
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.19.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
