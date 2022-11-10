@@ -1,5 +1,7 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.LoginDto;
+import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
@@ -16,27 +18,24 @@ public class AuthentificationService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public UtilisateurEntity authentifier(String login, String pwd) throws Exception {
-        if(login != null && !login.trim().isEmpty() && pwd!= null && !pwd.trim().isEmpty()){
-            //ok
-            var monUser = uDao.findByEmail(login);
 
-            if(monUser.isPresent()){
-                //ok
-                if(encoder.matches(pwd, monUser.get().getMdp())){
+    public UtilisateurEntity authentifier(LoginDto dto) throws Exception {
+        if (dto.getLogin() != null && !dto.getLogin().trim().isEmpty() && dto.getPwd() != null && !dto.getPwd().trim().isEmpty()) {
+            var monUser = uDao.findByEmail(dto.getLogin());
+            if (monUser.isPresent()) {
+                if (encoder.matches(dto.getPwd(), monUser.get().getMdp())) {
                     return monUser.get();
-                }
-                else {
+                } else {
                     //pas ok
                     throw new AuthentificationException("Utilisateur inconnu");
                 }
-            }
-            else {
+            } else {
                 //pas ok
                 throw new AuthentificationException("Utilisateur inconnu");
             }
         }
-        throw new IllegalArgumentException("Login ou password vide ou null");
-
+        else {
+            throw new IllegalArgumentException("Login ou password vide ou null");
+        }
     }
 }

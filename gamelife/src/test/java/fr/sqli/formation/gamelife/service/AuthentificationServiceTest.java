@@ -1,5 +1,8 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.LoginDto;
+import fr.sqli.formation.gamelife.dto.LoginDtoHandler;
+import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -23,7 +26,8 @@ class AuthentificationServiceTest {
     void testAuthentification01() throws Exception {
         String login = "fabien.bidault@social.aston-ecole.com";
         String pwd = "Paz6!!3";
-        UtilisateurEntity u = service.authentifier(login,pwd);
+        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        UtilisateurEntity u = service.authentifier(dto);
         Assertions.assertNotNull(u);
         Assertions.assertEquals(1,u.getId());
     }
@@ -32,27 +36,24 @@ class AuthentificationServiceTest {
     void testAuthentification02() throws Exception {
         String login = "fabien.bidault@social.aston-ecole.com";
         String pwd = "Padsfz6!!3";
-        Assertions.assertThrows(AuthentificationException.class,()-> service.authentifier(login,pwd));
+        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        Assertions.assertThrows(AuthentificationException.class,()-> service.authentifier(dto));
     }
 
     @Test
     void testAuthentification03() throws Exception {
         String login = "fabien@social.aston-ecole.com";
         String pwd = "Padsfz6!!3";
-        Assertions.assertThrows(AuthentificationException.class,()-> service.authentifier(login,pwd));
+        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        Assertions.assertThrows(AuthentificationException.class,()-> service.authentifier(dto));
     }
     @Test
     void testAuthentification04() throws Exception {
         String login = "";
         String pwd = "Padsfz6!!3";
-        Assertions.assertThrows(IllegalArgumentException.class,()-> service.authentifier(login,pwd));
+        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        Assertions.assertThrows(IllegalArgumentException.class,()-> service.authentifier(dto));
     }
 
-    @Test
-    void testAuthentification05() throws Exception {
-        String login = "";
-        String pwd = "Padsfz6!!3";
-        Assertions.assertThrows(IllegalArgumentException.class,()-> service.authentifier(login,pwd));
-    }
 
 }
