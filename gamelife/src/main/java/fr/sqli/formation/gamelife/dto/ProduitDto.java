@@ -1,7 +1,13 @@
 package fr.sqli.formation.gamelife.dto;
 
-import java.math.BigDecimal;
+import fr.sqli.formation.gamelife.entity.ImageEntity;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+/**
+ * Produit DTO
+ */
 public class ProduitDto {
 
 	private int id;
@@ -16,7 +22,7 @@ public class ProduitDto {
 
 	private BigDecimal prix;
 
-	// private List<ImageEntity> images;
+	private List<ImageEntity> images;
 
 	public int getId() {
 		return this.id;
@@ -66,12 +72,12 @@ public class ProduitDto {
 		this.prix = prix;
 	}
 
-//	public List<ImageEntity> getImages() {
-//		return this.images;
-//	}
-//
-//	public void setImages(List<ImageEntity> images) {
-//		this.images = images;
-//	}
+	public List<ImageEntity> getImages() {
+		return this.images;
+	}
+
+	public void setImages(List<ImageEntity> images) {
+		this.images = images;
+	}
 
 }

@@ -1,5 +1,7 @@
 package fr.sqli.formation.gamelife.entity;
 
+import com.fasterxml.jackson.annotation.*;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -20,11 +22,15 @@ public class ImageEntity implements Serializable {
 	@Lob
 	private String description;
 
+	@Lob
+	private String image;
+
 	private String titre;
 
 	//bi-directional many-to-one association to Produit
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_produit")
+	@JsonIgnore
 	private ProduitEntity produit;
 
 	public ImageEntity() {
@@ -44,6 +50,14 @@ public class ImageEntity implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getImage() {
+		return this.image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getTitre() {
