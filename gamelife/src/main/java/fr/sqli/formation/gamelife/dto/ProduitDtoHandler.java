@@ -12,6 +12,7 @@ public class ProduitDtoHandler {
 		resu.setPlateforme(entity.getPlateforme());
 		resu.setPrix(entity.getPrix());
 		resu.setId(entity.getId());
+		resu.setImages(entity.getImages());
 		return resu;
 	}
 

@@ -6,16 +6,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import fr.sqli.formation.gamelife.dto.ProduitDto;
 import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import fr.sqli.formation.gamelife.service.ProduitService;
 
+/**
+ * Produit Controller
+ */
 @RestController
 @RequestMapping("/produit")
 @CrossOrigin("*")
@@ -34,4 +34,21 @@ public class ProduitControler {
 		return ResponseEntity.ok(rd);
 	}
 
+	/**
+	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
+	 * Exemple: http://localhost:8080/produit/search?nom=fi
+	 * @param nom
+	 * @return
+	 * @throws Exception
+	 * @author Fabien
+	 */
+	@GetMapping("/search")
+	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) throws Exception {
+		var listJeuVideos = this.produitService.getProductsByName(nom);
+		var jeuxVideos = new ArrayList<ProduitDto>();
+		for (ProduitEntity e : listJeuVideos) {
+			jeuxVideos.add(ProduitDtoHandler.fromEntity(e));
+		}
+		return ResponseEntity.ok(jeuxVideos);
+	}
 }
