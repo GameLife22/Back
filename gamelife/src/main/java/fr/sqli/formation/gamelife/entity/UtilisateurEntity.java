@@ -67,6 +67,11 @@ public class UtilisateurEntity implements Serializable {
 		this.ville = ville;
 	}
 
+	public UtilisateurEntity(String email, String mdp) {
+		this.email = email;
+		this.mdp = mdp;
+	}
+
 	public int getId() {
 		return this.id;
 	}

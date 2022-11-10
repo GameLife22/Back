@@ -22,7 +22,7 @@ public class AuthentificationControler {
 
 
     //http://localhost:8080/auth/env1?pL=fabien.bidault@social.aston-ecole.com&pP=Paz6!!3
-    @GetMapping("/env1")
+   /* @GetMapping("/env1")
     public String auth01(@RequestParam("pL") String login ,@RequestParam("pP") String pwd) throws Exception{
 
         if(login != null && !login.trim().isEmpty() && pwd!= null && !pwd.trim().isEmpty()){
@@ -33,13 +33,13 @@ public class AuthentificationControler {
         else {
             throw new IllegalArgumentException("Login ou password vide ou null");
         }
-    }
+    }*/
 
     @PostMapping("/env3")
     public String auth03(@RequestBody LoginDto monBody) throws Exception {
         LOG.info("AuthentificationControler : IN {}", monBody);
         UtilisateurEntity resu;
-        resu = this.service.authentifier(monBody.getLogin(), monBody.getPwd());
+        resu = this.service.authentifier(monBody);
         LOG.info("AuthentificationControler : OUT {}", resu);
         return String.valueOf(resu.getId());
 
@@ -51,7 +51,7 @@ public class AuthentificationControler {
         if(monBody.getLogin() != null && !monBody.getLogin().trim().isEmpty() && monBody.getPwd()!= null && !monBody.getPwd().trim().isEmpty()){
             UtilisateurEntity resu;
             var dto = new UtilisateurDto();
-            resu = this.service.authentifier(monBody.getLogin(), monBody.getPwd());
+            resu = this.service.authentifier(monBody);
             dto.setId(resu.getId());
             dto.setNom(resu.getNom());
             dto.setPrenom(resu.getPrenom());
@@ -68,7 +68,7 @@ public class AuthentificationControler {
         if(monBody.getLogin() != null && !monBody.getLogin().trim().isEmpty() && monBody.getPwd()!= null && !monBody.getPwd().trim().isEmpty()){
             UtilisateurEntity resu;
             var dto = new UtilisateurDto();
-            resu = this.service.authentifier(monBody.getLogin(), monBody.getPwd());
+            resu = this.service.authentifier(monBody);
             dto.setId(resu.getId());
             dto.setNom(resu.getNom());
             dto.setPrenom(resu.getPrenom());
