@@ -1,5 +1,8 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.InscriptionDto;
+import fr.sqli.formation.gamelife.dto.InscriptionDtoHandler;
+import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -23,13 +26,16 @@ class InscriptionServiceTest {
 
     @Test
     void testInscription01() throws Exception {
-        UtilisateurEntity u =service.inscription("Astora","Solaire","sa","sa@gmail.com","Landrake",1,"dragon","acheteur",null,"active");
+        //faire constructeur Entity
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new InscriptionDto("SolaireAstora@gmail.com","active","sa","Astora",1,null,"Solaire","acheteur","dragon","Landrake"));
+        UtilisateurEntity u =service.inscription(dto);
         Assertions.assertNotNull(u);
         Assertions.assertEquals(u.getNom(),"Astora");
     }
     @Test
     void testInscription02() throws Exception {
-        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription("Astora","Solaire","sa","acheteur001@outlook.fr","Landrake",1,"dragon","acheteur",null,"active"));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new InscriptionDto("sa@gmail.com","active","sa","Astora",1,null,"Solaire","acheteur","dragon","Landrake"));
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
     }
 
 }

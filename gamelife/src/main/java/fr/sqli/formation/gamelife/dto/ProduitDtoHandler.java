@@ -17,6 +17,7 @@ public class ProduitDtoHandler {
 
 	public static ProduitEntity fromDto(ProduitDto dto) {
 		// Inchallah un jour faut coder
+
 		return null;
 	}
 

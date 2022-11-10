@@ -22,6 +22,20 @@ public class InscriptionDto {
     private String rue;
 
     private String ville;
+    public InscriptionDto() {
+    }
+    public InscriptionDto(String email, String etat, String mdp, String nom, int num_rue, String num_siren, String prenom, String role, String rue, String ville) {
+        this.email = email;
+        this.etat = etat;
+        this.mdp = mdp;
+        this.nom = nom;
+        this.num_rue = num_rue;
+        this.num_siren = num_siren;
+        this.prenom = prenom;
+        this.role = role;
+        this.rue = rue;
+        this.ville = ville;
+    }
 
     public String getEmail() {
         return email;
