@@ -5,7 +5,7 @@ import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
 public class InscriptionDtoHandler {
 
-	public static InscriptionDto fromEntity(InscriptionDto entity) {
+	public static InscriptionDto fromEntity(UtilisateurEntity entity) {
 		var u = new InscriptionDto();
 		u.setPrenom(entity.getPrenom());
 		u.setNom(entity.getNom());
@@ -13,9 +13,9 @@ public class InscriptionDtoHandler {
 		u.setEmail(entity.getEmail());
 		u.setVille(entity.getVille());
 		u.setRue(entity.getRue());
-		u.setNum_rue(entity.getNum_rue());
-		u.setNum_siren(entity.getNum_siren());
-		u.setEtat(entity.getEtat());
+		u.setNum_rue(entity.getNumRue());
+		u.setNum_siren(entity.getNumSiren());
+		u.setEtat(entity.getEtatCompte());
 		u.setRole(entity.getRole());
 		return u;
 	}
