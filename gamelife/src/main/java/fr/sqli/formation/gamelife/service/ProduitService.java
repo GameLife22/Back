@@ -40,10 +40,11 @@ public class ProduitService {
 	public List<ProduitEntity> getProductsByName(String nom) throws Exception {
 		if (nom != null && !nom.trim().isEmpty()) {
 			var jeuxVideos= produitRepository.findByNomStartsWith(nom);
-			if (jeuxVideos.isPresent()) {
+			if (jeuxVideos.get().size() > 0) {
 				LOG.debug("Le(s) jeu(x) vidéo(s) Ok");
 				return jeuxVideos.get();
 			}
+
 			throw new ProduitException("Produit introuvable");
 		}
 

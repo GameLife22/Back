@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface ProduitRepository extends JpaRepository<ProduitEntity, Integer> {
 
     /**
-     * Cette méthode permet de rechercher un jeux vidéo
+     * Cette méthode permet de rechercher un jeu vidéo
      * @param nom
-     * @return une liste correspondant au nom du jeux vidéo
+     * @return une liste correspondant au nom du jeu vidéo
      * @author: Fabien
      */
     public Optional<List<ProduitEntity>> findByNomStartsWith(String nom);
