@@ -17,6 +17,12 @@ public class ExceptionControlerAdvice {
         ResponseEntity<AuthentificationException> resu = new ResponseEntity<AuthentificationException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
+    @ExceptionHandler(CompteDesactiveException.class)
+    public ResponseEntity<CompteDesactiveException> exceptionHandler(CompteDesactiveException ex){
+        LOG.info("EXCEPTION HANDLER : COMPTE DESACTIVE EXCEPTION");
+        ResponseEntity<CompteDesactiveException> resu = new ResponseEntity<CompteDesactiveException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
     @ExceptionHandler(UtilisateurExistantException.class)
     public ResponseEntity<UtilisateurExistantException> exceptionHandler(UtilisateurExistantException ex){
         LOG.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION");
