@@ -2,11 +2,9 @@ package fr.sqli.formation.gamelife.service;
 
 import fr.sqli.formation.gamelife.dto.LoginDto;
 import fr.sqli.formation.gamelife.dto.LoginDtoHandler;
-import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
-import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
-import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
+import fr.sqli.formation.gamelife.ex.CompteDesactiveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +51,14 @@ class AuthentificationServiceTest {
         String pwd = "Padsfz6!!3";
         LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
         Assertions.assertThrows(IllegalArgumentException.class,()-> service.authentifier(dto));
+    }
+
+    @Test
+    void testCompteDesactive() throws Exception {
+        String login = "acheteur002@outlook.fr";
+        String pwd = "acheteur002";
+        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        Assertions.assertThrows(CompteDesactiveException.class,()-> service.authentifier(dto));
     }
 
 
