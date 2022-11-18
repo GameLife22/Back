@@ -17,5 +17,5 @@ public interface ProduitRepository extends JpaRepository<ProduitEntity, Integer>
      * @return une liste correspondant au nom du jeu vidéo
      * @author: Fabien
      */
-    public Optional<List<ProduitEntity>> findByNomStartsWith(String nom);
+    public Optional<List<ProduitEntity>> findByNomIsContaining(String nom);
 }

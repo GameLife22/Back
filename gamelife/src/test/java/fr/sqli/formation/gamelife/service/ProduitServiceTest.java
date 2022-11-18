@@ -25,7 +25,7 @@ public class ProduitServiceTest {
         Assertions.assertNotNull(jeux);
         Assertions.assertEquals(1, jeux.size());
         for (ProduitEntity j : jeux) {
-            Assertions.assertTrue(j.getNom().startsWith(jeuvideo));
+            Assertions.assertTrue(j.getNom().contains(jeuvideo));
         }
     }
 
@@ -36,7 +36,7 @@ public class ProduitServiceTest {
         Assertions.assertNotNull(jeux);
         Assertions.assertEquals(1, jeux.size());
         for (ProduitEntity j : jeux) {
-            Assertions.assertTrue(j.getNom().toLowerCase().startsWith(jeuvideo.toLowerCase()));
+            Assertions.assertTrue(j.getNom().toLowerCase().contains(jeuvideo.toLowerCase()));
         }
     }
 
