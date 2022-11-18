@@ -39,7 +39,7 @@ public class ProduitService {
 	 */
 	public List<ProduitEntity> getProductsByName(String nom) throws Exception {
 		if (nom != null && !nom.trim().isEmpty()) {
-			var jeuxVideos= produitRepository.findByNomStartsWith(nom);
+			var jeuxVideos= produitRepository.findByNomIsContaining(nom);
 			if (jeuxVideos.get().size() > 0) {
 				LOG.debug("Le(s) jeu(x) vidéo(s) Ok");
 				return jeuxVideos.get();
