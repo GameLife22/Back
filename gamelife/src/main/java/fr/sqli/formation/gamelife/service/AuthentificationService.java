@@ -1,7 +1,6 @@
 package fr.sqli.formation.gamelife.service;
 
 import fr.sqli.formation.gamelife.dto.LoginDto;
-import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.CompteDesactiveException;
