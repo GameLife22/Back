@@ -22,20 +22,20 @@ public class AuthentificationControler {
 
 
     //http://localhost:8080/auth/env1?pL=fabien.bidault@social.aston-ecole.com&pP=Paz6!!3
-   /* @GetMapping("/env1")
+   /*  @GetMapping("/env1")
     public String auth01(@RequestParam("pL") String login ,@RequestParam("pP") String pwd) throws Exception{
 
         if(login != null && !login.trim().isEmpty() && pwd!= null && !pwd.trim().isEmpty()){
             UtilisateurEntity resu;
-            resu = this.service.authentifier(login,pwd);
+            resu = this.service.authentifier1(login,pwd);
             return String.valueOf(resu.getId());
         }
         else {
             throw new IllegalArgumentException("Login ou password vide ou null");
         }
-    }*/
-
-    @PostMapping("/env3")
+    }
+*/
+    @PostMapping("/signin")
     public String auth03(@RequestBody LoginDto monBody) throws Exception {
         LOG.info("AuthentificationControler : IN {}", monBody);
         UtilisateurEntity resu;
