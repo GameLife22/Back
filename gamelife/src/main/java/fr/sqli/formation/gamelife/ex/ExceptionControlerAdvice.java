@@ -29,4 +29,10 @@ public class ExceptionControlerAdvice {
         ResponseEntity<Exception> resu = new ResponseEntity<Exception>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
+    @ExceptionHandler(OldPasswordException.class)
+    public ResponseEntity<OldPasswordException> exceptionHandler(OldPasswordException ex){
+        LOG.info("EXCEPTION HANDLER : OLD PASSWORD EXCEPTION");
+        ResponseEntity<OldPasswordException> resu = new ResponseEntity<OldPasswordException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
 }
