@@ -19,17 +19,18 @@ public class GestionCompteService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public UtilisateurEntity modificationCompte(String nom,String prenom,String newEmail,String oldEmail,String ville,Integer num_rue,String rue,String role,String num_Siren,String etat) throws Exception{
+    public UtilisateurEntity modificationCompte(String nom,String prenom,String newEmail,String oldEmail,Integer numRue,String rue,String ville, Integer cp, String role,String numSiren,String etat) throws Exception{
         var user = uDao.findByEmail(oldEmail);
         if(user.isPresent()){
             UtilisateurEntity u = uDao.findByEmail(oldEmail).get();
             u.setPrenom(prenom);
             u.setNom(nom);
             u.setEmail(newEmail);
-            u.setVille(ville);
+            u.setNumRue(numRue);
             u.setRue(rue);
-            u.setNumRue(num_rue);
-            u.setNumSiren(num_Siren);
+            u.setVille(ville);
+            u.setCp(cp);
+            u.setNumSiren(numSiren);
             u.setEtatCompte(etat);
             u.setRole(role);
             return uDao.save(u);

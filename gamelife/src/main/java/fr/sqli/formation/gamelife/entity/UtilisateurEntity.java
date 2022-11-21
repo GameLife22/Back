@@ -43,6 +43,8 @@ public class UtilisateurEntity implements Serializable {
 
 	private String ville;
 
+	private int cp;
+
 	//bi-directional many-to-one association to Commande
 	@OneToMany(mappedBy="utilisateur")
 	private List<CommandeEntity> commandes;
@@ -52,6 +54,33 @@ public class UtilisateurEntity implements Serializable {
 	private List<ProduitEntity> produits;
 
 	public UtilisateurEntity() {
+	}
+
+	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue,int cp, String numSiren, String prenom, String role, String rue, String ville) {
+		this.email = email;
+		this.etatCompte = etatCompte;
+		this.mdp = mdp;
+		this.nom = nom;
+		this.numRue = numRue;
+		this.cp = cp;
+		this.numSiren = numSiren;
+		this.prenom = prenom;
+		this.role = role;
+		this.rue = rue;
+		this.ville = ville;
+	}
+
+	public UtilisateurEntity(String email, String mdp) {
+		this.email = email;
+		this.mdp = mdp;
+	}
+
+	public int getCp() {
+		return cp;
+	}
+
+	public void setCp(int cp) {
+		this.cp = cp;
 	}
 
 	public int getId() {
