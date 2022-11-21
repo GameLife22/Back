@@ -22,9 +22,11 @@ public class InscriptionDto {
     private String rue;
 
     private String ville;
+
+    private  int code_postal;
     public InscriptionDto() {
     }
-    public InscriptionDto(String email, String etat, String mdp, String nom, int num_rue, String num_siren, String prenom, String role, String rue, String ville) {
+    public InscriptionDto(String email, String etat, String mdp, String nom, int num_rue, String num_siren, String prenom, String role, String rue, String ville, int code_postal) {
         this.email = email;
         this.etat = etat;
         this.mdp = mdp;
@@ -35,6 +37,7 @@ public class InscriptionDto {
         this.role = role;
         this.rue = rue;
         this.ville = ville;
+        this.code_postal = code_postal;
     }
 
     public String getEmail() {
@@ -115,5 +118,13 @@ public class InscriptionDto {
 
     public void setVille(String ville) {
         this.ville = ville;
+    }
+
+    public int getCode_postal() {
+        return code_postal;
+    }
+
+    public void setCode_postal(int code_postal) {
+        this.code_postal = code_postal;
     }
 }

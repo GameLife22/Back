@@ -18,7 +18,7 @@ public class InscriptionService {
     private BCryptPasswordEncoder encoder;
 
     public UtilisateurEntity inscription(InscriptionDto dto) throws Exception{
-            UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getRole(), dto.getNum_siren(), dto.getEtat());
+            UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getRole(), dto.getNum_siren(), dto.getEtat(), dto.getCode_postal());
             var newUser = uDao.findByEmail(dto.getEmail());
             if(newUser.isEmpty()){
                 UtilisateurEntity u = InscriptionDtoHandler.fromDto(dto);

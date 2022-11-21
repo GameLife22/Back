@@ -42,6 +42,8 @@ public class UtilisateurEntity implements Serializable {
 	private String rue;
 
 	private String ville;
+	@Column(name="code_postal")
+	private int codePostal;
 
 	//bi-directional many-to-one association to Commande
 	@OneToMany(mappedBy="utilisateur")
@@ -54,7 +56,7 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, String numSiren, String prenom, String role, String rue, String ville) {
+	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, String numSiren, String prenom, String role, String rue, String ville,int cp) {
 		this.email = email;
 		this.etatCompte = etatCompte;
 		this.mdp = mdp;
@@ -65,6 +67,7 @@ public class UtilisateurEntity implements Serializable {
 		this.role = role;
 		this.rue = rue;
 		this.ville = ville;
+		this.codePostal = cp;
 	}
 
 	public int getId() {
@@ -198,7 +201,16 @@ public class UtilisateurEntity implements Serializable {
 
 		return produit;
 	}
-	public static void validate(String nom,String prenom,String pwd,String email,String ville,Integer num_rue,String rue,String role,String num_Siren,String etat) throws Exception{
+
+	public int getCodePostal() {
+		return codePostal;
+	}
+
+	public void setCodePostal(int codePostal) {
+		this.codePostal = codePostal;
+	}
+
+	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String role, String num_Siren, String etat, Integer code_postal) throws Exception{
 		if(!(nom != null && !nom.trim().isEmpty() &&
 				prenom != null && !prenom.trim().isEmpty() &&
 				email != null && !email.trim().isEmpty() &&
@@ -207,7 +219,8 @@ public class UtilisateurEntity implements Serializable {
 				rue != null && !rue.trim().isEmpty() &&
 				role != null && !role.trim().isEmpty() &&
 				etat != null && !etat.trim().isEmpty() &&
-				ville != null && !ville.trim().isEmpty()) ){
+				ville != null && !ville.trim().isEmpty()) &&
+				code_postal != null && code_postal > 0){
 			throw new IllegalArgumentException("Champs vide ou null");
 
 		}
