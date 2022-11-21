@@ -25,7 +25,7 @@ public class GestionCompteControler {
     public ResponseEntity inscr01(@RequestBody GestionCompteDto monbody) throws Exception{
         LOG.info("GestionCompteControler : IN {}", monbody);
         UtilisateurEntity res;
-        res = service.modificationCompte(monbody.getNom(), monbody.getPrenom(), monbody.getNewEmail(), monbody.getOldEmail(), monbody.getNumRue(), monbody.getRue(),monbody.getVille(),monbody.getCp(), monbody.getRole(), monbody.getNumSiren(), monbody.getEtat());
+        res = service.modificationCompte(monbody.getNom(), monbody.getPrenom(), monbody.getNewEmail(), monbody.getOldEmail(), monbody.getNumRue(), monbody.getRue(),monbody.getVille(),monbody.getCodePostal(), monbody.getRole(), monbody.getNumSiren(), monbody.getEtat());
         LOG.info("GestionCompteControler : OUT {}", res);
         return new ResponseEntity<Integer>(res.getId(), HttpStatus.OK);
     }

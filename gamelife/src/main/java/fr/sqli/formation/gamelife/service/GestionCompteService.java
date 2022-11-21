@@ -1,9 +1,5 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.controler.GestionEtatControler;
-import fr.sqli.formation.gamelife.dto.GestionCompteDto;
-import fr.sqli.formation.gamelife.dto.GestionEtatDto;
-import fr.sqli.formation.gamelife.dto.GestionMdpDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.OldPasswordException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -19,7 +15,7 @@ public class GestionCompteService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public UtilisateurEntity modificationCompte(String nom,String prenom,String newEmail,String oldEmail,Integer numRue,String rue,String ville, Integer cp, String role,String numSiren,String etat) throws Exception{
+    public UtilisateurEntity modificationCompte(String nom,String prenom,String newEmail,String oldEmail,Integer numRue,String rue,String ville, Integer codePostal, String role,String numSiren,String etat) throws Exception{
         var user = uDao.findByEmail(oldEmail);
         if(user.isPresent()){
             UtilisateurEntity u = uDao.findByEmail(oldEmail).get();
@@ -29,7 +25,7 @@ public class GestionCompteService {
             u.setNumRue(numRue);
             u.setRue(rue);
             u.setVille(ville);
-            u.setCp(cp);
+            u.setCodePostal(codePostal);
             u.setNumSiren(numSiren);
             u.setEtatCompte(etat);
             u.setRole(role);

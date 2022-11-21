@@ -26,7 +26,7 @@ public class GestionCompteDto {
 
     private Integer numRue;
 
-    private Integer cp;
+    private Integer codePostal;
 
     private String numSiren;
 
@@ -39,12 +39,12 @@ public class GestionCompteDto {
     private String ville;
 
 
-    public Integer getCp() {
-        return cp;
+    public Integer getCodePostal() {
+        return codePostal;
     }
 
-    public void setCp(Integer cp) {
-        this.cp = cp;
+    public void setCodePostal(Integer codePostal) {
+        this.codePostal = codePostal;
     }
 
     public String getNewEmail() {

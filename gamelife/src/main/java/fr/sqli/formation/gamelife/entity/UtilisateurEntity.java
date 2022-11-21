@@ -1,7 +1,5 @@
 package fr.sqli.formation.gamelife.entity;
 
-import fr.sqli.formation.gamelife.ex.AuthentificationException;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
@@ -43,7 +41,7 @@ public class UtilisateurEntity implements Serializable {
 
 	private String ville;
 
-	private int cp;
+	private int codePostal;
 
 	//bi-directional many-to-one association to Commande
 	@OneToMany(mappedBy="utilisateur")
@@ -56,13 +54,13 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue,int cp, String numSiren, String prenom, String role, String rue, String ville) {
+	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiren, String prenom, String role, String rue, String ville) {
 		this.email = email;
 		this.etatCompte = etatCompte;
 		this.mdp = mdp;
 		this.nom = nom;
 		this.numRue = numRue;
-		this.cp = cp;
+		this.codePostal = codePostal;
 		this.numSiren = numSiren;
 		this.prenom = prenom;
 		this.role = role;
@@ -75,12 +73,12 @@ public class UtilisateurEntity implements Serializable {
 		this.mdp = mdp;
 	}
 
-	public int getCp() {
-		return cp;
+	public int getCodePostal() {
+		return codePostal;
 	}
 
-	public void setCp(int cp) {
-		this.cp = cp;
+	public void setCodePostal(int cp) {
+		this.codePostal = cp;
 	}
 
 	public int getId() {
