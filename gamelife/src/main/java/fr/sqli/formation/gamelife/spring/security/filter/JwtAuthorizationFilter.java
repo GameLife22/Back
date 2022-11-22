@@ -49,8 +49,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter implements
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+
         final var remoteIP = request.getRemoteAddr();
         final var url = request.getRequestURL().toString();
+
+        //On récupére le token du header
         var jwtToken = request.getHeader(SecurityConstants.TOKEN_HEADER);
 
         JwtAuthorizationFilter.LOG.debug("[{}] <-- JwtAuthorizationFilter.doFilterInternal - {} - JWT token is {}", remoteIP, url, jwtToken);
@@ -71,27 +74,30 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter implements
 
         JwtAuthorizationFilter.LOG.debug("[{}] --> JwtAuthorizationFilter.getAuthentication - Token - {}", remoteIp, token);
         try {
+            //On transforme le Jwt en token spring
             var parsedToken = Jwts.parserBuilder().setSigningKey(this.signingKey).build().
                     parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""));
 
-            var login = parsedToken.getBody().getSubject();
+            //on recupere l'email qu'on a utilisé à l'authetification
+            var email = parsedToken.getBody().getSubject();
 
             Collection<? extends GrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
                     .get(SecurityConstants.TOKEN_ROLES)).stream()
                     .map(authority -> new SimpleGrantedAuthority((String) authority))
                     .collect(Collectors.toList());
 
-            if (!StringUtils.hasLength(login)) {
-                var resu = new UsernamePasswordAuthenticationToken(login, null, authorities);
+            if (!StringUtils.hasLength(email)) {
+                var resu = new UsernamePasswordAuthenticationToken(email, null, authorities);
                 @SuppressWarnings("unchecked")
-                Map<String, ?> userDto = (Map<String, ?>) parsedToken.getBody().get(SecurityConstants.TOKEN_USER);
-                JwtAuthorizationFilter.LOG.trace("val {}", userDto);
-
-                var userDtoOut = new UtilisateurDtoOut(userDto);
-                resu.setDetails(userDtoOut);
-                JwtAuthorizationFilter.LOG.warn("[{}] <-- JwtAuthorizationFilter.getAuthentication - Token was pushed into Spring Security, {}", remoteIp, resu);
+                String idUser = (String) parsedToken.getBody().get(SecurityConstants.TOKEN_USER);
+                JwtAuthorizationFilter.LOG.trace("val {}", idUser);
+                resu.setDetails(idUser);
+                JwtAuthorizationFilter.LOG.warn(
+                        "[{}] <-- JwtAuthorizationFilter.getAuthentication - Token was pushed into Spring Security, {}",
+                        remoteIp, resu);
                 return resu;
             }
+
         } catch (Exception exception) {
             JwtAuthorizationFilter.LOG.warn("[{}] - JwtAuthorizationFilter.getAuthentication : {} failed", remoteIp, token, exception);
         }

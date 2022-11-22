@@ -36,8 +36,9 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(Environment env, AuthenticationManager authenticationManager) {
+        LOG.info("JWT AuthenticationFilter");
         this.authenticationManager = authenticationManager;
-        this.setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
+        this.setFilterProcessesUrl(SecurityConstants.contextRoot+SecurityConstants.AUTH_LOGIN_URL);
         this.env = env;
     }
 
@@ -52,14 +53,19 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("JWT AuthenticationFilter - attemptAuthentication");
 
+        //Adresse IP
         final var remoteIP = request.getRemoteAddr();
 
+        //email et mdp qu'on a mis dans le body
         var email = request.getParameter("email");
         var password = request.getParameter("password");
 
-        if (StringUtils.hasLength(email) || StringUtils.hasLength(password)) {
-            JwtAuthenticationFilter.LOG.debug("[{}] --> JwtAuthenticationFilter.attemptAuthentication(email, password) as Json in Body", remoteIP);
+        //condition pour fairele choix dans verifier les les donnees soit en body ou en parametre
+        if (!StringUtils.hasLength(email) && !StringUtils.hasLength(password)) {
+            JwtAuthenticationFilter.LOG.info("[{}] --> JwtAuthenticationFilter.attemptAuthentication(email, password) as Json in Body", remoteIP);
+            //C'est bon les donnees sont dans le body
             // Look as JSon in the body
             String body = null;
             try {
@@ -76,16 +82,16 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
                         remoteIP, body, lExp);
             }
         } else {
-            JwtAuthenticationFilter.LOG.debug(
+            JwtAuthenticationFilter.LOG.info(
                     "[{}] --> JwtAuthenticationFilter.attemptAuthentication(email, password) as parameter", remoteIP);
         }
 
-        JwtAuthenticationFilter.LOG.debug("[{}] --> JwtAuthenticationFilter.attemptAuthentication({}, [PROTECTED])",
+        JwtAuthenticationFilter.LOG.info("[{}] --> JwtAuthenticationFilter.attemptAuthentication({}, [PROTECTED])",
                 remoteIP, email);
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         var result = this.authenticationManager.authenticate(authenticationToken);
-        JwtAuthenticationFilter.LOG.debug(
+        JwtAuthenticationFilter.LOG.info(
                 "[{}] --> JwtAuthenticationFilter.attemptAuthentication is ok - User id is {}", remoteIP, result.getDetails().toString());
         return result;
     }
@@ -101,12 +107,19 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, Authentication authentication) {
+        LOG.info("JWT AuthenticationFilter - successfulAuthentication");
         final var remoteIP = request.getRemoteAddr();
         var userName = (String) authentication.getPrincipal();
+        LOG.info("JWT AuthenticationFilter - successfulAuthentication  -- username : {}",userName);
 
         List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        for (String r: roles) {
+            LOG.info("JWT AuthenticationFilter - successfulAuthentication  -- roles : {}",r);
 
-        var ue = (String) authentication.getDetails();
+        }
+        var ue =  authentication.getDetails();
+
+        //payload du token*************
         Claims claims = new DefaultClaims();
         claims.put(SecurityConstants.TOKEN_USER, ue);
         claims.put(SecurityConstants.TOKEN_ROLES, roles);
@@ -115,16 +128,17 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
         claims.setSubject(userName);
         var val = Integer.parseInt(this.env.getProperty("configuration.jwt.expire.in.ms", "86400000"));
         claims.setExpiration(new Date(System.currentTimeMillis() + val));
+        //*******************************************
+
         var signatureAlgorithm = SignatureAlgorithm
                 .forName(this.env.getProperty("configuration.jwt.signature.algorithm", "none"));
 
         JwtBuilder builder = null;
         if (signatureAlgorithm == null || signatureAlgorithm == SignatureAlgorithm.NONE) {
-            JwtAuthenticationFilter.LOG.warn("[{}] - No encryption for JWT token, this is good for testing ...",
-                    remoteIP);
+            JwtAuthenticationFilter.LOG.warn("[{}] - No encryption for JWT token, this is good for testing ...", remoteIP);
             builder = Jwts.builder().setHeaderParam("typ", SecurityConstants.TOKEN_TYPE).setClaims(claims);
         } else {
-            JwtAuthenticationFilter.LOG.debug(
+            JwtAuthenticationFilter.LOG.info(
                     "Encryption for JWT token is {}, do not forget to set your key in the configuration file",
                     signatureAlgorithm);
             // Sample key is for HS512
@@ -134,7 +148,10 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
                     .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE).setClaims(claims);
         }
 
+        //Le token est cree
         var token = builder.compact();
+
+        //le token est insere dans le header
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
     }
 

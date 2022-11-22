@@ -42,18 +42,22 @@ public class AuthentificationService implements AuthenticationProvider {
                         return monUser.get();
                     } else {
                         //pas ok
+                        LOG.info("Utilisateur inconnu");
                         throw new AuthentificationException("Utilisateur inconnu");
                     }
                 } else {
+                    LOG.info("Compte Desactive");
                     throw new CompteDesactiveException("Compte Desactive");
                 }
             } else {
                 //pas ok
+                LOG.info("Utilisateur inconnu");
                 throw new AuthentificationException("Utilisateur inconnu");
             }
 
         }
         else {
+            LOG.info("Login ou password vide ou null");
             throw new IllegalArgumentException("Login ou password vide ou null");
         }
     }
@@ -64,7 +68,7 @@ public class AuthentificationService implements AuthenticationProvider {
         var password = authentication.getCredentials() != null ? authentication.getCredentials().toString() : null;
         LoginDto login = new LoginDto(email,password) ;
 
-        AuthentificationService.LOG.debug("Spring Security Authenticate email={}", email);
+        AuthentificationService.LOG.info("Spring Security Authenticate email={}", email);
         UtilisateurEntity user = null;
         try {
             user = authentifier(login);
@@ -72,11 +76,13 @@ public class AuthentificationService implements AuthenticationProvider {
             throw new AuthenticationServiceException("Erreur d'authentification", lExp);
         }
         if (user != null) {
-            AuthentificationService.LOG.debug("Spring Security Authenticate found {}", user);
+            AuthentificationService.LOG.info("Spring Security Authenticate found {} {}", user.getId(),user.getRole());
             Collection<GrantedAuthority> springSecurityRoles = new ArrayList<>(1);
-            GrantedAuthority ga = new SimpleGrantedAuthority("ROLE_ACHETEUR");
+
+            //Inserer le role du user dans le token
+            GrantedAuthority ga = new SimpleGrantedAuthority(user.getRole());
             springSecurityRoles.add(ga);
-            user.getRole();
+
             var upat = new UsernamePasswordAuthenticationToken(email, password, springSecurityRoles);
             upat.setDetails(user.getId());
             return upat;
