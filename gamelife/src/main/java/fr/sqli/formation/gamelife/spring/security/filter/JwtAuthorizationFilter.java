@@ -56,9 +56,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter implements
         //On récupére le token du header
         var jwtToken = request.getHeader(SecurityConstants.TOKEN_HEADER);
 
-        JwtAuthorizationFilter.LOG.debug("[{}] <-- JwtAuthorizationFilter.doFilterInternal - {} - JWT token is {}", remoteIP, url, jwtToken);
+        JwtAuthorizationFilter.LOG.info("[{}] <-- JwtAuthorizationFilter.doFilterInternal - {} - JWT token is {}", remoteIP, url, jwtToken);
 
-        if (StringUtils.hasLength(jwtToken) || !jwtToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        if (jwtToken==null|| !StringUtils.hasLength(jwtToken) || !jwtToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             JwtAuthorizationFilter.LOG.warn("[{}] <-- JwtAuthorizationFilter.doFilterInternal - {} - JWT token is Empty", remoteIP, url);
             filterChain.doFilter(request, response);
             return;
@@ -66,13 +66,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter implements
 
         Authentication authentication = this.getAuthentication(jwtToken, remoteIP);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        JwtAuthorizationFilter.LOG.debug("[{}] <-- JwtAuthorizationFilter.doFilterInternal - {} - OK - Set authentication back", remoteIP, url);
+        JwtAuthorizationFilter.LOG.info("[{}] <-- JwtAuthorizationFilter.doFilterInternal - {} - OK - Set authentication back", remoteIP, url);
         filterChain.doFilter(request, response);
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token, String remoteIp) {
 
-        JwtAuthorizationFilter.LOG.debug("[{}] --> JwtAuthorizationFilter.getAuthentication - Token - {}", remoteIp, token);
+        JwtAuthorizationFilter.LOG.info("[{}] --> JwtAuthorizationFilter.getAuthentication - Token - {}", remoteIp, token);
         try {
             //On transforme le Jwt en token spring
             var parsedToken = Jwts.parserBuilder().setSigningKey(this.signingKey).build().
@@ -81,16 +81,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter implements
             //on recupere l'email qu'on a utilisé à l'authetification
             var email = parsedToken.getBody().getSubject();
 
-            Collection<? extends GrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
-                    .get(SecurityConstants.TOKEN_ROLES)).stream()
-                    .map(authority -> new SimpleGrantedAuthority((String) authority))
-                    .collect(Collectors.toList());
 
-            if (!StringUtils.hasLength(email)) {
+            if (StringUtils.hasLength(email)) {
+                Collection<? extends GrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
+                        .get(SecurityConstants.TOKEN_ROLES)).stream()
+                        .map(authority -> new SimpleGrantedAuthority((String) authority))
+                        .collect(Collectors.toList());
+
                 var resu = new UsernamePasswordAuthenticationToken(email, null, authorities);
                 @SuppressWarnings("unchecked")
-                String idUser = (String) parsedToken.getBody().get(SecurityConstants.TOKEN_USER);
-                JwtAuthorizationFilter.LOG.trace("val {}", idUser);
+                Integer idUser = (Integer) parsedToken.getBody().get(SecurityConstants.TOKEN_USER);
+                JwtAuthorizationFilter.LOG.info("val {}", idUser);
                 resu.setDetails(idUser);
                 JwtAuthorizationFilter.LOG.warn(
                         "[{}] <-- JwtAuthorizationFilter.getAuthentication - Token was pushed into Spring Security, {}",
