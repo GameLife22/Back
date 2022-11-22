@@ -25,7 +25,12 @@ public class InscriptionService {
                 u.setMdp(encoder.encode(u.getMdp()));
                 return uDao.save(u);
             }else {
-                throw new UtilisateurExistantException("Utilisateur deja enregistre");
+                if(newUser.get().getEtatCompte().equals("desactive")){
+                    newUser.get().setEtatCompte("active");
+                     return uDao.save(newUser.get());
+                }else{
+                    throw new UtilisateurExistantException("Utilisateur deja enregistre");
+                }
             }
     }
 }
