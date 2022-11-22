@@ -10,10 +10,7 @@ public class GamelifeApplication {
 
 
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y);
-	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(GamelifeApplication.class, args);
