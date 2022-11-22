@@ -2,25 +2,23 @@ package fr.sqli.formation.gamelife.dto;
 
 public class GestionCompteDto {
 
+    public GestionCompteDto() {
+    }
 
-    public GestionCompteDto(String newEmail, String oldEmail, String etat, String nom, Integer numRue, String numSiren, String prenom, String role, String rue, String ville) {
-        this.newEmail = newEmail;
-        this.oldEmail = oldEmail;
-        this.etat = etat;
+    public GestionCompteDto(Integer id, String nom, String prenom, String email, Integer numRue, String rue, String ville, Integer codePostal, String numSiren) {
+        this.id = id;
+        this.email = email;
         this.nom = nom;
         this.numRue = numRue;
+        this.codePostal = codePostal;
         this.numSiren = numSiren;
         this.prenom = prenom;
-        this.role = role;
         this.rue = rue;
         this.ville = ville;
     }
 
-    private String newEmail;
-
-    private String oldEmail;
-
-    private String etat;
+    private  Integer id;
+    private String email;
 
     private String nom;
 
@@ -32,35 +30,29 @@ public class GestionCompteDto {
 
     private String prenom;
 
-    private String role;
-
     private String rue;
 
     private String ville;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getCodePostal() {
         return codePostal;
     }
 
-    public void setCodePostal(Integer codePostal) {
-        this.codePostal = codePostal;
+
+    public String getEmail() {
+        return email;
     }
 
-    public String getNewEmail() {
-        return newEmail;
-    }
-
-    public void setNewEmail(String newEmail) {
-        this.newEmail = newEmail;
-    }
-
-    public String getEtat() {
-        return etat;
-    }
-
-    public void setEtat(String etat) {
-        this.etat = etat;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNom() {
@@ -87,28 +79,12 @@ public class GestionCompteDto {
         this.numSiren = numSiren;
     }
 
-    public String getOldEmail() {
-        return oldEmail;
-    }
-
-    public void setOldEmail(String oldEmail) {
-        this.oldEmail = oldEmail;
-    }
-
     public String getPrenom() {
         return prenom;
     }
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getRue() {

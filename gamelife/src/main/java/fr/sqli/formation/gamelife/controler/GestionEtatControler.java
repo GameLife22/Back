@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.controler;
 
-import fr.sqli.formation.gamelife.dto.GestionCompteDto;
 import fr.sqli.formation.gamelife.dto.GestionEtatDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.service.GestionCompteService;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/getat")
+@RequestMapping("/gestioncomtpe/etat")
 public class GestionEtatControler {
     @Autowired
     private GestionCompteService service;
@@ -23,12 +22,12 @@ public class GestionEtatControler {
     private static final Logger LOG = LogManager.getLogger();
 
     @PostMapping("/env1")
-    public ResponseEntity inscr01(@RequestBody GestionEtatDto monbody) throws Exception{
+    public ResponseEntity<Integer> inscr01(@RequestBody GestionEtatDto monbody) throws Exception{
         LOG.info("GestionEtatControler : IN {}", monbody);
         UtilisateurEntity res;
-        res = service.modificationEtat(monbody.getEmail(), monbody.getNew_etat());
+        res = service.modificationEtat(monbody);
         LOG.info("GestionEtatControler : OUT {}", res);
-        return new ResponseEntity<Integer>(res.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(res.getId(), HttpStatus.OK);
     }
 
 }

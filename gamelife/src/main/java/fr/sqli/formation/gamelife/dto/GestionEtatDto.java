@@ -2,27 +2,26 @@ package fr.sqli.formation.gamelife.dto;
 
 public class GestionEtatDto {
 
-    public GestionEtatDto(String new_etat, String email) {
+    public GestionEtatDto() {
+    }
+
+    public GestionEtatDto(Integer id, String new_etat) {
         this.new_etat = new_etat;
-        this.email = email;
+        this.id = id;
     }
 
     private String new_etat;
-    private String email;
+    private Integer id;
 
     public String getNew_etat() {
         return new_etat;
     }
 
-    public void setNew_etat(String new_etat) {
-        this.new_etat = new_etat;
+    public Integer getId() {
+        return id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

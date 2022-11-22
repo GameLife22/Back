@@ -1,7 +1,9 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.GestionCompteDto;
+import fr.sqli.formation.gamelife.dto.GestionEtatDto;
+import fr.sqli.formation.gamelife.dto.GestionMdpDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.ex.OldPasswordException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,50 +17,43 @@ public class GestionCompteService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public UtilisateurEntity modificationCompte(String nom,String prenom,String newEmail,String oldEmail,Integer numRue,String rue,String ville, Integer codePostal, String role,String numSiren,String etat) throws Exception{
-        var user = uDao.findByEmail(oldEmail);
+    public UtilisateurEntity modificationCompte(GestionCompteDto dto) throws Exception{
+        var user = uDao.findById(dto.getId());
         if(user.isPresent()){
-            UtilisateurEntity u = uDao.findByEmail(oldEmail).get();
-            u.setPrenom(prenom);
-            u.setNom(nom);
-            u.setEmail(newEmail);
-            u.setNumRue(numRue);
-            u.setRue(rue);
-            u.setVille(ville);
-            u.setCodePostal(codePostal);
-            u.setNumSiren(numSiren);
-            u.setEtatCompte(etat);
-            u.setRole(role);
+            UtilisateurEntity u = uDao.findById(dto.getId()).get();
+            u.setPrenom(dto.getPrenom());
+            u.setNom(dto.getNom());
+            u.setEmail(dto.getEmail());
+            u.setNumRue(dto.getNumRue());
+            u.setRue(dto.getRue());
+            u.setVille(dto.getVille());
+            u.setCodePostal(dto.getCodePostal());
+            u.setNumSiren(dto.getNumSiren());
             return uDao.save(u);
         }else {
             throw new UtilisateurExistantException("Utilisateur inexistant");
         }
     }
 
-    public UtilisateurEntity modificationMdp(String email, String oldMdp,String newMdp) throws Exception {
-        var user = uDao.findByEmail(email);
+    public UtilisateurEntity modificationMdp(GestionMdpDto dto) throws Exception {
+        var user = uDao.findById(dto.getId());
         if (user.isPresent()) {
-            UtilisateurEntity u = uDao.findByEmail(email).get();
-            if (u.getMdp().equals(oldMdp)) {
-                u.setMdp(encoder.encode(newMdp));
-                return uDao.save(u);
-            } else {
-                throw new OldPasswordException("Mauvais mot de passe");
-            }
+            UtilisateurEntity u = uDao.findById(dto.getId()).get();
+            u.setMdp(encoder.encode(dto.getNew_mdp()));
+            return uDao.save(u);
         } else {
             throw new UtilisateurExistantException("utilisateur inexistant");
         }
     }
 
-    public UtilisateurEntity modificationEtat(String email, String etat) throws Exception {
-        var user = uDao.findByEmail(email);
+    public UtilisateurEntity modificationEtat(GestionEtatDto dto) throws Exception {
+        var user = uDao.findById(dto.getId());
         if (user.isPresent()) {
-            UtilisateurEntity u = uDao.findByEmail(email).get();
-            u.setEtatCompte(etat);
+            UtilisateurEntity u = uDao.findById(dto.getId()).get();
+            u.setEtatCompte(dto.getNew_etat());
             return uDao.save(u);
         } else {
             throw new UtilisateurExistantException("utilisateur inexistant");
-
         }
     }
 }

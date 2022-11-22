@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.controler;
 
-import fr.sqli.formation.gamelife.dto.GestionCompteDto;
 import fr.sqli.formation.gamelife.dto.GestionMdpDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.service.GestionCompteService;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/gmdp")
+@RequestMapping("/gestioncomtpe/mdp")
 public class GestionMdpControler {
     @Autowired
     private GestionCompteService service;
@@ -23,12 +22,12 @@ public class GestionMdpControler {
     private static final Logger LOG = LogManager.getLogger();
 
     @PostMapping("/env1")
-    public ResponseEntity inscr01(@RequestBody GestionMdpDto monbody) throws Exception{
+    public ResponseEntity<Integer> inscr01(@RequestBody GestionMdpDto monbody) throws Exception{
         LOG.info("GestionMdpControler : IN {}", monbody);
         UtilisateurEntity res;
-        res = service.modificationMdp(monbody.getEmail(), monbody.getOld_mdp(), monbody.getNew_mdp());
+        res = service.modificationMdp(monbody);
         LOG.info("GestionMdpControler : OUT {}", res);
-        return new ResponseEntity<Integer>(res.getId(), HttpStatus.OK);
+        return ResponseEntity.ok(res.getId());
     }
 
 }

@@ -1,70 +1,74 @@
 package fr.sqli.formation.gamelife.service;
-
 import fr.sqli.formation.gamelife.dto.GestionCompteDto;
 import fr.sqli.formation.gamelife.dto.GestionEtatDto;
 import fr.sqli.formation.gamelife.dto.GestionMdpDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
-import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Rollback
 @Transactional
 class GestionCompteServiceTest {
     @Autowired
     GestionCompteService service;
-//    UtilisateurRepository uDao;
+    @Autowired
+    BCryptPasswordEncoder encoder;
 
+
+    // Methode modificationCompte
     @Test
     void testModificationCompte01() throws Exception {
-        UtilisateurEntity test = service.modificationCompte("dubois","henry","acheteur002@outlook.fr","acheteur002@outlook.fr",13,"rue de la papeterie", "Ballancourt",91610,"acheteur",null,"active");
+        GestionCompteDto dto = new GestionCompteDto(4, "dubois","henry","acheteur002@outlook.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
+        UtilisateurEntity test = service.modificationCompte(dto);
         Assertions.assertEquals("Ballancourt",test.getVille());
     }
     @Test
     void testModificationCompte02() throws Exception {
-        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationCompte("dubois","henry","acheteur0aze02@outlook.fr","acheteur0aze02@outlook.fr",13,"rue de la papeterie", "ballancourt",91610, "acheteur",null,"active"));
+        GestionCompteDto dto = new GestionCompteDto(24, "dubois","henry","acheteur002@outlook.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationCompte(dto));
 
     }
 
 
-
+    // Methode modificationMdp
     @Test
     void testModificationMdp01() throws Exception {
-//        UtilisateurEntity u = uDao.findByEmail("acheteur002@outlook.fr").get();
-//        UtilisateurEntity test = service.modificationMdp("acheteur002@outlook.fr",u.getMdp(),"021aze155");
-//        Assertions.assertNotEquals(u.getMdp(),test.getMdp());
+        GestionMdpDto dto = new GestionMdpDto(4,"021aze155");
+        UtilisateurEntity test = service.modificationMdp(dto);
+        System.out.println(encoder.matches("021aze155", test.getMdp()));
+        Assertions.assertTrue(encoder.matches("021aze155", test.getMdp()));
     }
     @Test
     void testModificationMdp02() throws Exception {
-//        UtilisateurEntity u = uDao.findByEmail("acheteur002@outlook.fr").get();
-//        Assertions.assertThrows(OldPasswordException.class,()->  service.modificationMdp("acheteur002@outlook.fr",u.getMdp(),"021aze155"));
+        GestionMdpDto dto = new GestionMdpDto(4,"021aze155");
+        UtilisateurEntity test = service.modificationMdp(dto);
+        Assertions.assertFalse(encoder.matches("021azeee155", test.getMdp()));
     }
     @Test
     void testModificationMdp03() throws Exception {
-//        UtilisateurEntity u = uDao.findByEmail("acheteur002@outlook.fr").get();
-//       Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationMdp("acheteur002@oeeutlook.fr",u.getMdp(),"021aze155"));
+        GestionMdpDto dto = new GestionMdpDto(24,"021aze155");
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationMdp(dto));
     }
 
 
 
 @Test
     void testModificationEtat01() throws Exception {
-    UtilisateurEntity test = service.modificationEtat("acheteur002@outlook.fr","desactive");
+    GestionEtatDto dto = new GestionEtatDto(4,"desactive");
+    UtilisateurEntity test = service.modificationEtat(dto);
     Assertions.assertEquals("desactive",test.getEtatCompte());
     }
     @Test
     void testModificationEtat02() throws Exception {
-        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationEtat("acheteur002@outloeeok.fr","desactive"));
+        GestionEtatDto dto = new GestionEtatDto(45,"desactive");
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationEtat(dto));
     }
 
 }
