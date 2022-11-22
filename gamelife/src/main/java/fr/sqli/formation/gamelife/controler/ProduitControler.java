@@ -4,6 +4,8 @@ package fr.sqli.formation.gamelife.controler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,19 +20,22 @@ import fr.sqli.formation.gamelife.service.ProduitService;
  */
 @RestController
 @RequestMapping("/produit")
-@CrossOrigin("*")
 public class ProduitControler {
 
+	private static final Logger LOG = LogManager.getLogger();
+	
 	@Autowired
 	private ProduitService produitService;
 
 	@GetMapping("/all")
 	public ResponseEntity<List<ProduitDto>> getAllProduit() {
+		LOG.info("Dans getAllProduit");
 		var r = this.produitService.getAllProduit();
 		var rd = new ArrayList<ProduitDto>();
 		for (ProduitEntity e : r) {
 			rd.add(ProduitDtoHandler.fromEntity(e));
 		}
+		LOG.info("Sortie de getAllProduit avec {} produits", rd.size());
 		return ResponseEntity.ok(rd);
 	}
 

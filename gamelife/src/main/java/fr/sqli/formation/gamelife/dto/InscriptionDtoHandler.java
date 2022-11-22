@@ -17,6 +17,7 @@ public class InscriptionDtoHandler {
 		u.setNum_siren(entity.getNumSiren());
 		u.setEtat(entity.getEtatCompte());
 		u.setRole(entity.getRole());
+		u.setCode_postal(entity.getCodePostal());
 		return u;
 	}
 
@@ -33,6 +34,7 @@ public class InscriptionDtoHandler {
 		u.setNumSiren(dto.getNum_siren());
 		u.setEtatCompte(dto.getEtat());
 		u.setRole(dto.getRole());
+		u.setCodePostal(dto.getCode_postal());
 		return u;
 	}
 
