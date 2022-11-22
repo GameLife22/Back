@@ -219,13 +219,6 @@ public class UtilisateurEntity implements Serializable {
 		return produit;
 	}
 
-	public int getCodePostal() {
-		return codePostal;
-	}
-
-	public void setCodePostal(int codePostal) {
-		this.codePostal = codePostal;
-	}
 
 	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String role, String num_Siren, String etat, Integer code_postal) throws Exception{
 		if(!(nom != null && !nom.trim().isEmpty() &&
