@@ -20,7 +20,7 @@ public class InscriptionControler {
     public String inscr01(@RequestBody InscriptionDto monbody) throws Exception{
         LOG.info("InscriptionControler : IN {}", monbody);
         UtilisateurEntity res;
-        res = service.inscription(monbody.getNom(), monbody.getPrenom(), monbody.getMdp(), monbody.getEmail(), monbody.getEmail(), monbody.getNum_rue(), monbody.getRue(), monbody.getRole(), monbody.getNum_siren(), monbody.getEtat());
+        res = service.inscription(monbody);
         LOG.info("InscriptionControler : OUT {}", res);
         return res.getNom();
     }

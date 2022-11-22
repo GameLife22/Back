@@ -1,5 +1,7 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.InscriptionDto;
+import fr.sqli.formation.gamelife.dto.InscriptionDtoHandler;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -15,21 +17,12 @@ public class InscriptionService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public UtilisateurEntity inscription(String nom,String prenom,String pwd,String email,String ville,Integer num_rue,String rue,String role,String num_Siren,String etat) throws Exception{
-            UtilisateurEntity.validate(nom,prenom,pwd,email,ville,num_rue,rue,role,num_Siren,etat);
-            var newUser = uDao.findByEmail(email);
+    public UtilisateurEntity inscription(InscriptionDto dto) throws Exception{
+            UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getRole(), dto.getNum_siren(), dto.getEtat(), dto.getCode_postal());
+            var newUser = uDao.findByEmail(dto.getEmail());
             if(newUser.isEmpty()){
-                UtilisateurEntity u = new UtilisateurEntity();
-                u.setPrenom(prenom);
-                u.setNom(nom);
-                u.setMdp(encoder.encode(pwd));
-                u.setEmail(email);
-                u.setVille(ville);
-                u.setRue(rue);
-                u.setNumRue(num_rue);
-                u.setNumSiren(num_Siren);
-                u.setEtatCompte(etat);
-                u.setRole(role);
+                UtilisateurEntity u = InscriptionDtoHandler.fromDto(dto);
+                u.setMdp(encoder.encode(u.getMdp()));
                 return uDao.save(u);
             }else {
                 throw new UtilisateurExistantException("Utilisateur deja enregistre");

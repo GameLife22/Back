@@ -1,9 +1,14 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.InscriptionDto;
+import fr.sqli.formation.gamelife.dto.InscriptionDtoHandler;
+import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -20,16 +25,27 @@ import static org.junit.jupiter.api.Assertions.*;
 class InscriptionServiceTest {
     @Autowired
     InscriptionService service;
+    private static final Logger LOG = LogManager.getLogger();
 
     @Test
     void testInscription01() throws Exception {
-        UtilisateurEntity u =service.inscription("Astora","Solaire","sa","sa@gmail.com","Landrake",1,"dragon","acheteur",null,"active");
+        LOG.debug("TEST : Cas normal");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com","active","sa","Astora",1,null,"Solaire","acheteur","dragon","Landrake",95150));
+        UtilisateurEntity u =service.inscription(dto);
         Assertions.assertNotNull(u);
         Assertions.assertEquals(u.getNom(),"Astora");
     }
     @Test
     void testInscription02() throws Exception {
-        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription("Astora","Solaire","sa","acheteur001@outlook.fr","Landrake",1,"dragon","acheteur",null,"active"));
+        LOG.debug("TEST : Cas utilisateur existant");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("sa@gmail.com","active","sa","Astora",1,null,"Solaire","acheteur","dragon","Landrake",95150));
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
+    }
+    @Test
+    void testInscription03() throws Exception {
+        LOG.debug("TEST : Cas champs vide");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("sa@gmail.com","active","","",1,null,"Solaire","acheteur","dragon","Landrake",95150));
+        Assertions.assertThrows(IllegalArgumentException.class,()-> service.inscription(dto));
     }
 
 }
