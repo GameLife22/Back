@@ -40,7 +40,8 @@ public class UtilisateurEntity implements Serializable {
 	private String rue;
 
 	private String ville;
-
+	
+	@Column(name="code_postal")
 	private int codePostal;
 
 	//bi-directional many-to-one association to Commande

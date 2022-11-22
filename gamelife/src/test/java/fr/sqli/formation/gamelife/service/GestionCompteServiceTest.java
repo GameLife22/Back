@@ -27,12 +27,12 @@ class GestionCompteServiceTest {
 
     @Test
     void testModificationCompte01() throws Exception {
-        UtilisateurEntity test = service.modificationCompte("dubois","henry","acheteur002@outlook.fr","acheteur002@outlook.fr","Ballancourt",13, "papeterie","acheteur",null,"active");
+        UtilisateurEntity test = service.modificationCompte("dubois","henry","acheteur002@outlook.fr","acheteur002@outlook.fr",13,"rue de la papeterie", "Ballancourt",91610,"acheteur",null,"active");
         Assertions.assertEquals("Ballancourt",test.getVille());
     }
     @Test
     void testModificationCompte02() throws Exception {
-        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationCompte("dubois","henry","acheteur0aze02@outlook.fr","acheteur0aze02@outlook.fr","Ballancourt",13, "papeterie","acheteur",null,"active"));
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationCompte("dubois","henry","acheteur0aze02@outlook.fr","acheteur0aze02@outlook.fr",13,"rue de la papeterie", "ballancourt",91610, "acheteur",null,"active"));
 
     }
 
