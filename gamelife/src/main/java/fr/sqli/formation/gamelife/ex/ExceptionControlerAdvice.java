@@ -13,7 +13,7 @@ public class ExceptionControlerAdvice {
 
     @ExceptionHandler(AuthentificationException.class)
     public ResponseEntity<AuthentificationException> exceptionHandler(AuthentificationException ex){
-        LOG.info("EXCEPTION HANDLER : AUTHENTIFICATION EXCEPTION");
+        LOG.info("EXCEPTION HANDLER : AUTHENTIFICATION EXCEPTION", ex);
         ResponseEntity<AuthentificationException> resu = new ResponseEntity<AuthentificationException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
@@ -25,14 +25,20 @@ public class ExceptionControlerAdvice {
     }
     @ExceptionHandler(UtilisateurExistantException.class)
     public ResponseEntity<UtilisateurExistantException> exceptionHandler(UtilisateurExistantException ex){
-        LOG.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION");
+        LOG.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION", ex);
         ResponseEntity<UtilisateurExistantException> resu = new ResponseEntity<UtilisateurExistantException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Exception> exceptionHandler(Exception ex){
-        LOG.info("EXCEPTION HANDLER : OTHER EXCEPTION");
+        LOG.info("EXCEPTION HANDLER : OTHER EXCEPTION", ex);
         ResponseEntity<Exception> resu = new ResponseEntity<Exception>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
+    @ExceptionHandler(OldPasswordException.class)
+    public ResponseEntity<OldPasswordException> exceptionHandler(OldPasswordException ex){
+        LOG.info("EXCEPTION HANDLER : OLD PASSWORD EXCEPTION", ex);
+        ResponseEntity<OldPasswordException> resu = new ResponseEntity<OldPasswordException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
 }

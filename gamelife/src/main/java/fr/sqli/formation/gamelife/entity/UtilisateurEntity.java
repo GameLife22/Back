@@ -1,7 +1,5 @@
 package fr.sqli.formation.gamelife.entity;
 
-import fr.sqli.formation.gamelife.ex.AuthentificationException;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
@@ -42,6 +40,7 @@ public class UtilisateurEntity implements Serializable {
 	private String rue;
 
 	private String ville;
+
 	@Column(name="code_postal")
 	private int codePostal;
 
@@ -56,24 +55,37 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, String numSiren, String prenom, String role, String rue, String ville,int cp) {
+	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiren, String prenom, String role, String rue, String ville) {
+
 		this.email = email;
 		this.etatCompte = etatCompte;
 		this.mdp = mdp;
 		this.nom = nom;
 		this.numRue = numRue;
+
+		this.codePostal = codePostal;
+
 		this.numSiren = numSiren;
 		this.prenom = prenom;
 		this.role = role;
 		this.rue = rue;
 		this.ville = ville;
-		this.codePostal = cp;
 	}
 
 	public UtilisateurEntity(String email, String mdp) {
 		this.email = email;
 		this.mdp = mdp;
 	}
+
+
+	public int getCodePostal() {
+		return codePostal;
+	}
+
+	public void setCodePostal(int cp) {
+		this.codePostal = cp;
+	}
+
 
 	public int getId() {
 		return this.id;
