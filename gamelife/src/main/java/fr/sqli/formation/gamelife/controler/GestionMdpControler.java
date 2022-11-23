@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ public class GestionMdpControler {
     private static final Logger LOG = LogManager.getLogger();
 
     @PostMapping("/env1")
+    //Obliger que le role = exemple "ROLE_ACHETEUR"
+    //@PreAuthorize("hasRole('ROLE_ACHETEUR')")
     public ResponseEntity<Integer> inscr01(@RequestBody GestionMdpDto monbody) throws Exception{
         LOG.info("GestionMdpControler : IN {}", monbody);
         UtilisateurEntity res;
