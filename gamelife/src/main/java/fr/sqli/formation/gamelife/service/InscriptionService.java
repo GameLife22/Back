@@ -25,7 +25,22 @@ public class InscriptionService {
                 u.setMdp(encoder.encode(u.getMdp()));
                 return uDao.save(u);
             }else {
-                throw new UtilisateurExistantException("Utilisateur deja enregistre");
+                if(newUser.get().getEtatCompte().equals("desactive")){
+                    newUser.get().setEtatCompte("active");
+                    newUser.get().setNom(dto.getNom());
+                    newUser.get().setPrenom(dto.getPrenom());
+                    newUser.get().setMdp(encoder.encode(dto.getMdp()));
+                    newUser.get().setEmail(dto.getEmail());
+                    newUser.get().setVille(dto.getVille());
+                    newUser.get().setCodePostal(dto.getCode_postal());
+                    newUser.get().setRue(dto.getRue());
+                    newUser.get().setNumRue(dto.getNum_rue());
+                    newUser.get().setRole(dto.getRole());
+                    newUser.get().setNumSiren(dto.getNum_siren());
+                     return uDao.save(newUser.get());
+                }else{
+                    throw new UtilisateurExistantException("Utilisateur deja enregistre");
+                }
             }
     }
 }
