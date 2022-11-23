@@ -23,13 +23,13 @@ public class GestionCompteService {
         var control = uDao.findByEmail(dto.getEmail());
         if(user.isPresent()){
             UtilisateurEntity u = uDao.findById(dto.getId()).get();
-            if (!dto.getPrenom().isEmpty() || dto.getPrenom() != null) {
+            if (dto.getPrenom() != null && !dto.getPrenom().isEmpty()) {
                 u.setPrenom(dto.getPrenom());
             }
-            if (!dto.getNom().isEmpty() || dto.getNom() != null) {
+            if (dto.getNom()!= null && !dto.getNom().isEmpty()) {
                 u.setNom(dto.getNom());
             }
-            if (!dto.getEmail().isEmpty() || dto.getEmail() != null) {
+            if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
                 if (control.isEmpty()) {
                     u.setEmail(dto.getEmail());
                 }else if (control.get().getEmail().equals(u.getEmail())){
@@ -38,19 +38,19 @@ public class GestionCompteService {
                     throw new UtilisateurExistantException("email deja utilise");
                 }
             }
-            if (dto.getNumRue() != 0 || dto.getNumRue() != null) {
+            if (dto.getNumRue() != null && dto.getNumRue() == 0) {
                 u.setNumRue(dto.getNumRue());
             }
-            if (!dto.getRue().isEmpty() || dto.getRue() != null) {
+            if (dto.getRue() != null && !dto.getRue().isEmpty()) {
                 u.setRue(dto.getRue());
             }
-            if (!dto.getVille().isEmpty() || dto.getVille() != null) {
+            if (dto.getVille() != null && !dto.getVille().isEmpty()) {
                 u.setVille(dto.getVille());
             }
-            if (dto.getCodePostal() != 0 || dto.getCodePostal() != null) {
+            if (dto.getCodePostal() != null && dto.getCodePostal() != 0) {
                 u.setCodePostal(dto.getCodePostal());
             }
-            if (!dto.getNumSiren().isEmpty() || dto.getNumSiren() != null) {
+            if (dto.getNumSiren() != null && !dto.getNumSiren().isEmpty()) {
                 u.setNumSiren(dto.getNumSiren());
             }
             return uDao.save(u);
