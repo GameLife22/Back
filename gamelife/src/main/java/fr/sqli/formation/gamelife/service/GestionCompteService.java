@@ -56,4 +56,16 @@ public class GestionCompteService {
             throw new UtilisateurExistantException("utilisateur inexistant");
         }
     }
+
+    public boolean estRevendeur(int id) throws Exception {
+        var user = uDao.findById(id);
+        if (!user.isPresent()) {
+            throw new UtilisateurExistantException("utilisateur inexistant");
+        }
+        UtilisateurEntity u = uDao.findById(id).get();
+        if (u.getNumSiren() != null) {
+            return true;
+        }
+        return false;
+    }
 }

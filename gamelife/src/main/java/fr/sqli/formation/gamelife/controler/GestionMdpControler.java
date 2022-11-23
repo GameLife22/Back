@@ -21,7 +21,7 @@ public class GestionMdpControler {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @PostMapping("/env1")
+    @PostMapping("")
     public ResponseEntity<Integer> inscr01(@RequestBody GestionMdpDto monbody) throws Exception{
         LOG.info("GestionMdpControler : IN {}", monbody);
         UtilisateurEntity res;
