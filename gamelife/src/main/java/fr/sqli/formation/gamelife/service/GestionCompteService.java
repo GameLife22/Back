@@ -63,7 +63,7 @@ public class GestionCompteService {
             throw new UtilisateurExistantException("utilisateur inexistant");
         }
         UtilisateurEntity u = uDao.findById(id).get();
-        if (u.getNumSiren() != null) {
+        if (u.getNumSiren() != null && !u.getNumSiren().isEmpty()) {
             return true;
         }
         return false;
