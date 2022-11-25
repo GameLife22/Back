@@ -19,7 +19,7 @@ public class ProduitServiceTest {
     private ProduitService service;
 
     @Test
-    void testRechercherJeuxVideo01() throws Exception {
+    void testRechercherJeuxVideoParNom() throws Exception {
         String jeuvideo = "call";
         var jeux = service.getProductsByName(jeuvideo);
         Assertions.assertNotNull(jeux);
@@ -30,7 +30,7 @@ public class ProduitServiceTest {
     }
 
     @Test
-    void testRechercherJeuxVideo02() throws Exception {
+    void testRechercherJeuxVideoParNom02() throws Exception {
         String jeuvideo = "Call";
         var jeux = service.getProductsByName(jeuvideo);
         Assertions.assertNotNull(jeux);
@@ -41,8 +41,22 @@ public class ProduitServiceTest {
     }
 
     @Test
-    void testRechercheJeuxVideo03() {
+    void testRechercherJeuxVideoParNom03() {
         String jeuvideo = "";
         Assertions.assertThrows(IllegalArgumentException.class, () -> service.getProductsByName(jeuvideo));
+    }
+
+    @Test
+    void testRecupererJeuVideoParId01() {
+        String id = "1";
+        var jeuVideo = this.service.getProductById(id);
+        Assertions.assertNotNull(jeuVideo);
+        Assertions.assertEquals(1, jeuVideo.getId());
+    }
+
+    @Test
+    void testRecupererJeuVideoParId02() {
+        String id = " ";
+        Assertions.assertThrows(IllegalArgumentException.class, () -> service.getProductsByName(id));
     }
 }
