@@ -13,5 +13,7 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateurEntity,I
     // @Query("FROM UtilisateurEntity as c WHERE c.email=:email")
     // public UtilisateurEntity trouverEmail(@Param("email") String email);
     public Optional<UtilisateurEntity> findByEmail(String email);
+    public Optional<UtilisateurEntity> findById(Integer id);
+
 
 }
