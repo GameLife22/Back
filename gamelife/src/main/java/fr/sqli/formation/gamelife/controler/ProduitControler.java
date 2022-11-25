@@ -36,24 +36,43 @@ public class ProduitControler {
 	}
 
 	/**
+	 *	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
+	 * @param id: l'identifiant unique d'un jeu vidéo
+	 * @return HTTP Status + Produit DTO
+	 */
+	@GetMapping("{id}")
+	public ResponseEntity<ProduitDto> getProductById(@PathVariable String id) {
+		var jeuVideo = this.produitService.getProductById(id);
+
+		if (jeuVideo.getId() == 0) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ProduitDto());
+		}
+
+		ProduitDto produitDto = ProduitDtoHandler.fromEntity(jeuVideo);
+
+		return ResponseEntity.ok(produitDto);
+	}
+
+	/**
 	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
 	 * Exemple: http://localhost:8080/produit/search?nom=fi
-	 * @param nom
-	 * @return
+	 * @param nom : jeu vidéo recherché
+	 * @return HTTP Status + List<ProduitDTO>
 	 * @throws Exception
 	 * @author Fabien
 	 */
 	@GetMapping("/search")
-	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) throws Exception {
-		var listJeuVideos = this.produitService.getProductsByName(nom);
+	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) {
+		var listJeuxVideos = this.produitService.getProductsByName(nom);
 
-		if(listJeuVideos.isEmpty())
+		if(listJeuxVideos.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<ProduitDto>());
+		}
 
 		var jeuxVideos = new ArrayList<ProduitDto>();
 
-		for (ProduitEntity e : listJeuVideos) {
-			jeuxVideos.add(ProduitDtoHandler.fromEntity(e));
+		for (ProduitEntity jeu : listJeuxVideos) {
+			jeuxVideos.add(ProduitDtoHandler.fromEntity(jeu));
 		}
 
 		return ResponseEntity.ok(jeuxVideos);
