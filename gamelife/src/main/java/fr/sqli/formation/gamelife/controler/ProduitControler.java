@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,10 +51,16 @@ public class ProduitControler {
 	@GetMapping("/search")
 	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) throws Exception {
 		var listJeuVideos = this.produitService.getProductsByName(nom);
+
+		if(listJeuVideos.isEmpty())
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<ProduitDto>());
+
 		var jeuxVideos = new ArrayList<ProduitDto>();
+
 		for (ProduitEntity e : listJeuVideos) {
 			jeuxVideos.add(ProduitDtoHandler.fromEntity(e));
 		}
+
 		return ResponseEntity.ok(jeuxVideos);
 	}
 }
