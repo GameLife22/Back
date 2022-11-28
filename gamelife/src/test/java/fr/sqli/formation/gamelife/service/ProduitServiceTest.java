@@ -45,10 +45,4 @@ public class ProduitServiceTest {
         String jeuvideo = "";
         Assertions.assertThrows(IllegalArgumentException.class, () -> service.getProductsByName(jeuvideo));
     }
-
-    @Test
-    void testRechercheJeuxVideo04() {
-        String jeuvideo = "%f";
-        Assertions.assertThrows(ProduitException.class, () -> service.getProductsByName(jeuvideo));
-    }
 }

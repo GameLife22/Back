@@ -32,20 +32,21 @@ public class ProduitService {
 
 	/**
 	 * Cette méthode permet de faire une requête d'interrogation (SELECT) avec un filtre (LIKE).
-	 * Exemple: SELECT * FROM gamelife.produit WHERE produit.nom LIKE 'fi%'
-	 * @param nom
+	 * Exemple: SELECT * FROM gamelife.produit WHERE produit.nom LIKE '%fi%'
+	 * @param name
 	 * @return une liste de jeux vidéos
 	 * @author Fabien
 	 */
-	public List<ProduitEntity> getProductsByName(String nom) throws Exception {
-		if (nom != null && !nom.trim().isEmpty()) {
-			var jeuxVideos= produitRepository.findByNomIsContaining(nom);
+	public List<ProduitEntity> getProductsByName(String name) throws Exception {
+		if (name != null && !name.trim().isEmpty()) {
+			var jeuxVideos= produitRepository.findByNomIsContaining(name);
 			if (jeuxVideos.get().size() > 0) {
 				LOG.debug("Le(s) jeu(x) vidéo(s) Ok");
 				return jeuxVideos.get();
 			}
 
-			throw new ProduitException("Produit introuvable");
+			LOG.debug("Liste vide");
+			return new ArrayList<>();
 		}
 
 		throw new IllegalArgumentException();

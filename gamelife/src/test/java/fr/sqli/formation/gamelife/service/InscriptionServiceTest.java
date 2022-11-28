@@ -30,7 +30,7 @@ class InscriptionServiceTest {
     @Test
     void testInscription01() throws Exception {
         LOG.debug("TEST : Cas normal");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com","active","sa","Astora",1,null,"Solaire","acheteur","dragon","Landrake",95150));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com","active","sa","Astora",1,95150,null,"Solaire","acheteur","dragon","Landrake"));
         UtilisateurEntity u =service.inscription(dto);
         Assertions.assertNotNull(u);
         Assertions.assertEquals(u.getNom(),"Astora");
@@ -38,13 +38,13 @@ class InscriptionServiceTest {
     @Test
     void testInscription02() throws Exception {
         LOG.debug("TEST : Cas utilisateur existant");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("sa@gmail.com","active","sa","Astora",1,null,"Solaire","acheteur","dragon","Landrake",95150));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("sa@gmail.com","active","sa","Astora",1,95150,null,"Solaire","acheteur","dragon","Landrake"));
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
     }
     @Test
     void testInscription03() throws Exception {
         LOG.debug("TEST : Cas champs vide");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("sa@gmail.com","active","","",1,null,"Solaire","acheteur","dragon","Landrake",95150));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com","active","","Astora",1,95150,null,"Solaire","acheteur","dragon","Landrake"));
         Assertions.assertThrows(IllegalArgumentException.class,()-> service.inscription(dto));
     }
 
