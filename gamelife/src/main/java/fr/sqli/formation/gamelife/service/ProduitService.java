@@ -38,11 +38,11 @@ public class ProduitService {
      */
     public ProduitEntity getProductById(String id) {
 		if (id != null && !id.trim().isEmpty()) {
-			var jeuVideo= this.produitRepository.findById(Integer.valueOf(id));
+			var game= this.produitRepository.findById(Integer.valueOf(id));
 
-			if(jeuVideo.isPresent()) {
+			if(game.isPresent()) {
 				LOG.debug("Le jeu vidéo Ok");
-				return jeuVideo.get();
+				return game.get();
 			}
 
 			LOG.debug("Object vide");
@@ -61,11 +61,11 @@ public class ProduitService {
 	 */
 	public List<ProduitEntity> getProductsByName(String name) {
 		if (name != null && !name.trim().isEmpty()) {
-			var jeuxVideos= produitRepository.findByNomIsContaining(name);
+			var games= produitRepository.findByNomIsContaining(name);
 
-			if (jeuxVideos.get().size() > 0) {
+			if (games.get().size() > 0) {
 				LOG.debug("Le(s) jeu(x) vidéo(s) Ok");
-				return jeuxVideos.get();
+				return games.get();
 			}
 
 			LOG.debug("Liste vide");
