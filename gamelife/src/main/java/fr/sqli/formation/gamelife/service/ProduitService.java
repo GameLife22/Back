@@ -53,6 +53,7 @@ public class ProduitService {
     }
 
 	/**
+
 	 * Cette méthode permet de faire une requête d'interrogation (SELECT) avec un filtre (WHERE) sur le nom du produit.
 	 * Exemple: SELECT * FROM gamelife.produit WHERE produit.nom LIKE '%fi%'
 	 * @param name: nom du jeu vidéo
@@ -64,6 +65,7 @@ public class ProduitService {
 			var games= produitRepository.findByNomIsContaining(name);
 
 			if (games.get().size() > 0) {
+
 				LOG.debug("Le(s) jeu(x) vidéo(s) Ok");
 				return games.get();
 			}

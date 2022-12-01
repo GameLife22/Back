@@ -76,10 +76,12 @@ public class ProduitServiceTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.getProductById(id));
     }
 
+
     @Test
     void testGetProductsById03() {
         String id = "1000000000";
         var game = this.service.getProductById(id);
         Assertions.assertTrue(game.getId() == 0);
     }
+
 }
