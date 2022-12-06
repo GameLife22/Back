@@ -72,6 +72,7 @@ public class ProduitControler {
 	 * @author Fabien
 	 */
 	@GetMapping("/search")
+
 	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) {
 		var listJeuxVideos = this.produitService.getProductsByName(nom);
 
@@ -83,6 +84,7 @@ public class ProduitControler {
 
 		for (ProduitEntity jeu : listJeuxVideos) {
 			jeuxVideos.add(ProduitDtoHandler.fromEntity(jeu));
+
 		}
 
 		return ResponseEntity.ok(jeuxVideos);
