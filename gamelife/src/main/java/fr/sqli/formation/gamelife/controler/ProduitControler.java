@@ -28,6 +28,10 @@ public class ProduitControler {
 	@Autowired
 	private ProduitService produitService;
 
+	/**
+	 * Cette méthode permet d'appeler le service pour récupérer des produits
+	 * @return: une liste de jeux vidéos
+	 */
 	@GetMapping("/all")
 	public ResponseEntity<List<ProduitDto>> getAllProduit() {
 		LOG.info("Dans getAllProduit");
@@ -41,16 +45,17 @@ public class ProduitControler {
 	}
 
 	/**
-	 *	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
+	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
 	 * @param id: l'identifiant unique d'un jeu vidéo
 	 * @return HTTP Status + Produit DTO
+	 * @author: Fabien
 	 */
 	@GetMapping("{id}")
 	public ResponseEntity<ProduitDto> getProductById(@PathVariable String id) {
 		var jeuVideo = this.produitService.getProductById(id);
 
 		if (jeuVideo.getId() == 0) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ProduitDto());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 
 		ProduitDto produitDto = ProduitDtoHandler.fromEntity(jeuVideo);
