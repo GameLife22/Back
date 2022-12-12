@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.dto;
+package fr.sqli.formation.gamelife.dto.login;
 
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
