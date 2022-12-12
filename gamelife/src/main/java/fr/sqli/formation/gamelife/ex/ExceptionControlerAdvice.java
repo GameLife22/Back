@@ -23,6 +23,19 @@ public class ExceptionControlerAdvice {
         ResponseEntity<CompteDesactiveException> resu = new ResponseEntity<CompteDesactiveException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
+    @ExceptionHandler(PanierExistantException.class)
+    public ResponseEntity<PanierExistantException> exceptionHandler(PanierExistantException ex){
+        LOG.info("EXCEPTION HANDLER : PANIER EXISTANT EXCEPTION");
+        ResponseEntity<PanierExistantException> resu = new ResponseEntity<PanierExistantException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
+    @ExceptionHandler(PanierNonExistantException.class)
+    public ResponseEntity<PanierNonExistantException> exceptionHandler(PanierNonExistantException ex){
+        LOG.info("EXCEPTION HANDLER : PANIER NON EXISTANT EXCEPTION");
+        ResponseEntity<PanierNonExistantException> resu = new ResponseEntity<PanierNonExistantException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
+
     @ExceptionHandler(UtilisateurExistantException.class)
     public ResponseEntity<UtilisateurExistantException> exceptionHandler(UtilisateurExistantException ex){
         LOG.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION", ex);

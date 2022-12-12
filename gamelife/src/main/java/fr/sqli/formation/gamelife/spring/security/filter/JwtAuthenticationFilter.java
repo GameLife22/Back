@@ -1,8 +1,7 @@
 package fr.sqli.formation.gamelife.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.sqli.formation.gamelife.dto.LoginDto;
-import fr.sqli.formation.gamelife.dto.LoginDtoHandler;
+import fr.sqli.formation.gamelife.dto.login.LoginDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -62,7 +61,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
         var email = request.getParameter("email");
         var password = request.getParameter("password");
 
-        //condition pour fairele choix dans verifier les les donnees soit en body ou en parametre
+        //condition pour faire le choix de verifier  les donnees soit en body ou en parametre
         if (!StringUtils.hasLength(email) && !StringUtils.hasLength(password)) {
             JwtAuthenticationFilter.LOG.info("[{}] --> JwtAuthenticationFilter.attemptAuthentication(email, password) as Json in Body", remoteIP);
             //C'est bon les donnees sont dans le body
