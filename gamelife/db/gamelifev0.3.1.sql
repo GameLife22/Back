@@ -111,9 +111,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 -- Table `gamelife`.`panier`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gamelife`.`commande` ;
+DROP TABLE IF EXISTS `gamelife`.`ligne_produit` ;
 
-CREATE TABLE IF NOT EXISTS `gamelife`.`commande` (
+CREATE TABLE IF NOT EXISTS `gamelife`.`ligne_produit` (
   `id_panier` INT NOT NULL,
   `id_produit` INT NOT NULL,
   `quantite` INT NOT NULL,
@@ -154,15 +154,15 @@ INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `
 INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `etat`, `id_utilisateur`) VALUES ('god of war', 'lorem ipsum', 'lorem ipsum', '59.99', 'aventure', '20', 'ps5', '1', '1');
 
 -- -----------------------------------------------------
--- Insertion dans la table commande
+-- Insertion dans la table panier
 -- -----------------------------------------------------
 INSERT INTO `gamelife`.`panier` (`id_utilisateur`, `etat`, `date`) VALUES ('2', '1', '2022-11-07');
 INSERT INTO `gamelife`.`panier` (`id_utilisateur`, `etat`, `date`) VALUES ('2', '2', '2022-11-08');
 
 -- -----------------------------------------------------
--- Insertion dans la table panier
+-- Insertion dans la table ligne_produit
 -- -----------------------------------------------------
-INSERT INTO `gamelife`.`commande` (`id_panier`, `id_produit`, `quantite`) VALUES ('1', '1', '1');
+INSERT INTO `gamelife`.`ligne_produit` (`id_panier`, `id_produit`, `quantite`) VALUES ('1', '1', '1');
 
 -- -----------------------------------------------------
 -- Insertion dans la table image
