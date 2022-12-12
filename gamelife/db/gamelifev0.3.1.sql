@@ -44,16 +44,16 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 -- Table `gamelife`.`commande`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gamelife`.`commande` ;
+DROP TABLE IF EXISTS `gamelife`.`panier` ;
 
-CREATE TABLE IF NOT EXISTS `gamelife`.`commande` (
+CREATE TABLE IF NOT EXISTS `gamelife`.`panier` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `id_utilisateur` INT NOT NULL,
   `etat` TINYINT(1) NOT NULL,
-  `date_commande` DATE NOT NULL,
+  `date` DATE NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_UtilisateurCommande` (`id_utilisateur` ASC) VISIBLE,
-  CONSTRAINT `FK_UtilisateurCommande`
+  INDEX `FK_UtilisateurPanier` (`id_utilisateur` ASC) VISIBLE,
+  CONSTRAINT `FK_UtilisateurPanier`
     FOREIGN KEY (`id_utilisateur`)
     REFERENCES `gamelife`.`utilisateur` (`id`)
     ON DELETE CASCADE
@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`produit` (
   `categorie` VARCHAR(50) NOT NULL,
   `stock` INT NOT NULL,
   `plateforme` VARCHAR(50) NOT NULL,
+  `etat` TINYINT(1) NOT NULL,
   `id_utilisateur` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `FK_UtilisateurProduit` (`id_utilisateur` ASC) VISIBLE,
@@ -110,21 +111,21 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 -- Table `gamelife`.`panier`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gamelife`.`panier` ;
+DROP TABLE IF EXISTS `gamelife`.`ligne_produit` ;
 
-CREATE TABLE IF NOT EXISTS `gamelife`.`panier` (
-  `id_commande` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `gamelife`.`ligne_produit` (
+  `id_panier` INT NOT NULL,
   `id_produit` INT NOT NULL,
   `quantite` INT NOT NULL,
-  INDEX `FK_CommandePanier` (`id_commande` ASC) VISIBLE,
+  INDEX `FK_CommandePanier` (`id_panier` ASC) VISIBLE,
   INDEX `FK_ProduitPanier` (`id_produit` ASC) VISIBLE,
-  PRIMARY KEY (`id_commande`, `id_produit`),
+  PRIMARY KEY (`id_panier`, `id_produit`),
   CONSTRAINT `FK_CommandePanier`
-    FOREIGN KEY (`id_commande`)
-    REFERENCES `gamelife`.`commande` (`id`)
+    FOREIGN KEY (`id_panier`)
+    REFERENCES `gamelife`.`panier` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `FK_ProduitPanier`
+  CONSTRAINT `FK_ProduitCommande`
     FOREIGN KEY (`id_produit`)
     REFERENCES `gamelife`.`produit` (`id`)
     ON DELETE CASCADE
@@ -147,21 +148,21 @@ INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`
 -- -----------------------------------------------------
 -- Insertion dans la table produit
 -- -----------------------------------------------------
-INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `id_utilisateur`) VALUES ('fifa2023', 'fifa 2023', 'lorem ipsum', '59.99', 'sport', '100', 'ps5', '1');
-INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `id_utilisateur`) VALUES ('call of duty', 'lorem ipsum', 'lorem ipsum', '69.99', 'guerre', '10', 'ps5', '2');
-INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `id_utilisateur`) VALUES ('gta', 'lorem ipsum', 'lorem ipsum', '69.99', 'gta like', '5', 'ps5', '2');
-INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `id_utilisateur`) VALUES ('god of war', 'lorem ipsum', 'lorem ipsum', '59.99', 'aventure', '20', 'ps5', '1');
-
--- -----------------------------------------------------
--- Insertion dans la table commande
--- -----------------------------------------------------
-INSERT INTO `gamelife`.`commande` (`id_utilisateur`, `etat`, `date_commande`) VALUES ('2', '1', '2022-11-07');
-INSERT INTO `gamelife`.`commande` (`id_utilisateur`, `etat`, `date_commande`) VALUES ('2', '2', '2022-11-08');
+INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `etat`, `id_utilisateur`) VALUES ('fifa2023', 'fifa 2023', 'lorem ipsum', '59.99', 'sport', '100', 'ps5', '1', '1');
+INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `etat`, `id_utilisateur`) VALUES ('call of duty', 'lorem ipsum', 'lorem ipsum', '69.99', 'guerre', '10', 'ps5', '1', '2');
+INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `etat`, `id_utilisateur`) VALUES ('gta', 'lorem ipsum', 'lorem ipsum', '69.99', 'gta like', '5', 'ps5', '1', '2');
+INSERT INTO `gamelife`.`produit` (`nom`, `texte_descriptif`, `detail`, `prix`, `categorie`, `stock`, `plateforme`, `etat`, `id_utilisateur`) VALUES ('god of war', 'lorem ipsum', 'lorem ipsum', '59.99', 'aventure', '20', 'ps5', '1', '1');
 
 -- -----------------------------------------------------
 -- Insertion dans la table panier
 -- -----------------------------------------------------
-INSERT INTO `gamelife`.`panier` (`id_commande`, `id_produit`, `quantite`) VALUES ('1', '1', '1');
+INSERT INTO `gamelife`.`panier` (`id_utilisateur`, `etat`, `date`) VALUES ('2', '1', '2022-11-07');
+INSERT INTO `gamelife`.`panier` (`id_utilisateur`, `etat`, `date`) VALUES ('2', '2', '2022-11-08');
+
+-- -----------------------------------------------------
+-- Insertion dans la table ligne_produit
+-- -----------------------------------------------------
+INSERT INTO `gamelife`.`ligne_produit` (`id_panier`, `id_produit`, `quantite`) VALUES ('1', '1', '1');
 
 -- -----------------------------------------------------
 -- Insertion dans la table image
