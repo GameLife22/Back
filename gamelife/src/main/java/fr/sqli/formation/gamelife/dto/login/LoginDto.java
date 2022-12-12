@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.dto;
+package fr.sqli.formation.gamelife.dto.login;
 
 public class    LoginDto {
     private String login;
