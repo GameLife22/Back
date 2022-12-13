@@ -42,9 +42,9 @@ public class ProduitEntity implements Serializable {
 	@OneToMany(mappedBy="produit")
 	private List<ImageEntity> images;
 
-	//bi-directional many-to-one association to Panier
+	//bi-directional many-to-one association to ItemPanier
 	@OneToMany(mappedBy="produit")
-	private List<PanierEntity> paniers;
+	private List<ItemPanierEntity> ItemPaniers;
 
 	//bi-directional many-to-one association to Utilisateur
 	@ManyToOne
@@ -140,26 +140,26 @@ public class ProduitEntity implements Serializable {
 		return image;
 	}
 
-	public List<PanierEntity> getPaniers() {
-		return this.paniers;
+	public List<ItemPanierEntity> getItemPaniers() {
+		return this.ItemPaniers;
 	}
 
-	public void setPaniers(List<PanierEntity> paniers) {
-		this.paniers = paniers;
+	public void setItemPaniers(List<ItemPanierEntity> ItemPaniers) {
+		this.ItemPaniers = ItemPaniers;
 	}
 
-	public PanierEntity addPanier(PanierEntity panier) {
-		getPaniers().add(panier);
-		panier.setProduit(this);
+	public ItemPanierEntity addItemPanier(ItemPanierEntity ItemPanier) {
+		getItemPaniers().add(ItemPanier);
+		ItemPanier.setProduit(this);
 
-		return panier;
+		return ItemPanier;
 	}
 
-	public PanierEntity removePanier(PanierEntity panier) {
-		getPaniers().remove(panier);
-		panier.setProduit(null);
+	public ItemPanierEntity removeItemPanier(ItemPanierEntity ItemPanier) {
+		getItemPaniers().remove(ItemPanier);
+		ItemPanier.setProduit(null);
 
-		return panier;
+		return ItemPanier;
 	}
 
 	public UtilisateurEntity getUtilisateur() {

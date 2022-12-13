@@ -23,16 +23,16 @@ public class ExceptionControlerAdvice {
         ResponseEntity<CompteDesactiveException> resu = new ResponseEntity<CompteDesactiveException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
-    @ExceptionHandler(PanierExistantException.class)
-    public ResponseEntity<PanierExistantException> exceptionHandler(PanierExistantException ex){
-        LOG.info("EXCEPTION HANDLER : PANIER EXISTANT EXCEPTION");
-        ResponseEntity<PanierExistantException> resu = new ResponseEntity<PanierExistantException>(ex, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ItemPanierExistantException.class)
+    public ResponseEntity<ItemPanierExistantException> exceptionHandler(ItemPanierExistantException ex){
+        LOG.info("EXCEPTION HANDLER : ItemPanier EXISTANT EXCEPTION");
+        ResponseEntity<ItemPanierExistantException> resu = new ResponseEntity<ItemPanierExistantException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
-    @ExceptionHandler(PanierNonExistantException.class)
-    public ResponseEntity<PanierNonExistantException> exceptionHandler(PanierNonExistantException ex){
-        LOG.info("EXCEPTION HANDLER : PANIER NON EXISTANT EXCEPTION");
-        ResponseEntity<PanierNonExistantException> resu = new ResponseEntity<PanierNonExistantException>(ex, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ItemPanierNonExistantException.class)
+    public ResponseEntity<ItemPanierNonExistantException> exceptionHandler(ItemPanierNonExistantException ex){
+        LOG.info("EXCEPTION HANDLER : ItemPanier NON EXISTANT EXCEPTION");
+        ResponseEntity<ItemPanierNonExistantException> resu = new ResponseEntity<ItemPanierNonExistantException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
 
