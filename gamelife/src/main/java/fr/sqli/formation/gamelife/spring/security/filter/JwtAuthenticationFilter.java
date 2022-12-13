@@ -1,7 +1,7 @@
 package fr.sqli.formation.gamelife.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.sqli.formation.gamelife.dto.login.LoginDto;
+import fr.sqli.formation.gamelife.dto.login.LoginDtoIn;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
                 // production
                 JwtAuthenticationFilter.LOG.trace("[{}] --> JwtAuthenticationFilter.attemptAuthentication(email, password) Body={}", remoteIP, body);
                 var mapper = new ObjectMapper();
-                var loginDto = mapper.readValue(body, LoginDto.class);
+                var loginDto = mapper.readValue(body, LoginDtoIn.class);
                 email = loginDto.getLogin();
                 password = loginDto.getPwd();
             } catch (Exception lExp) {

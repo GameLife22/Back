@@ -1,14 +1,14 @@
 package fr.sqli.formation.gamelife.dto.login;
 
-public class    LoginDto {
+public class LoginDtoIn {
     private String login;
     private String pwd;
 
 
-    public LoginDto() {
+    public LoginDtoIn() {
     }
 
-    public LoginDto(String login, String pwd) {
+    public LoginDtoIn(String login, String pwd) {
         this.login = login;
         this.pwd = pwd;
     }

@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="ItemPanier")
+@Table(name="item_panier")
 @NamedQuery(name="ItemPanierEntity.findAll", query="SELECT p FROM ItemPanierEntity p")
 public class ItemPanierEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
