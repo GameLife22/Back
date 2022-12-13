@@ -14,6 +14,8 @@ public class ProduitDto {
 
 	private String categorie;
 
+	private String texteDescriptif;
+
 	private String detail;
 
 	private String nom;
@@ -38,6 +40,14 @@ public class ProduitDto {
 
 	public void setCategorie(String categorie) {
 		this.categorie = categorie;
+	}
+
+	public String getTexteDescriptif() {
+		return texteDescriptif;
+	}
+
+	public void setTexteDescriptif(String texteDescriptif) {
+		this.texteDescriptif = texteDescriptif;
 	}
 
 	public String getDetail() {

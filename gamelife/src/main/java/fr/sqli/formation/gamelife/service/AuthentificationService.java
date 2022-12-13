@@ -1,6 +1,6 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.LoginDto;
+import fr.sqli.formation.gamelife.dto.login.LoginDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.CompteDesactiveException;
@@ -69,6 +69,7 @@ public class AuthentificationService implements AuthenticationProvider {
         LoginDto login = new LoginDto(email,password) ;
 
         AuthentificationService.LOG.info("Spring Security Authenticate email={}", email);
+
         UtilisateurEntity user = null;
         try {
             user = authentifier(login);
@@ -84,6 +85,7 @@ public class AuthentificationService implements AuthenticationProvider {
             springSecurityRoles.add(ga);
 
             var upat = new UsernamePasswordAuthenticationToken(email, password, springSecurityRoles);
+            //Les détails qu'on veut insérer dans notre token
             upat.setDetails(user.getId());
             return upat;
         }

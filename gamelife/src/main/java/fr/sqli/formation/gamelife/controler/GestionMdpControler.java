@@ -22,7 +22,6 @@ public class GestionMdpControler {
 
     private static final Logger LOG = LogManager.getLogger();
 
-
     @PostMapping("")
     //Obliger que le role = exemple "ROLE_ACHETEUR"
     //@PreAuthorize("hasRole('ROLE_ACHETEUR')")

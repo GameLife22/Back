@@ -1,18 +1,14 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.LoginDto;
-import fr.sqli.formation.gamelife.dto.LoginDtoHandler;
+import fr.sqli.formation.gamelife.dto.login.LoginDto;
+import fr.sqli.formation.gamelife.dto.login.LoginDtoHandler;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.ex.AuthentificationException;
-import fr.sqli.formation.gamelife.ex.CompteDesactiveException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Rollback
 @Transactional
@@ -25,7 +21,7 @@ class AuthentificationServiceTest {
         String login = "fabien.bidault@social.aston-ecole.com";
         String pwd = "Paz6!!3";
         LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
-       // UtilisateurEntity u = service.authentifier(dto);
+        //UtilisateurEntity u = service.authentifier(dto);
         //Assertions.assertNotNull(u);
         //Assertions.assertEquals(1,u.getId());
     }
