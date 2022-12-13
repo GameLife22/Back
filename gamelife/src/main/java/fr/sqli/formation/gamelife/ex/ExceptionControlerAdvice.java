@@ -25,14 +25,15 @@ public class ExceptionControlerAdvice {
     }
     @ExceptionHandler(ItemPanierExistantException.class)
     public ResponseEntity<ItemPanierExistantException> exceptionHandler(ItemPanierExistantException ex){
-        LOG.info("EXCEPTION HANDLER : ItemPanier EXISTANT EXCEPTION");
+        LOG.info("EXCEPTION HANDLER : ITEM PANIER EXISTANT EXCEPTION");
         ResponseEntity<ItemPanierExistantException> resu = new ResponseEntity<ItemPanierExistantException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
     @ExceptionHandler(ItemPanierNonExistantException.class)
     public ResponseEntity<ItemPanierNonExistantException> exceptionHandler(ItemPanierNonExistantException ex){
-        LOG.info("EXCEPTION HANDLER : ItemPanier NON EXISTANT EXCEPTION");
+        LOG.info("EXCEPTION HANDLER : ITEM PANIER NON EXISTANT EXCEPTION");
         ResponseEntity<ItemPanierNonExistantException> resu = new ResponseEntity<ItemPanierNonExistantException>(ex, HttpStatus.BAD_REQUEST);
+
         return resu;
     }
 
