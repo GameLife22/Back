@@ -46,7 +46,7 @@ public class ItemPanierControler {
     }
 
    @GetMapping("/get")
-    public ResponseEntity<ItemPanierDtoOut>  getItemPanierByCommandeIdAndProduitId(@RequestBody ItemPanierDtoOut monbody ) throws Exception {
+    public ResponseEntity<ItemPanierDtoOut>  getItemPanierByPanierIdAndProduitId(@RequestBody ItemPanierDtoOut monbody ) throws Exception {
         var ItemPanier = this.ItemPanierService.getItemPanier(monbody);
        if (ItemPanier.equals(null)) {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
