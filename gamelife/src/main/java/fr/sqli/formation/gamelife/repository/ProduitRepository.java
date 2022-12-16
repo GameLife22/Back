@@ -20,11 +20,11 @@ public interface ProduitRepository extends JpaRepository<ProduitEntity, Integer>
     public Optional<List<ProduitEntity>> findByNomIsContaining(String nom);
 
     /**
-     * Cette méthoe permet de récupérer un produit à partir du nom et de la catégorie
+     * Cette méthode permet de récupérer un produit à partir du nom et de la plateforme
      * @param nom
-     * @param categorie:
+     * @param plateforme:
      * @return un produit
      * @author: Fabien
      */
-    public Optional<ProduitEntity> findByNomAndCategorie(String nom, String categorie);
+    public Optional<ProduitEntity> findByNomAndPlateforme(String nom, String plateforme);
 }
