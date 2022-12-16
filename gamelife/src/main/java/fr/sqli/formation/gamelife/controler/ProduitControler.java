@@ -4,15 +4,18 @@ package fr.sqli.formation.gamelife.controler;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.sqli.formation.gamelife.dto.produit.ProduitDtoIn;
+import fr.sqli.formation.gamelife.dto.produit.ProduitDtoIn2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import fr.sqli.formation.gamelife.dto.ProduitDto;
-import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
+import fr.sqli.formation.gamelife.dto.produit.ProduitDtoOut;
+import fr.sqli.formation.gamelife.dto.produit.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import fr.sqli.formation.gamelife.service.ProduitService;
 
@@ -33,10 +36,10 @@ public class ProduitControler {
 	 * @return: une liste de jeux vidéos
 	 */
 	@GetMapping("/all")
-	public ResponseEntity<List<ProduitDto>> getAllProduit() {
+	public ResponseEntity<List<ProduitDtoOut>> getAllProduit() {
 		LOG.info("Dans getAllProduit");
 		var r = this.produitService.getAllProduit();
-		var rd = new ArrayList<ProduitDto>();
+		var rd = new ArrayList<ProduitDtoOut>();
 		for (ProduitEntity e : r) {
 			rd.add(ProduitDtoHandler.fromEntity(e));
 		}
@@ -47,19 +50,12 @@ public class ProduitControler {
 	/**
 	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
 	 * @param id: l'identifiant unique d'un jeu vidéo
-	 * @return HTTP Status + Produit DTO
 	 * @author: Fabien
 	 */
 	@GetMapping("{id}")
-	public ResponseEntity<ProduitDto> getProductById(@PathVariable String id) {
+	public ResponseEntity<ProduitDtoOut> getProductById(@PathVariable Integer id) throws  Exception {
 		var jeuVideo = this.produitService.getProductById(id);
-
-		if (jeuVideo.getId() == 0) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-
-		ProduitDto produitDto = ProduitDtoHandler.fromEntity(jeuVideo);
-
+		ProduitDtoOut produitDto = ProduitDtoHandler.fromEntity(jeuVideo);
 		return ResponseEntity.ok(produitDto);
 	}
 
@@ -67,20 +63,13 @@ public class ProduitControler {
 	 * Cette méthode permet d'appeler le service pour récupérer un produit via son nom passé en paramètre de l'url
 	 * Exemple: http://localhost:8080/produit/search?nom=fi
 	 * @param nom : jeu vidéo recherché
-	 * @return HTTP Status + List<ProduitDTO>
-	 * @throws Exception
 	 * @author Fabien
 	 */
 	@GetMapping("/search")
 
-	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) {
+	public ResponseEntity<List<ProduitDtoOut>> getProductsByName(@RequestParam String nom) throws Exception {
 		var listJeuxVideos = this.produitService.getProductsByName(nom);
-
-		if(listJeuxVideos.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<ProduitDto>());
-		}
-
-		var jeuxVideos = new ArrayList<ProduitDto>();
+		var jeuxVideos = new ArrayList<ProduitDtoOut>();
 
 		for (ProduitEntity jeu : listJeuxVideos) {
 			jeuxVideos.add(ProduitDtoHandler.fromEntity(jeu));
@@ -89,4 +78,23 @@ public class ProduitControler {
 
 		return ResponseEntity.ok(jeuxVideos);
 	}
+
+	@PostMapping("/create")
+	public ResponseEntity<ProduitEntity> ajouterNouveauProduit(@RequestBody ProduitDtoIn produitDtoIn) throws Exception {
+		var produit = this.produitService.ajouterNouveauProduit(produitDtoIn);
+		return new ResponseEntity<>(produit, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<ProduitEntity> miseAjourProduit(@RequestBody ProduitDtoIn2 produitDtoIn2) throws Exception{
+		var produit = this.produitService.miseAJourProduit(produitDtoIn2);
+		return new ResponseEntity<>(produit, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/delete/{id}")
+	public ResponseEntity<ProduitEntity> desactiverProduit(@PathVariable Integer id) throws Exception {
+		var produit = this.produitService.desactiverProduit(id);
+		return new ResponseEntity<>(produit, HttpStatus.OK);
+	}
+
 }

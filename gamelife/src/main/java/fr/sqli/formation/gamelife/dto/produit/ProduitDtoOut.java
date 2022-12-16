@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.dto;
+package fr.sqli.formation.gamelife.dto.produit;
 
 import fr.sqli.formation.gamelife.entity.ImageEntity;
 
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Produit DTO
  */
-public class ProduitDto {
+public class ProduitDtoOut {
 
 	private int id;
 

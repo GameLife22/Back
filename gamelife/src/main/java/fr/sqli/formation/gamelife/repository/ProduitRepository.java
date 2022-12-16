@@ -18,4 +18,13 @@ public interface ProduitRepository extends JpaRepository<ProduitEntity, Integer>
      * @author: Fabien
      */
     public Optional<List<ProduitEntity>> findByNomIsContaining(String nom);
+
+    /**
+     * Cette méthoe permet de récupérer un produit à partir du nom et de la catégorie
+     * @param nom
+     * @param categorie:
+     * @return un produit
+     * @author: Fabien
+     */
+    public Optional<ProduitEntity> findByNomAndCategorie(String nom, String categorie);
 }

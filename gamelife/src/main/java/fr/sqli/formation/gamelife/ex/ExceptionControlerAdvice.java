@@ -42,6 +42,14 @@ public class ExceptionControlerAdvice {
         ResponseEntity<UtilisateurExistantException> resu = new ResponseEntity<UtilisateurExistantException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
+
+    @ExceptionHandler(UtilisateurNonExistantException.class)
+    public ResponseEntity<UtilisateurNonExistantException> exceptionHandler(UtilisateurNonExistantException ex){
+        LOG.info("EXCEPTION HANDLER : UTILISATEUR NON EXISTANT EXCEPTION", ex);
+        ResponseEntity<UtilisateurNonExistantException> resu = new ResponseEntity<UtilisateurNonExistantException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Exception> exceptionHandler(Exception ex){
         LOG.info("EXCEPTION HANDLER : OTHER EXCEPTION", ex);
@@ -54,4 +62,33 @@ public class ExceptionControlerAdvice {
         ResponseEntity<OldPasswordException> resu = new ResponseEntity<OldPasswordException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
+
+    @ExceptionHandler(ProduitExistantException.class)
+    public ResponseEntity<ProduitExistantException> exceptionHandler(ProduitExistantException ex){
+        LOG.info("EXCEPTION HANDLER : PRODUIT EXISTANT EXCEPTION", ex);
+        ResponseEntity<ProduitExistantException> resu = new ResponseEntity<ProduitExistantException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
+
+    @ExceptionHandler(ProduitNonExistantException.class)
+    public ResponseEntity<ProduitNonExistantException> exceptionHandler(ProduitNonExistantException ex){
+        LOG.info("EXCEPTION HANDLER : PRODUIT N'EXISTE PAS EXCEPTION", ex);
+        ResponseEntity<ProduitNonExistantException> resu = new ResponseEntity<ProduitNonExistantException>(ex, HttpStatus.NOT_FOUND);
+        return resu;
+    }
+
+    @ExceptionHandler(ProduitNonValideException.class)
+    public ResponseEntity<ProduitNonValideException> exceptionHandler(ProduitNonValideException ex){
+        LOG.info("EXCEPTION HANDLER : PRODUIT INVALIDE EXCEPTION", ex);
+        ResponseEntity<ProduitNonValideException> resu = new ResponseEntity<ProduitNonValideException>(ex, HttpStatus.BAD_REQUEST);
+        return resu;
+    }
+
+    @ExceptionHandler(ProduitsNonExistantsException.class)
+    public ResponseEntity<ProduitsNonExistantsException> exceptionHandler(ProduitsNonExistantsException ex){
+        LOG.info("EXCEPTION HANDLER : PRODUIT INTROUVABLE EXCEPTION", ex);
+        ResponseEntity<ProduitsNonExistantsException> resu = new ResponseEntity<ProduitsNonExistantsException>(ex, HttpStatus.NO_CONTENT);
+        return resu;
+    }
+
 }

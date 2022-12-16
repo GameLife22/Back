@@ -34,6 +34,8 @@ public class ProduitEntity implements Serializable {
 
 	private int stock;
 
+	private int etat;
+
 	@Lob
 	@Column(name="texte_descriptif")
 	private String texteDescriptif;
@@ -124,6 +126,14 @@ public class ProduitEntity implements Serializable {
 
 	public void setImages(List<ImageEntity> images) {
 		this.images = images;
+	}
+
+	public int getEtat() {
+		return etat;
+	}
+
+	public void setEtat(int etat) {
+		this.etat = etat;
 	}
 
 	public ImageEntity addImage(ImageEntity image) {

@@ -1,17 +1,14 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.produit.ProduitDtoIn;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
-import fr.sqli.formation.gamelife.ex.ProduitException;
-import fr.sqli.formation.gamelife.repository.ProduitRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class ProduitServiceTest {
@@ -63,8 +60,8 @@ public class ProduitServiceTest {
     }
 
     @Test
-    void testGetProductsById01() {
-        String id = "1";
+    void testGetProductsById01() throws Exception {
+        Integer id = 1;
         var game = this.service.getProductById(id);
         Assertions.assertNotNull(game);
         Assertions.assertEquals(1, game.getId());
@@ -72,14 +69,14 @@ public class ProduitServiceTest {
 
     @Test
     void testGetProductsById02() {
-        String id = "";
+        Integer id = -1;
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.getProductById(id));
     }
 
 
     @Test
-    void testGetProductsById03() {
-        String id = "1000000000";
+    void testGetProductsById03() throws  Exception{
+        Integer id = 1000000000;
         var game = this.service.getProductById(id);
         Assertions.assertTrue(game.getId() == 0);
     }
