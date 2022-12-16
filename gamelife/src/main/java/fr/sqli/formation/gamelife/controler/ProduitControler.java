@@ -80,21 +80,21 @@ public class ProduitControler {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ProduitEntity> ajouterNouveauProduit(@RequestBody ProduitDtoIn produitDtoIn) throws Exception {
-		var produit = this.produitService.ajouterNouveauProduit(produitDtoIn);
-		return new ResponseEntity<>(produit, HttpStatus.CREATED);
+	public ResponseEntity<HttpStatus> ajouterNouveauProduit(@RequestBody ProduitDtoIn produitDtoIn) throws Exception {
+		this.produitService.ajouterNouveauProduit(produitDtoIn);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<ProduitEntity> miseAjourProduit(@RequestBody ProduitDtoIn2 produitDtoIn2) throws Exception{
-		var produit = this.produitService.miseAJourProduit(produitDtoIn2);
-		return new ResponseEntity<>(produit, HttpStatus.CREATED);
+	public ResponseEntity<HttpStatus> miseAjourProduit(@RequestBody ProduitDtoIn2 produitDtoIn2) throws Exception{
+		this.produitService.miseAJourProduit(produitDtoIn2);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PutMapping("/delete/{id}")
-	public ResponseEntity<ProduitEntity> desactiverProduit(@PathVariable Integer id) throws Exception {
-		var produit = this.produitService.desactiverProduit(id);
-		return new ResponseEntity<>(produit, HttpStatus.OK);
+	public ResponseEntity<HttpStatus> desactiverProduit(@PathVariable Integer id) throws Exception {
+		this.produitService.desactiverProduit(id);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
