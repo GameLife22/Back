@@ -3,7 +3,6 @@ package fr.sqli.formation.gamelife.service;
 import fr.sqli.formation.gamelife.dto.InscriptionDto;
 import fr.sqli.formation.gamelife.dto.InscriptionDtoHandler;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class InscriptionService {
                     newUser.get().setNumRue(dto.getNum_rue());
                     newUser.get().setRole(dto.getRole());
                     newUser.get().setNumSiren(dto.getNum_siren());
-                     return uDao.save(newUser.get());
+                    return uDao.save(newUser.get());
                 }else{
                     throw new UtilisateurExistantException("Utilisateur deja enregistre");
                 }

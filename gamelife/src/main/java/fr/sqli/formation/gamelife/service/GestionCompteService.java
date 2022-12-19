@@ -63,13 +63,19 @@ public class GestionCompteService {
         var user = uDao.findById(dto.getId());
         if (user.isPresent()) {
             UtilisateurEntity u = uDao.findById(dto.getId()).get();
+            if(dto.getNew_mdp() == null || dto.getNew_mdp().isEmpty() || dto.getOld_mdp() == null || dto.getOld_mdp().isEmpty()){
+                throw new IllegalArgumentException("Champs vide ou null");
+            }
+            if (!encoder.matches(dto.getOld_mdp(), u.getMdp())){
+                throw new OldPasswordException("Mot de passe incorrect");
+            }
             if(encoder.matches(dto.getNew_mdp(), u.getMdp())){
-                throw new OldPasswordException("mot de passe deja utilise");
+                throw new OldPasswordException("Mot de passe déjà utilise");
             }
             u.setMdp(encoder.encode(dto.getNew_mdp()));
             return uDao.save(u);
         } else {
-            throw new UtilisateurExistantException("utilisateur inexistant");
+            throw new UtilisateurExistantException("utilisateur inéxistant");
         }
     }
 
@@ -77,6 +83,9 @@ public class GestionCompteService {
         var user = uDao.findById(dto.getId());
         if (user.isPresent()) {
             UtilisateurEntity u = uDao.findById(dto.getId()).get();
+            if (dto.getNew_etat() == null){
+                throw  new IllegalArgumentException();
+            }
             u.setEtatCompte(dto.getNew_etat());
             return uDao.save(u);
         } else {

@@ -1,11 +1,9 @@
 package fr.sqli.formation.gamelife.dto;
 
-import javax.persistence.Column;
-
 public class InscriptionDto {
     private String email;
 
-    private String etat;
+    private Integer etat;
 
     private String mdp;
 
@@ -26,7 +24,7 @@ public class InscriptionDto {
     private  int code_postal;
     public InscriptionDto() {
     }
-    public InscriptionDto(String email, String etat, String mdp, String nom, int num_rue, String num_siren, String prenom, String role, String rue, String ville, int code_postal) {
+    public InscriptionDto(String email, Integer etat, String mdp, String nom, int num_rue, String num_siren, String prenom, String role, String rue, String ville, int code_postal) {
         this.email = email;
         this.etat = etat;
         this.mdp = mdp;
@@ -48,11 +46,11 @@ public class InscriptionDto {
         this.email = email;
     }
 
-    public String getEtat() {
+    public Integer getEtat() {
         return etat;
     }
 
-    public void setEtat(String etat) {
+    public void setEtat(Integer etat) {
         this.etat = etat;
     }
 
