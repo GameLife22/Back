@@ -21,7 +21,7 @@ public class GestionEtatControler {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @PostMapping("/env1")
+    @PostMapping("")
     public ResponseEntity<Integer> inscr01(@RequestBody GestionEtatDto monbody) throws Exception{
         LOG.info("GestionEtatControler : IN {}", monbody);
         UtilisateurEntity res;

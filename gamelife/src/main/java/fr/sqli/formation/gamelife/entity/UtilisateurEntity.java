@@ -21,7 +21,7 @@ public class UtilisateurEntity implements Serializable {
 	private String email;
 
 	@Column(name="etat_compte")
-	private String etatCompte;
+	private Integer etatCompte;
 
 	private String mdp;
 
@@ -55,7 +55,7 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiren, String prenom, String role, String rue, String ville) {
+	public UtilisateurEntity(String email, Integer etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiren, String prenom, String role, String rue, String ville) {
 
 		this.email = email;
 		this.etatCompte = etatCompte;
@@ -103,11 +103,11 @@ public class UtilisateurEntity implements Serializable {
 		this.email = email;
 	}
 
-	public String getEtatCompte() {
+	public Integer getEtatCompte() {
 		return this.etatCompte;
 	}
 
-	public void setEtatCompte(String etatCompte) {
+	public void setEtatCompte(Integer etatCompte) {
 		this.etatCompte = etatCompte;
 	}
 
@@ -220,7 +220,7 @@ public class UtilisateurEntity implements Serializable {
 	}
 
 
-	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String role, String num_Siren, String etat, Integer code_postal) throws Exception{
+	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String role, String num_Siren, Integer etat, Integer code_postal) throws Exception{
 		if(!(nom != null && !nom.trim().isEmpty() &&
 				prenom != null && !prenom.trim().isEmpty() &&
 				email != null && !email.trim().isEmpty() &&
