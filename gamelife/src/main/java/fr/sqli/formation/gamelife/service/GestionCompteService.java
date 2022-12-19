@@ -28,7 +28,7 @@ public class GestionCompteService {
             u.setRue(dto.getRue());
             u.setVille(dto.getVille());
             u.setCodePostal(dto.getCodePostal());
-            u.setNumSiren(dto.getNumSiren());
+            u.setNumSiret(dto.getNumSiren());
             return uDao.save(u);
         }else {
             throw new UtilisateurExistantException("Utilisateur inexistant");

@@ -14,7 +14,7 @@ public class InscriptionDtoHandler {
 		u.setVille(entity.getVille());
 		u.setRue(entity.getRue());
 		u.setNum_rue(entity.getNumRue());
-		u.setNum_siren(entity.getNumSiren());
+		u.setNum_siret(entity.getNumSiret());
 		u.setEtat(entity.getEtatCompte());
 		u.setRole(entity.getRole());
 		u.setCode_postal(entity.getCodePostal());
@@ -31,7 +31,7 @@ public class InscriptionDtoHandler {
 		u.setVille(dto.getVille());
 		u.setRue(dto.getRue());
 		u.setNumRue(dto.getNum_rue());
-		u.setNumSiren(dto.getNum_siren());
+		u.setNumSiret(dto.getNum_siret());
 		u.setEtatCompte(dto.getEtat());
 		u.setRole(dto.getRole());
 		u.setCodePostal(dto.getCode_postal());

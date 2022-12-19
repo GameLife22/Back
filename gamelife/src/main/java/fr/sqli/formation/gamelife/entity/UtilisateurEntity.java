@@ -31,7 +31,7 @@ public class UtilisateurEntity implements Serializable {
 	private int numRue;
 
 	@Column(name="num_siren")
-	private String numSiren;
+	private String numSiret;
 
 	private String prenom;
 
@@ -55,7 +55,7 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiren, String prenom, String role, String rue, String ville) {
+	public UtilisateurEntity(String email, String etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiret, String prenom, String role, String rue, String ville) {
 
 		this.email = email;
 		this.etatCompte = etatCompte;
@@ -65,7 +65,7 @@ public class UtilisateurEntity implements Serializable {
 
 		this.codePostal = codePostal;
 
-		this.numSiren = numSiren;
+		this.numSiret = numSiret;
 		this.prenom = prenom;
 		this.role = role;
 		this.rue = rue;
@@ -135,12 +135,12 @@ public class UtilisateurEntity implements Serializable {
 		this.numRue = numRue;
 	}
 
-	public String getNumSiren() {
-		return this.numSiren;
+	public String getNumSiret() {
+		return this.numSiret;
 	}
 
-	public void setNumSiren(String numSiren) {
-		this.numSiren = numSiren;
+	public void setNumSiret(String numSiren) {
+		this.numSiret = numSiren;
 	}
 
 	public String getPrenom() {
