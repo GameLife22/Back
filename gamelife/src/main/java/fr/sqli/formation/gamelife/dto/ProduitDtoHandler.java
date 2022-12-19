@@ -7,6 +7,7 @@ public class ProduitDtoHandler {
 	public static ProduitDto fromEntity(ProduitEntity entity) {
 		var resu = new ProduitDto();
 		resu.setCategorie(entity.getCategorie());
+		resu.setTexteDescriptif(entity.getTexteDescriptif());
 		resu.setNom(entity.getNom());
 		resu.setDetail(entity.getDetail());
 		resu.setPlateforme(entity.getPlateforme());
