@@ -102,8 +102,8 @@ public class ProduitService {
 		validerNouveauProduit(nouveauProduit); 		// check si le produit est correcte
 
 		String nomProduit = nouveauProduit.getNom(); 		// check si le produit n'existe pas
-		String categorieProduit = nouveauProduit.getCategorie();
-		var produitExiste = this.produitRepository.findByNomAndCategorie(nomProduit, categorieProduit);
+		String plateformeProduit = nouveauProduit.getPlateforme();
+		var produitExiste = this.produitRepository.findByNomAndPlateforme(nomProduit, plateformeProduit);
 
 		if (!produitExiste.isEmpty()) {
 			throw new ProduitExistantException("le produit existe");
@@ -163,6 +163,8 @@ public class ProduitService {
 
 		throw new IllegalArgumentException();
 	}
+
+	// ACTIVER UN PRODUIT
 
 	/**
 	 * Cette méthode permet de vérifier si un produit est bien valide
