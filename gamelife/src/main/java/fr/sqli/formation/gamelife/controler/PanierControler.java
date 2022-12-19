@@ -2,7 +2,6 @@ package fr.sqli.formation.gamelife.controler;
 
 
 import fr.sqli.formation.gamelife.dto.panier.PanierDtoIn;
-import fr.sqli.formation.gamelife.dto.panier.PanierDtoOut;
 import fr.sqli.formation.gamelife.service.PanierService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +21,7 @@ public class PanierControler {
     @PostMapping("/create")
     public void creationPanier(@RequestBody PanierDtoIn monbody) throws Exception{
         LOG.info("PanierControler : IN {}", monbody);
-        LOG.info("id_Commande : {}",monbody.getId_commande());
+        LOG.info("id_Commande : {}",monbody.getId_panier());
         LOG.info("id_Produit : {}",monbody.getId_produit());
         LOG.info("Quantite : {}",monbody.getQuantite());
         panierService.creerPanier(monbody);
