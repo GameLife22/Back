@@ -23,16 +23,6 @@ public class GestionCompteService {
         var control = uDao.findByEmail(dto.getEmail());
         if(user.isPresent()){
             UtilisateurEntity u = uDao.findById(dto.getId()).get();
-<<<<<<< HEAD
-            u.setPrenom(dto.getPrenom());
-            u.setNom(dto.getNom());
-            u.setEmail(dto.getEmail());
-            u.setNumRue(dto.getNumRue());
-            u.setRue(dto.getRue());
-            u.setVille(dto.getVille());
-            u.setCodePostal(dto.getCodePostal());
-            u.setNumSiret(dto.getNumSiren());
-=======
             if (dto.getPrenom() != null && !dto.getPrenom().isEmpty()) {
                 u.setPrenom(dto.getPrenom());
             }
@@ -63,7 +53,6 @@ public class GestionCompteService {
             if (dto.getNumSiren() != null && !dto.getNumSiren().isEmpty()) {
                 u.setNumSiret(dto.getNumSiren());
             }
->>>>>>> f5effe25cc910a456860e173c46b5094dd081807
             return uDao.save(u);
         }else {
             throw new UtilisateurExistantException("Utilisateur inexistant");

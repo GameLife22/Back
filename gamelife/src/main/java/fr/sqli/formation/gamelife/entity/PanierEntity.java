@@ -98,8 +98,8 @@ public class PanierEntity implements Serializable {
 	 * @param quantite
 	 * @throws IllegalArgumentException
 	 */
-	public static void validateAll(PanierPK id ,int quantite) throws Exception{
-		if(id.getIdProduit() < 0  && id.getIdCommande() <0  && quantite < 0){
+	public static void validateAll(ItemPanierPK id ,int quantite) throws Exception{
+		if(id.getIdProduit() < 0  && id.getIdPanier() <0  && quantite < 0){
 			throw new IllegalArgumentException("Erreur Id_commande || Id_Prroduit || Quantite");
 		}
 	}
@@ -109,8 +109,8 @@ public class PanierEntity implements Serializable {
 	 * @param id
 	 * @throws IllegalArgumentException
 	 */
-	public static void validateId(PanierPK id) throws Exception{
-		if(id.getIdProduit() < 0  && id.getIdCommande() <0 ){
+	public static void validateId(ItemPanierPK id) throws Exception{
+		if(id.getIdProduit() < 0  && id.getIdPanier() <0 ){
 			throw new IllegalArgumentException("Erreur Id_commande || Id_Prroduit ");
 		}
 	}
