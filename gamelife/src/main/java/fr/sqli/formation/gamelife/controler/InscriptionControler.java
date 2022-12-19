@@ -1,6 +1,7 @@
 package fr.sqli.formation.gamelife.controler;
 
 import fr.sqli.formation.gamelife.dto.InscriptionDto;
+import fr.sqli.formation.gamelife.dto.SiretDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.service.InscriptionService;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,12 @@ public class InscriptionControler {
         res = service.inscription(monbody);
         LOG.info("InscriptionControler : OUT {}", res);
         return res.getNom();
+    }
+    @PostMapping("/siret")
+    public boolean checkSirret(@RequestBody SiretDto monbody) throws Exception{
+        LOG.info("InscriptionControler : IN {}", monbody);
+        LOG.info("InscriptionControler : OUT {}", service.checkSiret(monbody));
+        return service.checkSiret(monbody);
     }
 
 }

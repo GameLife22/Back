@@ -3,7 +3,7 @@ package fr.sqli.formation.gamelife.dto.login;
 public class LoginDtoOut {
     private String email;
 
-    private String etat;
+    private Integer etat;
 
     private String nom;
 
@@ -22,7 +22,7 @@ public class LoginDtoOut {
     public LoginDtoOut() {
     }
 
-    public LoginDtoOut(String email, String etat, String nom, int num_rue, String num_siren, String prenom, String rue, String ville, int code_postal) {
+    public LoginDtoOut(String email, Integer etat, String nom, int num_rue, String num_siren, String prenom, String rue, String ville, int code_postal) {
         this.email = email;
         this.etat = etat;
         this.nom = nom;
@@ -42,11 +42,11 @@ public class LoginDtoOut {
         this.email = email;
     }
 
-    public String getEtat() {
+    public Integer getEtat() {
         return etat;
     }
 
-    public void setEtat(String etat) {
+    public void setEtat(Integer etat) {
         this.etat = etat;
     }
 

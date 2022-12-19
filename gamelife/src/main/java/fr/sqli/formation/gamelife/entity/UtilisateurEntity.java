@@ -135,12 +135,12 @@ public class UtilisateurEntity implements Serializable {
 		this.numRue = numRue;
 	}
 
-	public String getNumSiren() {
+	public String getNumSiret() {
 		return this.numSiren;
 	}
 
-	public void setNumSiren(String numSiren) {
-		this.numSiren = numSiren;
+	public void setNumSiret(String numSiret) {
+		this.numSiren = numSiret;
 	}
 
 	public String getPrenom() {
@@ -224,14 +224,16 @@ public class UtilisateurEntity implements Serializable {
 		if(!(nom != null && !nom.trim().isEmpty() &&
 				prenom != null && !prenom.trim().isEmpty() &&
 				email != null && !email.trim().isEmpty() &&
+				email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") &&
 				pwd != null && !pwd.trim().isEmpty() &&
-				num_rue != null && num_rue > 0 &&
+				pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
+				num_rue != null && num_rue >= 0 &&
 				rue != null && !rue.trim().isEmpty() &&
 				role != null && !role.trim().isEmpty() &&
-				etat != null && !etat.trim().isEmpty() &&
+				etat != null && etat >= 0 &&
 				ville != null && !ville.trim().isEmpty()) &&
 				code_postal != null && code_postal > 0){
-			throw new IllegalArgumentException("Champs vide ou null");
+			throw new IllegalArgumentException("Champs invalides");
 
 		}
 	}

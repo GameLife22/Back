@@ -14,9 +14,13 @@ public class InscriptionDtoHandler {
 		u.setVille(entity.getVille());
 		u.setRue(entity.getRue());
 		u.setNum_rue(entity.getNumRue());
-		u.setNum_siren(entity.getNumSiren());
+		u.setNum_siret(entity.getNumSiret());
 		u.setEtat(entity.getEtatCompte());
-		u.setRole(entity.getRole());
+		if(entity.getNumSiret().trim().isEmpty()){ //A MODIFIER QUAND LE CHECK DE L'API FONCTIONNE
+			u.setRole("ROLE_ACHETEUR");
+		}else{
+			u.setRole("ROLE_REVENDEUR");
+		}
 		u.setCode_postal(entity.getCodePostal());
 		return u;
 	}
@@ -31,9 +35,14 @@ public class InscriptionDtoHandler {
 		u.setVille(dto.getVille());
 		u.setRue(dto.getRue());
 		u.setNumRue(dto.getNum_rue());
-		u.setNumSiren(dto.getNum_siren());
+		u.setNumSiret(dto.getNum_siret());
+
+		if(dto.getNum_siret().trim().isEmpty()){ //A MODIFIER QUAND LE CHECK DE L'API FONCTIONNE
+			u.setRole("ROLE_ACHETEUR");
+		}else{
+			u.setRole("ROLE_REVENDEUR");
+		}
 		u.setEtatCompte(dto.getEtat());
-		u.setRole(dto.getRole());
 		u.setCodePostal(dto.getCode_postal());
 		return u;
 	}
