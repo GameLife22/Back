@@ -18,7 +18,7 @@ public class GestionCompteControler {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @PostMapping("/env1")
+    @PostMapping("")
     public ResponseEntity<Integer> inscr01(@RequestBody GestionCompteDto monbody) throws Exception{
         LOG.info("GestionCompteControler : IN {}", monbody);
         UtilisateurEntity res;

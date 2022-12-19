@@ -4,28 +4,31 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the panier database table.
+ * The primary key class for the ItemPanier database table.
  * 
  */
 @Embeddable
-public class PanierPK implements Serializable {
+public class ItemPanierPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="id_commande", insertable=false, updatable=false, unique=true, nullable=false)
-	private int idCommande;
+	@Column(name="id_panier", insertable=false, updatable=false, unique=true, nullable=false)
+	private int idPanier;
 
 	@Column(name="id_produit", insertable=false, updatable=false, unique=true, nullable=false)
 	private int idProduit;
 
-	public PanierPK() {
+	public ItemPanierPK() {
 	}
-	public int getIdCommande() {
-		return this.idCommande;
+
+	public int getIdPanier() {
+		return idPanier;
 	}
-	public void setIdCommande(int idCommande) {
-		this.idCommande = idCommande;
+
+	public void setIdPanier(int idPanier) {
+		this.idPanier = idPanier;
 	}
+
 	public int getIdProduit() {
 		return this.idProduit;
 	}
@@ -37,19 +40,19 @@ public class PanierPK implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof PanierPK)) {
+		if (!(other instanceof ItemPanierPK)) {
 			return false;
 		}
-		PanierPK castOther = (PanierPK)other;
+		ItemPanierPK castOther = (ItemPanierPK)other;
 		return 
-			(this.idCommande == castOther.idCommande)
+			(this.idPanier == castOther.idPanier)
 			&& (this.idProduit == castOther.idProduit);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.idCommande;
+		hash = hash * prime + this.idPanier;
 		hash = hash * prime + this.idProduit;
 		
 		return hash;

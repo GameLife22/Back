@@ -32,7 +32,7 @@ public class InscriptionService {
                 return uDao.save(u);
             }else {
                 if(newUser.get().getEtatCompte().equals("desactive")){
-                    newUser.get().setEtatCompte("active");
+                    newUser.get().setEtatCompte(1);
                     newUser.get().setNom(dto.getNom());
                     newUser.get().setPrenom(dto.getPrenom());
                     newUser.get().setMdp(encoder.encode(dto.getMdp()));
