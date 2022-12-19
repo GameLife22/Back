@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`utilisateur` (
   `code_postal` INT,
   `role` VARCHAR(50) NOT NULL,
   `num_siren` CHAR(9) NULL DEFAULT NULL,
-  `etat_compte` VARCHAR(50) NOT NULL,
+  `etat_compte` TINYINT(1) DEFAULT 1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UK_UtilisateurEmail` (`email` ASC) VISIBLE,
   UNIQUE INDEX `UK_UtilisateurNumSiren` (`num_siren` ASC) VISIBLE)
@@ -109,23 +109,23 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
--- Table `gamelife`.`panier`
+-- Table `gamelife`.`item_panier`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gamelife`.`ligne_produit` ;
+DROP TABLE IF EXISTS `gamelife`.`item_panier` ;
 
-CREATE TABLE IF NOT EXISTS `gamelife`.`ligne_produit` (
+CREATE TABLE IF NOT EXISTS `gamelife`.`item_panier` (
   `id_panier` INT NOT NULL,
   `id_produit` INT NOT NULL,
   `quantite` INT NOT NULL,
-  INDEX `FK_CommandePanier` (`id_panier` ASC) VISIBLE,
+  INDEX `FK_ItemPanier` (`id_panier` ASC) VISIBLE,
   INDEX `FK_ProduitPanier` (`id_produit` ASC) VISIBLE,
   PRIMARY KEY (`id_panier`, `id_produit`),
-  CONSTRAINT `FK_CommandePanier`
+  CONSTRAINT `FK_ItemPanier`
     FOREIGN KEY (`id_panier`)
     REFERENCES `gamelife`.`panier` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `FK_ProduitCommande`
+  CONSTRAINT `FK_ProduitItemPanier`
     FOREIGN KEY (`id_produit`)
     REFERENCES `gamelife`.`produit` (`id`)
     ON DELETE CASCADE
@@ -140,10 +140,10 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 -- Insertion dans la table utilisateurs
 -- -----------------------------------------------------
-INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('admin', 'admin', '$2y$10$cllVSeF0YfWJqP69iZ0QHObAqWgj0teCZRmCjXVFSvIDbKpxb4e4u', 'fabien.bidault@social.aston-ecole.com', '1', 'rue de capucine', 'paris', '75000', 'ROLE_ADMIN', null,'active');
-INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('smith', 'albert', '$2y$10$Be8wPp9hlL8MTMAzpGddt.LDhjww9HQq9WgxVqmrL8wXduVKIYuZO', 'revendeur001@outlook.fr', '2', 'rue du marechal', 'nantes', '44000', 'ROLE_REVENDEUR', '325987418','active');
-INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('dupont', 'emmanuelle', '$2y$10$YOzoCt/pBb64uE/OOH3T.eeBrXqa/ftnkj8XpnIDc964.AYex6pEa', 'acheteur001@outlook.fr', '3', 'rue dupont', 'lille', '59000', 'ROLE_ACHETEUR', null,'active');
-INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('dubois', 'henry', '$2y$10$KZTksWKizskKPwZLaW6FWejCcEF1AdsYzVM8jxmHsot3Jypu0ZUti', 'acheteur002@outlook.fr', '3', 'rue dupont', 'lille', '59000', 'ROLE_ACHETEUR', null,'desactive');
+INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('admin', 'admin', '$2y$10$cllVSeF0YfWJqP69iZ0QHObAqWgj0teCZRmCjXVFSvIDbKpxb4e4u', 'fabien.bidault@social.aston-ecole.com', '1', 'rue de capucine', 'paris', '75000', 'ROLE_ADMIN', null,1);
+INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('smith', 'albert', '$2y$10$Be8wPp9hlL8MTMAzpGddt.LDhjww9HQq9WgxVqmrL8wXduVKIYuZO', 'revendeur001@outlook.fr', '2', 'rue du marechal', 'nantes', '44000', 'ROLE_REVENDEUR', '325987418',1);
+INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('dupont', 'emmanuelle', '$2y$10$YOzoCt/pBb64uE/OOH3T.eeBrXqa/ftnkj8XpnIDc964.AYex6pEa', 'acheteur001@outlook.fr', '3', 'rue dupont', 'lille', '59000', 'ROLE_ACHETEUR', null,1);
+INSERT INTO `gamelife`.`utilisateur` (`nom`, `prenom`, `mdp`, `email`, `num_rue`, `rue`, `ville`, `code_postal`, `role`, `num_siren`, `etat_compte`) VALUES ('dubois', 'henry', '$2y$10$KZTksWKizskKPwZLaW6FWejCcEF1AdsYzVM8jxmHsot3Jypu0ZUti', 'acheteur002@outlook.fr', '3', 'rue dupont', 'lille', '59000', 'ROLE_ACHETEUR', null,0);
 
 -- -----------------------------------------------------
 -- Insertion dans la table produit
@@ -160,9 +160,9 @@ INSERT INTO `gamelife`.`panier` (`id_utilisateur`, `etat`, `date`) VALUES ('2', 
 INSERT INTO `gamelife`.`panier` (`id_utilisateur`, `etat`, `date`) VALUES ('2', '2', '2022-11-08');
 
 -- -----------------------------------------------------
--- Insertion dans la table ligne_produit
+-- Insertion dans la table item_panier
 -- -----------------------------------------------------
-INSERT INTO `gamelife`.`ligne_produit` (`id_panier`, `id_produit`, `quantite`) VALUES ('1', '1', '1');
+INSERT INTO `gamelife`.`item_panier` (`id_panier`, `id_produit`, `quantite`) VALUES ('1', '1', '1');
 
 -- -----------------------------------------------------
 -- Insertion dans la table image

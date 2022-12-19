@@ -1,38 +1,34 @@
-package fr.sqli.formation.gamelife.dto;
+package fr.sqli.formation.gamelife.dto.login;
 
-public class InscriptionDto {
+public class LoginDtoOut {
     private String email;
 
     private Integer etat;
-
-    private String mdp;
 
     private String nom;
 
     private int num_rue;
 
-    private String num_siret;
+    private String num_siren;
 
     private String prenom;
-
-    private String role;
 
     private String rue;
 
     private String ville;
 
     private  int code_postal;
-    public InscriptionDto() {
+
+    public LoginDtoOut() {
     }
-    public InscriptionDto(String email, Integer etat, String mdp, String nom, int num_rue, String num_siret, String prenom, String role, String rue, String ville, int code_postal) {
+
+    public LoginDtoOut(String email, Integer etat, String nom, int num_rue, String num_siren, String prenom, String rue, String ville, int code_postal) {
         this.email = email;
         this.etat = etat;
-        this.mdp = mdp;
         this.nom = nom;
         this.num_rue = num_rue;
-        this.num_siret = num_siret;
+        this.num_siren = num_siren;
         this.prenom = prenom;
-        this.role = role;
         this.rue = rue;
         this.ville = ville;
         this.code_postal = code_postal;
@@ -54,14 +50,6 @@ public class InscriptionDto {
         this.etat = etat;
     }
 
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
-
     public String getNom() {
         return nom;
     }
@@ -78,12 +66,12 @@ public class InscriptionDto {
         this.num_rue = num_rue;
     }
 
-    public String getNum_siret() {
-        return num_siret;
+    public String getNum_siren() {
+        return num_siren;
     }
 
-    public void setNum_siret(String num_siret) {
-        this.num_siret = num_siret;
+    public void setNum_siren(String num_siren) {
+        this.num_siren = num_siren;
     }
 
     public String getPrenom() {
@@ -94,13 +82,6 @@ public class InscriptionDto {
         this.prenom = prenom;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public String getRue() {
         return rue;

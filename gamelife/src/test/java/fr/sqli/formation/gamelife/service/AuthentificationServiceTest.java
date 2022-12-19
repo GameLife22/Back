@@ -1,7 +1,8 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.login.LoginDto;
+import fr.sqli.formation.gamelife.dto.login.LoginDtoIn;
 import fr.sqli.formation.gamelife.dto.login.LoginDtoHandler;
+import fr.sqli.formation.gamelife.dto.login.LoginDtoOut;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ class AuthentificationServiceTest {
     void testAuthentification01() throws Exception {
         String login = "fabien.bidault@social.aston-ecole.com";
         String pwd = "Paz6!!3";
-        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        LoginDtoOut dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
         //UtilisateurEntity u = service.authentifier(dto);
         //Assertions.assertNotNull(u);
         //Assertions.assertEquals(1,u.getId());
@@ -30,7 +31,7 @@ class AuthentificationServiceTest {
     void testAuthentification02() throws Exception {
         String login = "fabien.bidault@social.aston-ecole.com";
         String pwd = "Padsfz6!!3";
-        LoginDto dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
+        LoginDtoOut dto = LoginDtoHandler.fromEntity(new UtilisateurEntity(login,pwd));
        // Assertions.assertThrows(AuthentificationException.class,()-> service.authentifier(dto));
     }
 /*

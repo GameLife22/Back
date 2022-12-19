@@ -1,6 +1,7 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.login.LoginDto;
+import fr.sqli.formation.gamelife.dto.login.LoginDtoHandler;
+import fr.sqli.formation.gamelife.dto.login.LoginDtoIn;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import fr.sqli.formation.gamelife.ex.CompteDesactiveException;
@@ -32,7 +33,7 @@ public class AuthentificationService implements AuthenticationProvider {
     private BCryptPasswordEncoder encoder;
 
 
-    private UtilisateurEntity authentifier(LoginDto dto) throws Exception {
+    private UtilisateurEntity authentifier(LoginDtoIn dto) throws Exception {
         if (dto.getLogin() != null && !dto.getLogin().trim().isEmpty() && dto.getPwd() != null && !dto.getPwd().trim().isEmpty() ) {
             var monUser = uDao.findByEmail(dto.getLogin());
 
@@ -66,7 +67,7 @@ public class AuthentificationService implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         var email = authentication.getName();
         var password = authentication.getCredentials() != null ? authentication.getCredentials().toString() : null;
-        LoginDto login = new LoginDto(email,password) ;
+        LoginDtoIn login = new LoginDtoIn(email,password) ;
 
         AuthentificationService.LOG.info("Spring Security Authenticate email={}", email);
 
@@ -86,7 +87,7 @@ public class AuthentificationService implements AuthenticationProvider {
 
             var upat = new UsernamePasswordAuthenticationToken(email, password, springSecurityRoles);
             //Les détails qu'on veut insérer dans notre token
-            upat.setDetails(user.getId());
+            upat.setDetails(LoginDtoHandler.fromEntity(user));
             return upat;
         }
         return null;

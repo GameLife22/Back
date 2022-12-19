@@ -71,4 +71,20 @@ class GestionCompteServiceTest {
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationEtat(dto));
     }
 
+
+
+    @Test
+    void testEstRevendeur01() throws Exception{
+        Assertions.assertTrue(service.estRevendeur(2));
+    }
+
+    @Test
+    void testEstRevendeur02() throws Exception{
+        Assertions.assertFalse(service.estRevendeur(4));
+    }
+
+    @Test
+    void testEstRevendeur03() throws Exception{
+        Assertions.assertThrows(UtilisateurExistantException.class, ()-> service.estRevendeur(25));
+    }
 }
