@@ -38,7 +38,7 @@ public class AuthentificationService implements AuthenticationProvider {
             var monUser = uDao.findByEmail(dto.getLogin());
 
             if (monUser.isPresent()) {
-                if(monUser.get().getEtatCompte().equals("active")){
+                if(monUser.get().getEtatCompte() == 1){
                     if (encoder.matches(dto.getPwd(), monUser.get().getMdp())) {
                         return monUser.get();
                     } else {

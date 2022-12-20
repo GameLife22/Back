@@ -31,7 +31,7 @@ public class InscriptionService {
                 u.setMdp(encoder.encode(u.getMdp()));
                 return uDao.save(u);
             }else {
-                if(newUser.get().getEtatCompte().equals("desactive")){
+                if(newUser.get().getEtatCompte() == 0){
                     newUser.get().setEtatCompte(1);
                     newUser.get().setNom(dto.getNom());
                     newUser.get().setPrenom(dto.getPrenom());
