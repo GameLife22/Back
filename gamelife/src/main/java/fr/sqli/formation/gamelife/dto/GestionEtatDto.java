@@ -5,15 +5,15 @@ public class GestionEtatDto {
     public GestionEtatDto() {
     }
 
-    public GestionEtatDto(Integer id, String new_etat) {
+    public GestionEtatDto(Integer id, Integer new_etat) {
         this.new_etat = new_etat;
         this.id = id;
     }
 
-    private String new_etat;
+    private Integer new_etat;
     private Integer id;
 
-    public String getNew_etat() {
+    public Integer getNew_etat() {
         return new_etat;
     }
 

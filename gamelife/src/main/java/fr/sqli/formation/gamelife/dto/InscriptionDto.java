@@ -1,11 +1,9 @@
 package fr.sqli.formation.gamelife.dto;
 
-import javax.persistence.Column;
-
 public class InscriptionDto {
     private String email;
 
-    private String etat;
+    private Integer etat;
 
     private String mdp;
 
@@ -13,7 +11,7 @@ public class InscriptionDto {
 
     private int num_rue;
 
-    private String num_siren;
+    private String num_siret;
 
     private String prenom;
 
@@ -26,13 +24,13 @@ public class InscriptionDto {
     private  int code_postal;
     public InscriptionDto() {
     }
-    public InscriptionDto(String email, String etat, String mdp, String nom, int num_rue, String num_siren, String prenom, String role, String rue, String ville, int code_postal) {
+    public InscriptionDto(String email, Integer etat, String mdp, String nom, int num_rue, String num_siret, String prenom, String role, String rue, String ville, int code_postal) {
         this.email = email;
         this.etat = etat;
         this.mdp = mdp;
         this.nom = nom;
         this.num_rue = num_rue;
-        this.num_siren = num_siren;
+        this.num_siret = num_siret;
         this.prenom = prenom;
         this.role = role;
         this.rue = rue;
@@ -48,11 +46,11 @@ public class InscriptionDto {
         this.email = email;
     }
 
-    public String getEtat() {
+    public Integer getEtat() {
         return etat;
     }
 
-    public void setEtat(String etat) {
+    public void setEtat(Integer etat) {
         this.etat = etat;
     }
 
@@ -80,12 +78,12 @@ public class InscriptionDto {
         this.num_rue = num_rue;
     }
 
-    public String getNum_siren() {
-        return num_siren;
+    public String getNum_siret() {
+        return num_siret;
     }
 
-    public void setNum_siren(String num_siren) {
-        this.num_siren = num_siren;
+    public void setNum_siret(String num_siret) {
+        this.num_siret = num_siret;
     }
 
     public String getPrenom() {

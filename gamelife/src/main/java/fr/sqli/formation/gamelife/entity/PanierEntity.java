@@ -91,4 +91,5 @@ public class PanierEntity implements Serializable {
 		return ItemPanier;
 	}
 
+
 }

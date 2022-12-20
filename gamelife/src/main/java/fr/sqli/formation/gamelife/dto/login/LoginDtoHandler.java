@@ -11,7 +11,7 @@ public class LoginDtoHandler {
         u.setEtat(entity.getEtatCompte());
         u.setNum_rue(entity.getNumRue());
         u.setRue(entity.getRue());
-        u.setNum_siren(entity.getNumSiren());
+        u.setNum_siren(entity.getNumSiret());
         u.setPrenom(entity.getPrenom());
         u.setVille(entity.getVille());
         u.setCode_postal(entity.getCodePostal());
