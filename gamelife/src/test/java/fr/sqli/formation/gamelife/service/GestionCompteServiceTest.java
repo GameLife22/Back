@@ -1,7 +1,7 @@
 package fr.sqli.formation.gamelife.service;
-import fr.sqli.formation.gamelife.dto.GestionCompteDto;
-import fr.sqli.formation.gamelife.dto.GestionEtatDto;
-import fr.sqli.formation.gamelife.dto.GestionMdpDto;
+import fr.sqli.formation.gamelife.dto.gestionCompte.GestionCompteDto;
+import fr.sqli.formation.gamelife.dto.gestionCompte.GestionEtatDto;
+import fr.sqli.formation.gamelife.dto.gestionCompte.GestionMdpDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
 import org.junit.jupiter.api.Assertions;
