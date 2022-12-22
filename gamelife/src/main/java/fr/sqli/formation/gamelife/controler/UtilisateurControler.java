@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.controler;
 
+import fr.sqli.formation.gamelife.dto.IdDto;
 import fr.sqli.formation.gamelife.dto.UtilisateurDto;
 import fr.sqli.formation.gamelife.dto.UtilisateurDtoHandler;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
@@ -22,11 +23,11 @@ public class UtilisateurControler {
     private static final Logger LOG = LogManager.getLogger();
 
     @PostMapping("/infos")
-    public UtilisateurDto getInfos(@RequestBody String id){
+    public UtilisateurDto getInfos(@RequestBody IdDto id){
         LOG.info("InscriptionControler : IN {}", id);
         UtilisateurDto res;
         try {
-            res = UtilisateurDtoHandler.fromEntity(service.getUtilisateurById(id));
+            res =UtilisateurDtoHandler.fromEntity(service.getUtilisateurById(id.getId()));
             LOG.info("InscriptionControler : OUT {}", res);
             return res;
         } catch (Exception err){

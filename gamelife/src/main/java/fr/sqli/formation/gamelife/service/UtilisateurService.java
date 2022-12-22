@@ -14,9 +14,10 @@ public class UtilisateurService {
     private UtilisateurRepository repository;
     private static final Logger LOG = LogManager.getLogger();
 
-    public UtilisateurEntity getUtilisateurById(String id) throws Exception{
-        if(!id.trim().isEmpty() && id != null){
-            var utilisateur = this.repository.findById(Integer.valueOf(id));
+    public UtilisateurEntity getUtilisateurById(int id) throws Exception{
+        if(id > 0){
+            LOG.info(id);
+            var utilisateur = this.repository.findById(id);
 
             if(utilisateur.isPresent()){
                 return utilisateur.get();
