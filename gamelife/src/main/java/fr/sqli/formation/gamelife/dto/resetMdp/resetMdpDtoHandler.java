@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.dto.restMdp;
+package fr.sqli.formation.gamelife.dto.resetMdp;
 
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
