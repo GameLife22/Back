@@ -1,8 +1,6 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.GestionCompteDto;
-import fr.sqli.formation.gamelife.dto.GestionEtatDto;
-import fr.sqli.formation.gamelife.dto.GestionMdpDto;
+import fr.sqli.formation.gamelife.dto.gestionCompte.*;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.OldPasswordException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -103,5 +101,16 @@ public class GestionCompteService {
             return true;
         }
         return false;
+    }
+
+    public UserDtoOut getUser(int id) throws Exception {
+        var user = uDao.findById(id);
+        if (!user.isPresent()) {
+            throw new UtilisateurExistantException("utilisateur inexistant");
+        }
+        UtilisateurEntity u = user.get();
+        UserDtoOut dto = UserDtoHandler.fromEntity(u);
+
+        return dto;
     }
 }
