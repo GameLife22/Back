@@ -52,11 +52,14 @@ public class UtilisateurEntity implements Serializable {
 	@OneToMany(mappedBy="utilisateur")
 	private List<ProduitEntity> produits;
 
+	@Column(name = "reset_password_token")
+	private String resetPasswordToken;
+
+
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(String email, Integer etatCompte, String mdp, String nom, int numRue, int codePostal, String numSiren, String prenom, String role, String rue, String ville) {
-
+	public UtilisateurEntity(int id, String email, Integer etatCompte, String mdp, String nom, int numRue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
 		this.email = email;
 		this.etatCompte = etatCompte;
 		this.mdp = mdp;
@@ -70,6 +73,8 @@ public class UtilisateurEntity implements Serializable {
 		this.role = role;
 		this.rue = rue;
 		this.ville = ville;
+
+		this.resetPasswordToken = resetPasswordToken;
 	}
 
 	public UtilisateurEntity(String email, String mdp) {
@@ -219,6 +224,13 @@ public class UtilisateurEntity implements Serializable {
 		return produit;
 	}
 
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
 
 	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String role, String num_Siren, Integer etat, Integer code_postal) throws Exception{
 		if(!(nom != null && !nom.trim().isEmpty() &&
