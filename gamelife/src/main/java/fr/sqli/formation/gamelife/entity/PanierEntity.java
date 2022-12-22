@@ -91,27 +91,5 @@ public class PanierEntity implements Serializable {
 		return ItemPanier;
 	}
 
-	/**
-	 * Cette Fonction Permet de verifier si les parametres sont suprieur à 0
-	 * puisque l'id et la quantitée commence de 1
-	 * @param id
-	 * @param quantite
-	 * @throws IllegalArgumentException
-	 */
-	public static void validateAll(ItemPanierPK id ,int quantite) throws Exception{
-		if(id.getIdProduit() < 0  && id.getIdPanier() <0  && quantite < 0){
-			throw new IllegalArgumentException("Erreur Id_commande || Id_Prroduit || Quantite");
-		}
-	}
 
-	/**
-	 * Cette Fonction Permet de verifier si les parametres sont suprieur à 0
-	 * @param id
-	 * @throws IllegalArgumentException
-	 */
-	public static void validateId(ItemPanierPK id) throws Exception{
-		if(id.getIdProduit() < 0  && id.getIdPanier() <0 ){
-			throw new IllegalArgumentException("Erreur Id_commande || Id_Prroduit ");
-		}
-	}
 }
