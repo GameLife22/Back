@@ -80,8 +80,6 @@ public class SpringSecurity  {
 		// Keep cors enable here, otherwise configuration of it is not applied
 		http.csrf().disable().cors();
 
-
-
 		// For H2
 		http.headers().frameOptions().disable();
 

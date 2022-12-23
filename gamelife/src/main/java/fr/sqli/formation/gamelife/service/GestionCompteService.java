@@ -20,7 +20,7 @@ public class GestionCompteService {
         var user = uDao.findById(dto.getId());
         var control = uDao.findByEmail(dto.getEmail());
         if(user.isPresent()){
-            UtilisateurEntity u = uDao.findById(dto.getId()).get();
+            UtilisateurEntity u = user.get();
             if (dto.getPrenom() != null && !dto.getPrenom().isEmpty()) {
                 u.setPrenom(dto.getPrenom());
             }
@@ -36,8 +36,8 @@ public class GestionCompteService {
                     throw new UtilisateurExistantException("email deja utilise");
                 }
             }
-            if (dto.getNumRue() != null && dto.getNumRue() == 0) {
-                u.setNumRue(dto.getNumRue());
+            if (dto.getNum_rue() != null && dto.getNum_rue() != 0) {
+                u.setNum_rue(dto.getNum_rue());
             }
             if (dto.getRue() != null && !dto.getRue().isEmpty()) {
                 u.setRue(dto.getRue());
