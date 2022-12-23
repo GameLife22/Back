@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.dto.restMdp;
+package fr.sqli.formation.gamelife.dto.resetMdp;
 
 public class resetMdpDtoIn {
     private String pwd;

@@ -13,5 +13,12 @@ public class MdpOublieDtoHandler {
         return u;
     }
 
+    public static EmailDtoOut fromEntity(UtilisateurEntity entity) {
+        var u = new EmailDtoOut();
+        u.setLogin(entity.getEmail());
+        return u;
+    }
+
+
 
 }
