@@ -6,10 +6,11 @@ public class LoginDtoHandler {
 
     public static LoginDtoOut fromEntity(UtilisateurEntity entity) {
         var u = new LoginDtoOut();
+        u.setId(entity.getId());
         u.setEmail(entity.getEmail());
         u.setNom(entity.getNom());
         u.setEtat(entity.getEtatCompte());
-        u.setNum_rue(entity.getNumRue());
+        u.setNum_rue(entity.getNum_rue());
         u.setRue(entity.getRue());
         u.setNum_siren(entity.getNumSiret());
         u.setPrenom(entity.getPrenom());
