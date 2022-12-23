@@ -1,6 +1,6 @@
 package fr.sqli.formation.gamelife.controler;
 
-import fr.sqli.formation.gamelife.dto.InscriptionDto;
+import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
 import fr.sqli.formation.gamelife.dto.SiretDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.service.InscriptionService;
@@ -17,19 +17,23 @@ public class InscriptionControler {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @PostMapping("/env1")
+    @PostMapping("/inscription")
     public String inscr01(@RequestBody InscriptionDto monbody) throws Exception{
         LOG.info("InscriptionControler : IN {}", monbody);
         UtilisateurEntity res;
         res = service.inscription(monbody);
         LOG.info("InscriptionControler : OUT {}", res);
-        return res.getNom();
+        return res.getResetPasswordToken();
     }
     @PostMapping("/siret")
     public boolean checkSirret(@RequestBody SiretDto monbody) throws Exception{
         LOG.info("InscriptionControler : IN {}", monbody);
         LOG.info("InscriptionControler : OUT {}", service.checkSiret(monbody));
         return service.checkSiret(monbody);
+    }
+    @PostMapping("/validation")
+    public void emailValidation(){
+        
     }
 
 }

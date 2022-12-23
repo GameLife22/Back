@@ -232,7 +232,7 @@ public class UtilisateurEntity implements Serializable {
 		this.resetPasswordToken = resetPasswordToken;
 	}
 
-	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String role, String num_Siren, Integer etat, Integer code_postal) throws Exception{
+	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String num_Siren, Integer code_postal) throws Exception{
 		if(!(nom != null && !nom.trim().isEmpty() &&
 				prenom != null && !prenom.trim().isEmpty() &&
 				email != null && !email.trim().isEmpty() &&
@@ -241,8 +241,6 @@ public class UtilisateurEntity implements Serializable {
 				pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
 				num_rue != null && num_rue >= 0 &&
 				rue != null && !rue.trim().isEmpty() &&
-				role != null && !role.trim().isEmpty() &&
-				etat != null && etat >= 0 &&
 				ville != null && !ville.trim().isEmpty()) &&
 				code_postal != null && code_postal > 0){
 			throw new IllegalArgumentException("Champs invalides");

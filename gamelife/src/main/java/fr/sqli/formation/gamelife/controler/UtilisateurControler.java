@@ -1,9 +1,8 @@
 package fr.sqli.formation.gamelife.controler;
 
 import fr.sqli.formation.gamelife.dto.IdDto;
-import fr.sqli.formation.gamelife.dto.UtilisateurDto;
-import fr.sqli.formation.gamelife.dto.UtilisateurDtoHandler;
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
+import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDtoHandler;
 import fr.sqli.formation.gamelife.service.UtilisateurService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

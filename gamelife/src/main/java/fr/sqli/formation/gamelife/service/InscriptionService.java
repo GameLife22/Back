@@ -1,19 +1,18 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.InscriptionDto;
-import fr.sqli.formation.gamelife.dto.InscriptionDtoHandler;
+import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
+import fr.sqli.formation.gamelife.dto.inscription.InscriptionDtoHandler;
 import fr.sqli.formation.gamelife.dto.SiretDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
+import net.bytebuddy.utility.RandomString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.http.HttpHeaders;
 
 @Service
 public class InscriptionService {
@@ -24,15 +23,23 @@ public class InscriptionService {
     private static final Logger LOG = LogManager.getLogger();
 
     public UtilisateurEntity inscription(InscriptionDto dto) throws Exception{
-            UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getRole(), dto.getNum_siret(), dto.getEtat(), dto.getCode_postal());
+            UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getNum_siret(), dto.getCode_postal());
             var newUser = uDao.findByEmail(dto.getEmail());
+            String token = RandomString.make(30);
             if(newUser.isEmpty()){
                 UtilisateurEntity u = InscriptionDtoHandler.fromDto(dto);
+                if(dto.getNum_siret().trim().isEmpty() && dto.getNum_siret() != null ){
+                    u.setRole("ROLE_ACHETEUR");
+                }else{
+                    u.setRole("ROLE_REVENDEUR");
+                }
                 u.setMdp(encoder.encode(u.getMdp()));
+                u.setEtatCompte(0);
+                u.setResetPasswordToken(token);
                 return uDao.save(u);
             }else {
                 if(newUser.get().getEtatCompte() == 0){
-                    newUser.get().setEtatCompte(1);
+                    newUser.get().setEtatCompte(0);
                     newUser.get().setNom(dto.getNom());
                     newUser.get().setPrenom(dto.getPrenom());
                     newUser.get().setMdp(encoder.encode(dto.getMdp()));
@@ -41,7 +48,13 @@ public class InscriptionService {
                     newUser.get().setCodePostal(dto.getCode_postal());
                     newUser.get().setRue(dto.getRue());
                     newUser.get().setNumRue(dto.getNum_rue());
-                    newUser.get().setRole(dto.getRole());
+
+                    if(dto.getNum_siret().trim().isEmpty() && dto.getNum_siret() != null ){
+                        newUser.get().setRole("ROLE_ACHETEUR");
+                    }else{
+                        newUser.get().setRole("ROLE_REVENDEUR");
+                    }
+
                     newUser.get().setNumSiret(dto.getNum_siret());
                      return uDao.save(newUser.get());
                 }else{

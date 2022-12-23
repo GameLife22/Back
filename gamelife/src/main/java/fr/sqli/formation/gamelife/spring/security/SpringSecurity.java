@@ -80,7 +80,6 @@ public class SpringSecurity  {
 		// Keep cors enable here, otherwise configuration of it is not applied
 		http.csrf().disable().cors();
 
-		http.authorizeRequests().antMatchers("/produit/all").permitAll();
 
 
 		// For H2

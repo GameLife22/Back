@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.dto.gestionCompte;
 
-import fr.sqli.formation.gamelife.dto.InscriptionDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
 public class UserDtoHandler {
