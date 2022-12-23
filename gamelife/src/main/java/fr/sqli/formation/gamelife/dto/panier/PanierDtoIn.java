@@ -1,6 +1,6 @@
 package fr.sqli.formation.gamelife.dto.panier;
 
-import fr.sqli.formation.gamelife.entity.PanierPK;
+import fr.sqli.formation.gamelife.entity.ItemPanierPK;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,32 +11,32 @@ public class PanierDtoIn {
 
 
 
-    private Integer id_commande;
+    private Integer id_panier;
     private Integer id_produit;
     private Integer quantite;
 
     public PanierDtoIn() {
     }
-    public PanierDtoIn(Integer id_commande , Integer id_produit , Integer quantite) {
-        PanierPK id = new PanierPK();
+    public PanierDtoIn(Integer id_panier, Integer id_produit , Integer quantite) {
+        ItemPanierPK id = new ItemPanierPK();
         id.setIdProduit(id_produit);
-        id.setIdCommande(id_commande);
+        id.setIdPanier(id_panier);
         this.id_produit = id_produit;
-        this.id_commande = id_commande;
+        this.id_panier = id_panier;
         this.quantite = quantite;
     }
 
-    public PanierDtoIn(Integer id_commande, Integer id_produit) {
-        this.id_commande = id_commande;
+    public PanierDtoIn(Integer id_panier, Integer id_produit) {
+        this.id_panier = id_panier;
         this.id_produit = id_produit;
     }
 
-    public Integer getId_commande() {
-        return id_commande;
+    public Integer getId_panier() {
+        return id_panier;
     }
 
-    public void setId_commande(Integer id_commande) {
-        this.id_commande = id_commande;
+    public void setId_panier(Integer id_panier) {
+        this.id_panier = id_panier;
     }
 
     public Integer getId_produit() {

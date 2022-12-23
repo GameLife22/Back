@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`utilisateur` (
   `role` VARCHAR(50) NOT NULL,
   `num_siren` CHAR(9) NULL DEFAULT NULL,
   `etat_compte` TINYINT(1) DEFAULT 1 NOT NULL,
+  `reset_password_token` VARCHAR(30) NULL ,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UK_UtilisateurEmail` (`email` ASC) VISIBLE,
   UNIQUE INDEX `UK_UtilisateurNumSiren` (`num_siren` ASC) VISIBLE)
