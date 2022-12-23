@@ -5,11 +5,11 @@ public class GestionCompteDto {
     public GestionCompteDto() {
     }
 
-    public GestionCompteDto(Integer id, String nom, String prenom, String email, Integer numRue, String rue, String ville, Integer codePostal, String numSiren) {
+    public GestionCompteDto(Integer id, String nom, String prenom, String email, Integer num_rue, String rue, String ville, Integer codePostal, String numSiren) {
         this.id = id;
         this.email = email;
         this.nom = nom;
-        this.numRue = numRue;
+        this.num_rue = num_rue;
         this.codePostal = codePostal;
         this.numSiren = numSiren;
         this.prenom = prenom;
@@ -22,7 +22,7 @@ public class GestionCompteDto {
 
     private String nom;
 
-    private Integer numRue;
+    private Integer num_rue;
 
     private Integer codePostal;
 
@@ -63,12 +63,12 @@ public class GestionCompteDto {
         this.nom = nom;
     }
 
-    public Integer getNumRue() {
-        return numRue;
+    public Integer getNum_rue() {
+        return num_rue;
     }
 
-    public void setNumRue(Integer numRue) {
-        this.numRue = numRue;
+    public void setNum_rue(Integer num_rue) {
+        this.num_rue = num_rue;
     }
 
     public String getNumSiren() {

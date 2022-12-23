@@ -28,7 +28,7 @@ public class UtilisateurEntity implements Serializable {
 	private String nom;
 
 	@Column(name="num_rue")
-	private int numRue;
+	private int num_rue;
 
 	@Column(name="num_siren")
 	private String numSiren;
@@ -59,12 +59,12 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(int id, String email, Integer etatCompte, String mdp, String nom, int numRue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
+	public UtilisateurEntity(int id, String email, Integer etatCompte, String mdp, String nom, int num_rue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
 		this.email = email;
 		this.etatCompte = etatCompte;
 		this.mdp = mdp;
 		this.nom = nom;
-		this.numRue = numRue;
+		this.num_rue = num_rue;
 
 		this.codePostal = codePostal;
 
@@ -132,12 +132,12 @@ public class UtilisateurEntity implements Serializable {
 		this.nom = nom;
 	}
 
-	public int getNumRue() {
-		return this.numRue;
+	public int getNum_rue() {
+		return num_rue;
 	}
 
-	public void setNumRue(int numRue) {
-		this.numRue = numRue;
+	public void setNum_rue(int num_rue) {
+		this.num_rue = num_rue;
 	}
 
 	public String getNumSiret() {

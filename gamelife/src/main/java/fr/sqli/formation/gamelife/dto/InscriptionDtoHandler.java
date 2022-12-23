@@ -13,7 +13,7 @@ public class InscriptionDtoHandler {
 		u.setEmail(entity.getEmail());
 		u.setVille(entity.getVille());
 		u.setRue(entity.getRue());
-		u.setNum_rue(entity.getNumRue());
+		u.setNum_rue(entity.getNum_rue());
 		u.setNum_siret(entity.getNumSiret());
 		u.setEtat(entity.getEtatCompte());
 		if(entity.getNumSiret() == null){ //A MODIFIER QUAND LE CHECK DE L'API FONCTIONNE
@@ -34,7 +34,7 @@ public class InscriptionDtoHandler {
 		u.setEmail(dto.getEmail());
 		u.setVille(dto.getVille());
 		u.setRue(dto.getRue());
-		u.setNumRue(dto.getNum_rue());
+		u.setNum_rue(dto.getNum_rue());
 		u.setNumSiret(dto.getNum_siret());
 
 		if(dto.getNum_siret() == null){ //A MODIFIER QUAND LE CHECK DE L'API FONCTIONNE
