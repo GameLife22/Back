@@ -92,9 +92,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter implements
 
                 var resu = new UsernamePasswordAuthenticationToken(email, null, authorities);
                 @SuppressWarnings("unchecked")
-                LinkedHashMap LoginDto = (LinkedHashMap) parsedToken.getBody().get(SecurityConstants.TOKEN_USER);
-                JwtAuthorizationFilter.LOG.info("val {}", LoginDto.get("email"));
-                resu.setDetails(LoginDto);
+                Integer id = (Integer) parsedToken.getBody().get(SecurityConstants.TOKEN_USER);
+                JwtAuthorizationFilter.LOG.info("val {}", id);
+                resu.setDetails(id);
                 JwtAuthorizationFilter.LOG.warn(
                         "[{}] <-- JwtAuthorizationFilter.getAuthentication - Token was pushed into Spring Security, {}",
                         remoteIp, resu);

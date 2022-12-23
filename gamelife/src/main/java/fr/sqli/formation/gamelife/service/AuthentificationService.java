@@ -98,8 +98,8 @@ public class AuthentificationService implements AuthenticationProvider {
             springSecurityRoles.add(ga);
 
             var upat = new UsernamePasswordAuthenticationToken(email, password, springSecurityRoles);
-            //Les détails qu'on veut insérer dans notre token
-            upat.setDetails(LoginDtoHandler.fromEntity(user));
+            //Les détails qu'on veut insérer dans notre token (id)
+            upat.setDetails(user.getId());
             return upat;
         }
         return null;
