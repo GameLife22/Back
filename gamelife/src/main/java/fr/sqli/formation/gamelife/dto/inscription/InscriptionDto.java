@@ -1,9 +1,8 @@
-package fr.sqli.formation.gamelife.dto;
+package fr.sqli.formation.gamelife.dto.inscription;
 
 public class InscriptionDto {
     private String email;
 
-    private Integer etat;
 
     private String mdp;
 
@@ -15,8 +14,6 @@ public class InscriptionDto {
 
     private String prenom;
 
-    private String role;
-
     private String rue;
 
     private String ville;
@@ -26,13 +23,11 @@ public class InscriptionDto {
     }
     public InscriptionDto(String email, Integer etat, String mdp, String nom, int num_rue, String num_siret, String prenom, String role, String rue, String ville, int code_postal) {
         this.email = email;
-        this.etat = etat;
         this.mdp = mdp;
         this.nom = nom;
         this.num_rue = num_rue;
         this.num_siret = num_siret;
         this.prenom = prenom;
-        this.role = role;
         this.rue = rue;
         this.ville = ville;
         this.code_postal = code_postal;
@@ -46,13 +41,6 @@ public class InscriptionDto {
         this.email = email;
     }
 
-    public Integer getEtat() {
-        return etat;
-    }
-
-    public void setEtat(Integer etat) {
-        this.etat = etat;
-    }
 
     public String getMdp() {
         return mdp;
@@ -94,13 +82,6 @@ public class InscriptionDto {
         this.prenom = prenom;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public String getRue() {
         return rue;

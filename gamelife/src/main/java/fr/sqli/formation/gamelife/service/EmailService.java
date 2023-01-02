@@ -43,4 +43,26 @@ public class EmailService {
 
         emailSender.send(message);
     }
+    public void sendEmailValidationInscription(String recipientEmail, String link)throws MessagingException, UnsupportedEncodingException{
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("contact@gamelife.com", "GameLife Support");
+        helper.setTo(recipientEmail);
+
+        String subject = "Here's the link to activate your account";
+
+        String content = "<p>Hello,</p>"
+                + "<p>You have created an account on our site.</p>"
+                + "<p>Click the link below to activate your account:</p>"
+                + "<p><a href=\"" + link + "\">Activate my account</a></p>"
+                + "<br>"
+                + "<p>Ignore this email if you do not made the request.</p> ";
+
+        helper.setSubject(subject);
+
+        helper.setText(content, true);
+
+        emailSender.send(message);
+    }
 }
