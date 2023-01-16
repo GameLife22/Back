@@ -1,6 +1,7 @@
 package fr.sqli.formation.gamelife.spring.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.sqli.formation.gamelife.dto.springSecurity.ExceptionDtoOut;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
@@ -21,11 +22,9 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 request.getRemoteAddr(), request.getRequestURL(), authException);
 
         // We want our Json Exception model instead of the one in Spring
-        //TODO
-        //var out = new ExceptionDtoOut(authException);
+       var out = new ExceptionDtoOut(authException);
         var objectMapper = new ObjectMapper();
-        //TODO DtoException
-        var expToJson = objectMapper.writeValueAsString("Erreur Auth");
+        var expToJson = objectMapper.writeValueAsString(out);
         var pw = response.getWriter();
         pw.write(expToJson);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

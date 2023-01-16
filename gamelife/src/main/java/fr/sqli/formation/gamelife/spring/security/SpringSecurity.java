@@ -92,6 +92,9 @@ public class SpringSecurity  {
 						UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+		var exceptionHandling = http.authorizeRequests().and().exceptionHandling();
+		exceptionHandling.authenticationEntryPoint(new RestAuthenticationEntryPoint());
+		exceptionHandling.accessDeniedHandler(new AccesDeniedHandler());
 
 
 		// For logout, simply send 200
