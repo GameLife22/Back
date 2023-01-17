@@ -102,9 +102,11 @@ public class InscriptionService {
             }
             LOG.warn("validateAccount - {}, Status {}", email, user.getEtatCompte());
 
+        }else {
+            LOG.warn("validateAccount - No user found with email={}", email);
+            throw new UtilisateurNonExistantException("Utilisateur introuvable");
         }
-        LOG.warn("validateAccount - No user found with email={}", email);
-        throw new UtilisateurNonExistantException("Utilisateur introuvable");
+
     }
     public void activateAccount(String token){
         UtilisateurEntity u = uDao.findByResetPasswordToken(token);

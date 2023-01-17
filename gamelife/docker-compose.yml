@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gamelife
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=totoAdmin17
+    ports:
+      - 3307:3306
+    volumes:
+      - ./db/gamelifev0.3.4.sql:/docker-entrypoint-initdb.d/0_init.sql
+  back:
+    depends_on:
+      - mysqldb
+    image: gamelife-back
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL : jdbc:mysql://mysqldb:3306/gamelife?autoReconnect=true&useSSL=false
+  front:
+    image: gamelife-front
+    restart: always
+    ports:
+      - 7070:80
