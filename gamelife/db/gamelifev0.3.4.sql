@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`utilisateur` (
   `etat_compte` TINYINT(1) DEFAULT 1 NOT NULL,
   `reset_password_token` VARCHAR(30) NULL ,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `UK_UtilisateurEmail` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `UK_UtilisateurNumSiren` (`num_siren` ASC) VISIBLE)
+  UNIQUE INDEX `UK_UtilisateurEmail` (`email` ASC),
+  UNIQUE INDEX `UK_UtilisateurNumSiren` (`num_siren` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`panier` (
   `etat` TINYINT(1) NOT NULL,
   `date` DATE NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_UtilisateurPanier` (`id_utilisateur` ASC) VISIBLE,
+  INDEX `FK_UtilisateurPanier` (`id_utilisateur` ASC),
   CONSTRAINT `FK_UtilisateurPanier`
     FOREIGN KEY (`id_utilisateur`)
     REFERENCES `gamelife`.`utilisateur` (`id`)
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`produit` (
   `etat` TINYINT(1) NOT NULL,
   `id_utilisateur` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_UtilisateurProduit` (`id_utilisateur` ASC) VISIBLE,
+  INDEX `FK_UtilisateurProduit` (`id_utilisateur` ASC),
   CONSTRAINT `FK_UtilisateurProduit`
     FOREIGN KEY (`id_utilisateur`)
     REFERENCES `gamelife`.`utilisateur` (`id`)
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`image` (
   `titre` VARCHAR(255) NOT NULL,
   `description` TEXT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_ProduitImage` (`id_produit` ASC) VISIBLE,
+  INDEX `FK_ProduitImage` (`id_produit` ASC),
   CONSTRAINT `FK_ProduitImage`
     FOREIGN KEY (`id_produit`)
     REFERENCES `gamelife`.`produit` (`id`)
@@ -118,8 +118,8 @@ CREATE TABLE IF NOT EXISTS `gamelife`.`item_panier` (
   `id_panier` INT NOT NULL,
   `id_produit` INT NOT NULL,
   `quantite` INT NOT NULL,
-  INDEX `FK_ItemPanier` (`id_panier` ASC) VISIBLE,
-  INDEX `FK_ProduitPanier` (`id_produit` ASC) VISIBLE,
+  INDEX `FK_ItemPanier` (`id_panier` ASC) ,
+  INDEX `FK_ProduitPanier` (`id_produit` ASC),
   PRIMARY KEY (`id_panier`, `id_produit`),
   CONSTRAINT `FK_ItemPanier`
     FOREIGN KEY (`id_panier`)
