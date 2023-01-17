@@ -2,6 +2,7 @@ HELP.md
 gamelife/target/
 target/
 .mvn/
+.m2/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -34,8 +35,8 @@ build/
 .vscode/
 
 ### Script Maven ###
-mvnw
-mvnw.cmd
+gamelife/mvnw
+gamelife/mvnw.cmd
 
 ##.DS_Store##
 .DS_Store

@@ -59,21 +59,18 @@ public class UtilisateurEntity implements Serializable {
 	public UtilisateurEntity() {
 	}
 
-	public UtilisateurEntity(int id, String email, Integer etatCompte, String mdp, String nom, int num_rue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
+	public UtilisateurEntity(String email, Integer etatCompte, String mdp, String nom, int num_rue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
 		this.email = email;
 		this.etatCompte = etatCompte;
 		this.mdp = mdp;
 		this.nom = nom;
 		this.num_rue = num_rue;
-
 		this.codePostal = codePostal;
-
 		this.numSiren = numSiren;
 		this.prenom = prenom;
 		this.role = role;
 		this.rue = rue;
 		this.ville = ville;
-
 		this.resetPasswordToken = resetPasswordToken;
 	}
 
