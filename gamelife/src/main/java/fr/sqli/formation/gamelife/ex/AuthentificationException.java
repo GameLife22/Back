@@ -1,8 +1,11 @@
 package fr.sqli.formation.gamelife.ex;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AuthentificationException extends Exception{
 
-
+    private static final Logger LOG = LogManager.getLogger();
 
     public AuthentificationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
@@ -12,7 +15,7 @@ public class AuthentificationException extends Exception{
     }
 
     public AuthentificationException(String message) {
-        super(message);
+        LOG.info(message);
     }
 
     public AuthentificationException(String message, Throwable cause) {

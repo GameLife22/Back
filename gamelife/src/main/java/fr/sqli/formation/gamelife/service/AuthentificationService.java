@@ -55,7 +55,7 @@ public class AuthentificationService implements AuthenticationProvider {
                         return monUser.get();
                     } else {
                         //pas ok
-                        LOG.info("Utilisateur inconnu");
+
                         throw new AuthentificationException("Utilisateur inconnu");
                     }
                 } else {
@@ -64,7 +64,6 @@ public class AuthentificationService implements AuthenticationProvider {
                 }
             } else {
                 //pas ok
-                LOG.info("Utilisateur inconnu");
                 throw new AuthentificationException("Utilisateur inconnu");
             }
 

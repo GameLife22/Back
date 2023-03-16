@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private static final Logger LOG = LogManager.getLogger();
 
@@ -26,6 +27,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         var objectMapper = new ObjectMapper();
         var expToJson = objectMapper.writeValueAsString(out);
         var pw = response.getWriter();
+
         pw.write(expToJson);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
