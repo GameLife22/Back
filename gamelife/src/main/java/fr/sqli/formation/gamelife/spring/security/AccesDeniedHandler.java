@@ -1,6 +1,7 @@
 package fr.sqli.formation.gamelife.spring.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.sqli.formation.gamelife.dto.springSecurity.ExceptionDtoOut;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
@@ -23,10 +24,9 @@ class AccesDeniedHandler implements AccessDeniedHandler {
                 request.getRequestURL(), exception);
 
         // We want our Json Exception model instead of the one in Spring
-        //var out = new ExceptionDtoOut(exception);
+        var out = new ExceptionDtoOut(exception);
         var objectMapper = new ObjectMapper();
-        //TODO EXception DtoOut
-        var expToJson = objectMapper.writeValueAsString("Erreur Access Denied");
+        var expToJson = objectMapper.writeValueAsString(out);
         var pw = response.getWriter();
         pw.write(expToJson);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
