@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.http.HttpHeaders;
+
 @Service
 public class InscriptionService {
     @Autowired
@@ -29,7 +31,7 @@ public class InscriptionService {
                 u.setMdp(encoder.encode(u.getMdp()));
                 return uDao.save(u);
             }else {
-                if(newUser.get().getEtatCompte() == 0){
+                if(newUser.get().getEtatCompte().equals("desactive")){
                     newUser.get().setEtatCompte(1);
                     newUser.get().setNom(dto.getNom());
                     newUser.get().setPrenom(dto.getPrenom());
@@ -38,7 +40,7 @@ public class InscriptionService {
                     newUser.get().setVille(dto.getVille());
                     newUser.get().setCodePostal(dto.getCode_postal());
                     newUser.get().setRue(dto.getRue());
-                    newUser.get().setNum_rue(dto.getNum_rue());
+                    newUser.get().setNumRue(dto.getNum_rue());
                     newUser.get().setRole(dto.getRole());
                     newUser.get().setNumSiret(dto.getNum_siret());
                      return uDao.save(newUser.get());

@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.dto.gestionCompte;
+package fr.sqli.formation.gamelife.dto;
 
 public class GestionMdpDto {
 

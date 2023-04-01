@@ -1,6 +1,8 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.dto.gestionCompte.*;
+import fr.sqli.formation.gamelife.dto.GestionCompteDto;
+import fr.sqli.formation.gamelife.dto.GestionEtatDto;
+import fr.sqli.formation.gamelife.dto.GestionMdpDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.OldPasswordException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -20,7 +22,17 @@ public class GestionCompteService {
         var user = uDao.findById(dto.getId());
         var control = uDao.findByEmail(dto.getEmail());
         if(user.isPresent()){
-            UtilisateurEntity u = user.get();
+            UtilisateurEntity u = uDao.findById(dto.getId()).get();
+<<<<<<< HEAD
+            u.setPrenom(dto.getPrenom());
+            u.setNom(dto.getNom());
+            u.setEmail(dto.getEmail());
+            u.setNumRue(dto.getNumRue());
+            u.setRue(dto.getRue());
+            u.setVille(dto.getVille());
+            u.setCodePostal(dto.getCodePostal());
+            u.setNumSiret(dto.getNumSiren());
+=======
             if (dto.getPrenom() != null && !dto.getPrenom().isEmpty()) {
                 u.setPrenom(dto.getPrenom());
             }
@@ -36,8 +48,8 @@ public class GestionCompteService {
                     throw new UtilisateurExistantException("email deja utilise");
                 }
             }
-            if (dto.getNum_rue() != null && dto.getNum_rue() != 0) {
-                u.setNum_rue(dto.getNum_rue());
+            if (dto.getNumRue() != null && dto.getNumRue() == 0) {
+                u.setNumRue(dto.getNumRue());
             }
             if (dto.getRue() != null && !dto.getRue().isEmpty()) {
                 u.setRue(dto.getRue());
@@ -51,6 +63,7 @@ public class GestionCompteService {
             if (dto.getNumSiren() != null && !dto.getNumSiren().isEmpty()) {
                 u.setNumSiret(dto.getNumSiren());
             }
+>>>>>>> f5effe25cc910a456860e173c46b5094dd081807
             return uDao.save(u);
         }else {
             throw new UtilisateurExistantException("Utilisateur inexistant");
@@ -101,16 +114,5 @@ public class GestionCompteService {
             return true;
         }
         return false;
-    }
-
-    public UserDtoOut getUser(int id) throws Exception {
-        var user = uDao.findById(id);
-        if (!user.isPresent()) {
-            throw new UtilisateurExistantException("utilisateur inexistant");
-        }
-        UtilisateurEntity u = user.get();
-        UserDtoOut dto = UserDtoHandler.fromEntity(u);
-
-        return dto;
     }
 }
