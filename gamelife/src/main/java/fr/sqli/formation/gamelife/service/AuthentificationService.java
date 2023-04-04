@@ -55,8 +55,7 @@ public class AuthentificationService implements AuthenticationProvider {
                         return monUser.get();
                     } else {
                         //pas ok
-
-                        throw new AuthentificationException("Utilisateur inconnu");
+                        throw new AuthentificationException("Utilisateur inconnu pass");
                     }
                 } else {
                     LOG.info("Compte Desactive");
@@ -64,7 +63,7 @@ public class AuthentificationService implements AuthenticationProvider {
                 }
             } else {
                 //pas ok
-                throw new AuthentificationException("Utilisateur inconnu");
+                throw new AuthentificationException("Utilisateur inconnu email");
             }
 
         }

@@ -2,16 +2,19 @@ package fr.sqli.formation.gamelife.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.sqli.formation.gamelife.dto.login.LoginDtoIn;
+import fr.sqli.formation.gamelife.ex.AuthentificationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.security.Keys;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -89,10 +92,17 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
                 remoteIP, email);
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-        var result = this.authenticationManager.authenticate(authenticationToken);
-        JwtAuthenticationFilter.LOG.info(
-                "[{}] --> JwtAuthenticationFilter.attemptAuthentication is ok - User id is {}", remoteIP, result.getDetails().toString());
-        return result;
+
+        try {
+            var result = this.authenticationManager.authenticate(authenticationToken);
+            JwtAuthenticationFilter.LOG.info(
+                    "[{}] --> JwtAuthenticationFilter.attemptAuthentication is ok - User id is {}", remoteIP, result.getDetails().toString());
+            return result;
+        } catch (AuthenticationException e) {
+            throw new AuthentificationException("Authentication failed for user " + email + " - " + e.getMessage(), e);
+        }
+
+
     }
 
     /**
@@ -155,3 +165,4 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
     }
 
 }
+
