@@ -27,6 +27,7 @@ public class MdpOublieControler {
     @PostMapping("/mdpoublie")
     public void mdpoublie(@RequestBody MdpOublieDtoIn monbody) throws Exception{
         LOG.info("MdpOublieControler : IN {}", monbody);
+
         authentificationService.mdpOublie(monbody);
         LOG.info("MdpOublieControler : OUT ");
     }

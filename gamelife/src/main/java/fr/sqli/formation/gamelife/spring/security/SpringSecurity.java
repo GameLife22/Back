@@ -96,7 +96,6 @@ public class SpringSecurity  {
 		exceptionHandling.authenticationEntryPoint(new RestAuthenticationEntryPoint());
 		exceptionHandling.accessDeniedHandler(new AccesDeniedHandler());
 
-
 		// For logout, simply send 200
 		http.authorizeRequests().and().logout().clearAuthentication(true)
 				.logoutSuccessHandler((pRequest, pResponse, pAuthentication) -> pResponse.setStatus(200));

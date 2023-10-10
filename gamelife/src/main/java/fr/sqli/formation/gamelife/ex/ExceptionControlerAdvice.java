@@ -42,7 +42,7 @@ public class ExceptionControlerAdvice {
 
     @ExceptionHandler(UtilisateurExistantException.class)
     public ResponseEntity<UtilisateurExistantException> exceptionHandler(UtilisateurExistantException ex){
-        LOG.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION", ex);
+        LOG.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION {}", ex.getMessage());
         ResponseEntity<UtilisateurExistantException> resu = new ResponseEntity<UtilisateurExistantException>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }

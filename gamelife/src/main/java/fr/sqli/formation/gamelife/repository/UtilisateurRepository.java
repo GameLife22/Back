@@ -5,6 +5,7 @@ import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +17,8 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateurEntity,I
     public Optional<UtilisateurEntity> findById(Integer id);
 
     public UtilisateurEntity findByResetPasswordToken(String token);
+
+    public List<UtilisateurEntity> findAll();
 
 
 }

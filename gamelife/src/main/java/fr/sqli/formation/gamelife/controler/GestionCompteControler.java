@@ -39,8 +39,6 @@ public class GestionCompteControler {
 
 
     @PostMapping("/mdp")
-    //Obliger que le role = exemple "ROLE_ACHETEUR"
-    //@PreAuthorize("hasRole('ROLE_ACHETEUR')")
     public ResponseEntity<Integer> gestionMdp(@RequestBody GestionMdpDto monbody) throws Exception{
         LOG.info("GestionMdpControler : IN {}", monbody);
         UtilisateurEntity res;

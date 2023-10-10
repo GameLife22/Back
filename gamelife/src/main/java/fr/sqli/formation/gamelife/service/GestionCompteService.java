@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class GestionCompteService {
     @Autowired
@@ -113,4 +116,10 @@ public class GestionCompteService {
 
         return dto;
     }
+    public List<UtilisateurEntity> getUsers() {
+        List<UtilisateurEntity> users = new ArrayList<>();
+        uDao.findAll().forEach(u -> users.add(u));
+        return users;
+    }
+
 }
