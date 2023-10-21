@@ -5,7 +5,6 @@ import fr.sqli.formation.gamelife.dto.inscription.InscriptionDtoHandler;
 import fr.sqli.formation.gamelife.dto.SiretDto;
 import fr.sqli.formation.gamelife.dto.mdpOublie.EmailDtoOut;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.ex.CompteDesactiveException;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;

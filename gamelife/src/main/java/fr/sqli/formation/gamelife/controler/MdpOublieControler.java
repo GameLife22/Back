@@ -5,7 +5,7 @@ import fr.sqli.formation.gamelife.dto.mdpOublie.MdpOublieDtoHandler;
 import fr.sqli.formation.gamelife.dto.mdpOublie.MdpOublieDtoIn;
 import fr.sqli.formation.gamelife.dto.resetMdp.resetMdpDtoIn;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.service.AuthentificationService;
+import fr.sqli.formation.gamelife.service.UtilisateurService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/utilisateur")
 
 public class MdpOublieControler {
 
 
     @Autowired
-    private AuthentificationService authentificationService;
+    private UtilisateurService utilisateurService;
 
     private static final Logger LOG = LogManager.getLogger();
 
@@ -28,13 +28,13 @@ public class MdpOublieControler {
     public void mdpoublie(@RequestBody MdpOublieDtoIn monbody) throws Exception{
         LOG.info("MdpOublieControler : IN {}", monbody);
 
-        authentificationService.mdpOublie(monbody);
+        utilisateurService.mdpOublie(monbody);
         LOG.info("MdpOublieControler : OUT ");
     }
 
     @GetMapping("/getEmailByToken")
-    public ResponseEntity<EmailDtoOut>  getItemPanierByPanierIdAndProduitId(@RequestParam String token ) throws Exception {
-        var user = this.authentificationService.getByResetPasswordToken(token);
+    public ResponseEntity<EmailDtoOut>  getEmailByToken(@RequestParam String token )  {
+        var user = this.utilisateurService.getByResetPasswordToken(token);
         if (user.equals(null)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -45,10 +45,10 @@ public class MdpOublieControler {
     }
 
     @PostMapping("/mdpreset")
-    public void mdpreset(@RequestBody resetMdpDtoIn monbody, @RequestParam String token) throws Exception{
+    public void mdpreset(@RequestBody resetMdpDtoIn monbody, @RequestParam String token) {
         LOG.info("MdpResetControler : IN {} {}", token,monbody.getPwd());
-        UtilisateurEntity user = authentificationService.getByResetPasswordToken(token);
-        authentificationService.modifierMotDePasse(user,monbody);
+        UtilisateurEntity user = utilisateurService.getByResetPasswordToken(token);
+        utilisateurService.modifierMotDePasse(user,monbody);
         LOG.info("MdpResetControler : OUT ");
     }
 
