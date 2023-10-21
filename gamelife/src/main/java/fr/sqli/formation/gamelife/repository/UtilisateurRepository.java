@@ -15,9 +15,7 @@ public interface UtilisateurRepository extends JpaRepository<UtilisateurEntity,I
     // public UtilisateurEntity trouverEmail(@Param("email") String email);
     public Optional<UtilisateurEntity> findByEmail(String email);
     public Optional<UtilisateurEntity> findById(Integer id);
-
     public UtilisateurEntity findByResetPasswordToken(String token);
-
     public List<UtilisateurEntity> findAll();
 
 

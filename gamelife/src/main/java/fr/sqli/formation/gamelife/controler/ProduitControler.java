@@ -33,6 +33,8 @@ public class ProduitControler {
 	 * Cette méthode permet d'appeler le service pour récupérer des produits
 	 * @return: une liste de jeux vidéos
 	 */
+
+	//@PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<ProduitDto>> getAllProduit() {
 		LOG.info("Dans getAllProduit");
