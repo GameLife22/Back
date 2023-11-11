@@ -24,7 +24,7 @@ class InscriptionServiceTest {
     @Test
     void testInscription01() throws Exception {
         LOG.debug("TEST : Cas normal");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com",1,"sa","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com",1,"Teeest1999@","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
         UtilisateurEntity u =service.inscription(dto);
         Assertions.assertNotNull(u);
         Assertions.assertEquals(u.getNom(),"Astora");
@@ -32,7 +32,7 @@ class InscriptionServiceTest {
     @Test
     void testInscription02() throws Exception {
         LOG.debug("TEST : Cas utilisateur existant");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("sa@gmail.com",1,"sa","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("fabien.bidault@social.aston-ecole.com",1,"Paz6!!133","admin",3,null,"admin","ROLE_ADMIN","rue de capucine","paris",75000,null));
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
     }
     @Test

@@ -40,16 +40,16 @@ class GestionCompteServiceTest {
     // Methode modificationMdp
     @Test
     void testModificationMdp01() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(4,"021aze155", "021aze155");
+        GestionMdpDto dto = new GestionMdpDto(1,"Paz6!!1333", "Paz6!!133");
         UtilisateurEntity test = service.modificationMdp(dto);
-        System.out.println(encoder.matches("021aze155", test.getMdp()));
-        Assertions.assertTrue(encoder.matches("021aze155", test.getMdp()));
+        System.out.println(encoder.matches("Paz6!!133", test.getMdp()));
+        Assertions.assertTrue(encoder.matches("Paz6!!1333", test.getMdp()));
     }
     @Test
     void testModificationMdp02() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(4,"021aze155", "021aze155");
+        GestionMdpDto dto = new GestionMdpDto(1,"Paz6!!1333", "Paz6!!133");
         UtilisateurEntity test = service.modificationMdp(dto);
-        Assertions.assertFalse(encoder.matches("021azeee155", test.getMdp()));
+        Assertions.assertFalse(encoder.matches("Paz6!!13", test.getMdp()));
     }
     @Test
     void testModificationMdp03() throws Exception {
@@ -61,9 +61,9 @@ class GestionCompteServiceTest {
 
 @Test
     void testModificationEtat01() throws Exception {
-    GestionEtatDto dto = new GestionEtatDto(4,0);
+    GestionEtatDto dto = new GestionEtatDto(1,0);
     UtilisateurEntity test = service.modificationEtat(dto);
-    Assertions.assertEquals("desactive",test.getEtatCompte());
+    Assertions.assertEquals(0,test.getEtatCompte());
     }
     @Test
     void testModificationEtat02() throws Exception {
