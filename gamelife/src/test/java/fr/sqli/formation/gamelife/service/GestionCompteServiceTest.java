@@ -40,16 +40,16 @@ class GestionCompteServiceTest {
     // Methode modificationMdp
     @Test
     void testModificationMdp01() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(1,"Paz6!!1333", "Paz6!!133");
+        GestionMdpDto dto = new GestionMdpDto(1,"Paz6!!1333", "Paz6!!3");
         UtilisateurEntity test = service.modificationMdp(dto);
-        System.out.println(encoder.matches("Paz6!!133", test.getMdp()));
+        System.out.println(encoder.matches("Paz6!!3", test.getMdp()));
         Assertions.assertTrue(encoder.matches("Paz6!!1333", test.getMdp()));
     }
     @Test
     void testModificationMdp02() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(1,"Paz6!!1333", "Paz6!!133");
+        GestionMdpDto dto = new GestionMdpDto(1,"Paz6!!1333", "Paz6!!3");
         UtilisateurEntity test = service.modificationMdp(dto);
-        Assertions.assertFalse(encoder.matches("Paz6!!13", test.getMdp()));
+        Assertions.assertFalse(encoder.matches("Paz6!!3", test.getMdp()));
     }
     @Test
     void testModificationMdp03() throws Exception {
