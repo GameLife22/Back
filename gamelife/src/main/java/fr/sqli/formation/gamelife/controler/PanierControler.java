@@ -1,6 +1,9 @@
 package fr.sqli.formation.gamelife.controler;
 
+import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
+import fr.sqli.formation.gamelife.ex.panier.ItemPanierNotFoundException;
+import fr.sqli.formation.gamelife.ex.panier.PanierNotFoundException;
 import fr.sqli.formation.gamelife.repository.PanierRepository;
 import fr.sqli.formation.gamelife.service.panier.PanierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,7 @@ public class PanierControler {
     }
 
     @GetMapping("/{id}")
-    public PanierDto getPanierById(@PathVariable int id) {
+    public PanierDto getPanierById(@PathVariable int id) throws PanierNotFoundException {
         return panierService.getPanierById(id);
     }
 
@@ -37,17 +40,20 @@ public class PanierControler {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PanierDto> updatePanier(@PathVariable int id, @RequestBody PanierDto panierDto) {
+    public ResponseEntity<PanierDto> updatePanier(@PathVariable int id, @RequestBody PanierDto panierDto) throws PanierNotFoundException {
         PanierDto updatedPanier = panierService.updatePanier(id, panierDto);
         // Si le panier est trouvé et mis à jour, retourne un code HTTP OK
         // Sinon, retourne un code HTTP 404 Not Found si le panier n'est pas trouvé
         return updatedPanier != null ? new ResponseEntity<>(updatedPanier, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePanier(@PathVariable int id) {
+    public ResponseEntity<Void> deletePanier(@PathVariable int id) throws PanierNotFoundException {
         panierService.deletePanier(id);
         return ResponseEntity.noContent().build();
     }
-
+    @PatchMapping("/{id}/modif-quantite")
+    public PanierDto modifierQuantite(@PathVariable int id, @RequestBody ItemPanierDto itemPanierDto) throws PanierNotFoundException, ItemPanierNotFoundException {
+        return panierService.modifierQuantite(id, itemPanierDto);
+    }
 }
 

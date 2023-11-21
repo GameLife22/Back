@@ -1,14 +1,22 @@
 package fr.sqli.formation.gamelife.service.panier.impl;
 
+import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
+import fr.sqli.formation.gamelife.dto.panier.ItemPanierPKDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDtoHandler;
+import fr.sqli.formation.gamelife.entity.ItemPanierEntity;
+import fr.sqli.formation.gamelife.entity.ItemPanierPK;
 import fr.sqli.formation.gamelife.entity.PanierEntity;
-import fr.sqli.formation.gamelife.ex.PanierNotFoundException;
+import fr.sqli.formation.gamelife.ex.panier.ItemPanierNotFoundException;
+import fr.sqli.formation.gamelife.ex.panier.PanierNotFoundException;
+import fr.sqli.formation.gamelife.repository.ItemPanierRepository;
 import fr.sqli.formation.gamelife.repository.PanierRepository;
+import fr.sqli.formation.gamelife.repository.ProduitRepository;
 import fr.sqli.formation.gamelife.service.panier.PanierService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,14 +25,17 @@ import java.util.stream.Collectors;
 @Service
 public class PanierServiceImpl implements PanierService {
 
-    @Autowired
-    private PanierDtoHandler panierDtoHandler;
+
     @Autowired
     private PanierRepository panierRepository;
-
+    @Autowired
+    private ItemPanierRepository itemPanierRepository;
+    @Autowired
+    private ProduitRepository produitRepository;
     @Autowired // ModelMapper permet de transférer automatiquement les données d'un objet source vers un objet cible
     private ModelMapper modelMapper;
-
+    @Autowired
+    private PanierDtoHandler panierDtoHandler;
 
 
 
@@ -79,8 +90,29 @@ public class PanierServiceImpl implements PanierService {
         panierRepository.delete(panierEntity);
     }
 
+    //Mettre à jour la quantité d'un article dans un panie
+    @Override
+    @Transactional
+    public PanierDto modifierQuantite(int id, ItemPanierDto itemPanierDto) throws PanierNotFoundException, ItemPanierNotFoundException {
+        PanierEntity panierEntity = panierRepository.findById(id)
+                .orElseThrow(() -> new PanierNotFoundException("Panier not found with id: " + id));
 
-    
+        ItemPanierPKDto itemPanierPKDto = itemPanierDto.getId();
+        ItemPanierPK itemPanierPK = new ItemPanierPK();
+        itemPanierPK.setIdPanier(itemPanierPKDto.getIdPanier());
+        itemPanierPK.setIdProduit(itemPanierPKDto.getIdProduit());
+
+        ItemPanierEntity itemPanierEntity = itemPanierRepository.findById(itemPanierPK)
+                .orElseThrow(() -> new ItemPanierNotFoundException("ItemPanier not found with id: " + itemPanierPK));
+
+        itemPanierEntity.setQuantite(itemPanierDto.getQuantite());
+        itemPanierRepository.save(itemPanierEntity);
+
+        return panierDtoHandler.entityToDto(panierEntity);
+    }
+
+
+
 
 
 }
