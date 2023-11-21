@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.ex;
+package fr.sqli.formation.gamelife.ex.panier;
 
 public class PanierNotFoundException extends Exception {
 

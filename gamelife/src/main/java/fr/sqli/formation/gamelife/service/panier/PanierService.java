@@ -1,10 +1,10 @@
 package fr.sqli.formation.gamelife.service.panier;
 
-import fr.sqli.formation.gamelife.dto.ProduitDto;
 import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
-import fr.sqli.formation.gamelife.ex.PanierNotFoundException;
-import fr.sqli.formation.gamelife.repository.PanierRepository;
+import fr.sqli.formation.gamelife.ex.panier.ItemPanierNotFoundException;
+import fr.sqli.formation.gamelife.ex.panier.PanierNotFoundException;
+
 import java.util.List;
 
 public interface PanierService {
@@ -23,9 +23,9 @@ public interface PanierService {
 
     void deletePanier(int id) throws PanierNotFoundException;
 
- /*
-    PanierDto modifierQuantite(int id, ItemPanierDto itemPanierDto);
 
+    PanierDto modifierQuantite(int id, ItemPanierDto itemPanierDto) throws PanierNotFoundException, ItemPanierNotFoundException;
+/*
     double getPrixTotalPanier(int id);
 
     PanierDto ajoutArticle(int id, ProduitDto produitDto);
