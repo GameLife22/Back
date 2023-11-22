@@ -10,8 +10,10 @@ import fr.sqli.formation.gamelife.service.panier.PanierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -29,8 +31,13 @@ public class PanierControler {
     }
 
     @GetMapping("/{id}")
-    public PanierDto getPanierById(@PathVariable int id) throws PanierNotFoundException {
-        return panierService.getPanierById(id);
+    public ResponseEntity<PanierDto> getPanierById(@PathVariable int id) {
+        try {
+            PanierDto panierDto = panierService.getPanierById(id);
+            return new ResponseEntity<>(panierDto, HttpStatus.OK);
+        } catch (PanierNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/creer")

@@ -96,7 +96,7 @@ public class SecurityConfig {
                         .antMatchers("/h2-console").permitAll()
                         .antMatchers("/panier/all").permitAll()
                         .antMatchers("/panier/creer").permitAll()
-
+                        .antMatchers("/panier/{id}").permitAll()
                         .anyRequest().authenticated()
 
                 )
