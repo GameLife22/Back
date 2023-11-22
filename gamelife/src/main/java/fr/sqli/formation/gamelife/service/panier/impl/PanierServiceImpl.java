@@ -7,11 +7,14 @@ import fr.sqli.formation.gamelife.dto.panier.PanierDtoHandler;
 import fr.sqli.formation.gamelife.entity.ItemPanierEntity;
 import fr.sqli.formation.gamelife.entity.ItemPanierPK;
 import fr.sqli.formation.gamelife.entity.PanierEntity;
+import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.panier.ItemPanierNotFoundException;
 import fr.sqli.formation.gamelife.ex.panier.PanierNotFoundException;
 import fr.sqli.formation.gamelife.repository.ItemPanierRepository;
 import fr.sqli.formation.gamelife.repository.PanierRepository;
 import fr.sqli.formation.gamelife.repository.ProduitRepository;
+import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
 import fr.sqli.formation.gamelife.service.panier.PanierService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,8 @@ public class PanierServiceImpl implements PanierService {
     private ModelMapper modelMapper;
     @Autowired
     private PanierDtoHandler panierDtoHandler;
-
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
 
 
     //Recuperation de tous les paniers
@@ -58,11 +62,19 @@ public class PanierServiceImpl implements PanierService {
 
     //Creation du panier
     @Override
-    public PanierDto createPanier(PanierDto panierDto) {
+    public PanierDto createPanier(PanierDto panierDto) throws UtilisateurNonExistantException {
         PanierEntity panierEntity = panierDtoHandler.dtoToEntity(panierDto);
+
+        // Récupérez l'utilisateur associé au panier
+        UtilisateurEntity utilisateur = utilisateurRepository.findById(panierDto.getUtilisateur().getId())
+                .orElseThrow(() -> new UtilisateurNonExistantException("Utilisateur not found"));
+        panierEntity.setUtilisateur(utilisateur);
+
+        // Enregistrez le panier dans la base de données
         panierEntity = panierRepository.save(panierEntity);
         return panierDtoHandler.entityToDto(panierEntity);
     }
+
     // Panier mise à jour
     @Override
     public PanierDto updatePanier(int id, PanierDto panierDto) throws PanierNotFoundException {

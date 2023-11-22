@@ -2,7 +2,9 @@ package fr.sqli.formation.gamelife.dto.panier;
 
 import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
 import fr.sqli.formation.gamelife.entity.PanierEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PanierDtoHandler {
     public PanierDto entityToDto(PanierEntity panierEntity) {
         PanierDto panierDto = new PanierDto();
