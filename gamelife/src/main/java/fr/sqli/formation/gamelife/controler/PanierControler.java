@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.controler;
 
 import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
+import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.panier.ItemPanierNotFoundException;
 import fr.sqli.formation.gamelife.ex.panier.PanierNotFoundException;
 import fr.sqli.formation.gamelife.repository.PanierRepository;
@@ -32,8 +33,8 @@ public class PanierControler {
         return panierService.getPanierById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<PanierDto> createPanier(@RequestBody PanierDto panierDto) {
+    @PostMapping("/creer")
+    public ResponseEntity<PanierDto> createPanier(@RequestBody PanierDto panierDto) throws UtilisateurNonExistantException {
         PanierDto createdPanier = panierService.createPanier(panierDto);
         // Retourne un code HTTP 201 Created avec le corps contenant le panier créé
         return new ResponseEntity<>(createdPanier, HttpStatus.CREATED);
