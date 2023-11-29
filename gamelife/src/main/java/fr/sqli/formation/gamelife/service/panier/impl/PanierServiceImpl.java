@@ -6,7 +6,6 @@ import fr.sqli.formation.gamelife.dto.panier.ItemPanierDtoHandler;
 import fr.sqli.formation.gamelife.dto.panier.ItemPanierPKDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDtoHandler;
-import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDtoHandler;
 import fr.sqli.formation.gamelife.entity.*;
 import fr.sqli.formation.gamelife.ex.ProduitException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
@@ -32,7 +31,6 @@ import java.util.stream.Collectors;
 @Service
 public class PanierServiceImpl implements PanierService {
 
-
     @Autowired
     private PanierRepository panierRepository;
     @Autowired
@@ -54,7 +52,7 @@ public class PanierServiceImpl implements PanierService {
     private ItemPanierDtoHandler itemPanierDtoHandler;
 
 
-    //Recuperation de tous les paniers
+    // Recuperation de tous les paniers
     @Override
     public List<PanierDto> getAllPaniers() {
         List<PanierEntity> panierEntities = panierRepository.findAll();
@@ -63,7 +61,7 @@ public class PanierServiceImpl implements PanierService {
                 .collect(Collectors.toList());
     }
 
-    //Récupère un panier en utilisant un ID
+    // Récupère un panier en utilisant un ID
     @Override
     public PanierDto getPanierById(int id) throws PanierNotFoundException {
         PanierEntity panierEntity = panierRepository.findById(id)
@@ -92,7 +90,6 @@ public class PanierServiceImpl implements PanierService {
                 panierEntity.addItemPanier(itemPanierEntity);
             }
         }
-
         // Enregistrez le panier dans la base de données
         panierEntity = panierRepository.save(panierEntity);
 
@@ -101,7 +98,7 @@ public class PanierServiceImpl implements PanierService {
 
 
 
-    // Panier mise à jour
+    // Panier mise à jour ex : gerer l'etat du panier, modifier la date de la livraison
     @Override
     public PanierDto updatePanier(int id, PanierDto panierDto) throws PanierNotFoundException {
             Optional<PanierEntity> panierEntityOptional = panierRepository.findById(id);
@@ -119,7 +116,7 @@ public class PanierServiceImpl implements PanierService {
                 throw new PanierNotFoundException("Panier non trouvé avec l'ID : " + id);
             }
         }
-    //Supprimer le panier
+    // Supprimer le panier
     @Override
     public void deletePanier(int id) throws PanierNotFoundException {
         PanierEntity panierEntity = panierRepository.findById(id)
@@ -128,7 +125,7 @@ public class PanierServiceImpl implements PanierService {
         panierRepository.delete(panierEntity);
     }
 
-    //Mettre à jour la quantité d'un article dans un panie
+    // Mettre à jour la quantité d'un article dans un panier
     @Override
     @Transactional
     public PanierDto modifierQuantite(int id, ItemPanierDto itemPanierDto) throws PanierNotFoundException, ItemPanierNotFoundException {
@@ -149,6 +146,7 @@ public class PanierServiceImpl implements PanierService {
         return panierDtoHandler.entityToDto(panierEntity);
     }
 
+    // Prix total du panier
     @Override
     public double getPrixTotalPanier(int id) {
         PanierEntity panierEntity = panierRepository.findById(id).orElse(null);
@@ -160,6 +158,7 @@ public class PanierServiceImpl implements PanierService {
         return 0.0;
     }
 
+    // Ajouter un article dans le panier
     @Override
     @Transactional
     public PanierDto ajoutArticle(int id, ProduitDto produitDto) throws ProduitException, PanierNotFoundException {
@@ -185,7 +184,7 @@ public class PanierServiceImpl implements PanierService {
             // Si l'ItemPanierEntity existe, augmenter la quantité
             existingItemPanier.get().setQuantite(existingItemPanier.get().getQuantite() + 1);
         } else {
-            // Si l'ItemPanierEntity n'existe pas, créer un nouvel ItemPanierEntity
+            // Si l'ItemPanierEntity n'existe pas  créer un nouvel ItemPanierEntity
             ItemPanierEntity newItemPanier = new ItemPanierEntity();
             ItemPanierPK itemPanierPK = new ItemPanierPK(id, produitDto.getId());
             newItemPanier.setId(itemPanierPK);
@@ -199,12 +198,46 @@ public class PanierServiceImpl implements PanierService {
         // Enregistrer les modifications dans la base de données
         panierRepository.save(panierEntity);
 
-        // Retourner le panier mis à jour sous forme de DTO
         return panierDtoHandler.entityToDto(panierEntity);
     }
 
+    // Validation du panier
+    @Override
+    public PanierDto validerPanier(int id) throws PanierNotFoundException {
+        PanierEntity panierEntity = panierRepository.findByIdWithItemPaniers(id)
+                .orElseThrow(() -> new PanierNotFoundException("Panier not found with id: " + id));
 
+        if (panierEntity.getEtat() != 1) {
+            if (panierEntity.getItemPaniers().isEmpty()) {
+                throw new IllegalStateException("Cannot validate an empty panier (id: " + id + ")");
+            }
 
+            panierEntity.setEtat((byte) 1);
 
+            panierEntity = panierRepository.save(panierEntity);
+
+            return panierDtoHandler.entityToDto(panierEntity);
+
+        } else {
+            throw new IllegalStateException("Panier with id " + id + " is already validated.");
+        }
+    }
+
+    // Supprimer un article dans le panier
+    @Override
+    public PanierDto supprimerArticle(int idPanier, int idProduit) throws PanierNotFoundException, ProduitException {
+        // Récupérer le panier
+        PanierEntity panierEntity = panierRepository.findById(idPanier)
+                .orElseThrow(() -> new PanierNotFoundException("Panier introuvable avec l'ID : " + idPanier));
+
+        // Récupérer l'article dans le panier
+        ItemPanierEntity itemPanierEntity = itemPanierRepository.findById(new ItemPanierPK(idPanier, idProduit))
+                .orElseThrow(() -> new ProduitException("Produit introuvable avec l'ID : " + idProduit));
+
+        panierEntity.getItemPaniers().remove(itemPanierEntity);
+        panierRepository.save(panierEntity);
+
+        return panierDtoHandler.entityToDto(panierEntity);
+    }
 
 }
