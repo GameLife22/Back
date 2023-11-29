@@ -35,6 +35,7 @@ public class PanierEntity implements Serializable {
 	@OneToMany(mappedBy="panier", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<ItemPanierEntity> itemPaniers;
 
+
 	public ItemPanierEntity addItemPanier(ItemPanierEntity itemPaniers) {
 		getItemPaniers().add(itemPaniers);
 		itemPaniers.setPanier(this);
@@ -48,6 +49,7 @@ public class PanierEntity implements Serializable {
 
 		return itemPaniers;
 	}
+
 	public PanierEntity() {
 		this.itemPaniers = new ArrayList<>();
 
@@ -92,8 +94,5 @@ public class PanierEntity implements Serializable {
 	public void setItemPaniers(List<ItemPanierEntity> ItemPaniers) {
 		this.itemPaniers = ItemPaniers;
 	}
-
-
-
 
 }

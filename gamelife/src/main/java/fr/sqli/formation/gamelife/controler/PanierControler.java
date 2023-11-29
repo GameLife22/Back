@@ -29,11 +29,13 @@ public class PanierControler {
     @Autowired
     private PanierDtoHandler panierDtoHandler;
 
+    // Recuperer tous les paniers
     @GetMapping("/all")
     public List<PanierDto> getAllPaniers() {
         return panierService.getAllPaniers();
     }
 
+    // Recuperer un seul panier
     @GetMapping("/{id}")
     public PanierDto getPanierById(@PathVariable int id) throws PanierNotFoundException {
         PanierEntity panierEntity = panierRepository.findByIdWithItemPaniers(id)
@@ -41,6 +43,7 @@ public class PanierControler {
         return panierDtoHandler.entityToDto(panierEntity);
     }
 
+    // Crée un panier
     @PostMapping("/creer")
     public ResponseEntity<PanierDto> createPanier(@RequestBody PanierDto panierDto) throws UtilisateurNonExistantException {
         PanierDto createdPanier = panierService.createPanier(panierDto);
@@ -48,7 +51,7 @@ public class PanierControler {
         return new ResponseEntity<>(createdPanier, HttpStatus.CREATED);
     }
 
-    //Mise a jour du panier
+    // Mise a jour du panier
     @PutMapping("/{id}")
     public ResponseEntity<PanierDto> updatePanier(@PathVariable int id, @RequestBody PanierDto panierDto) throws PanierNotFoundException {
         PanierDto updatedPanier = panierService.updatePanier(id, panierDto);
@@ -56,43 +59,43 @@ public class PanierControler {
         // Sinon, retourne un code HTTP 404 Not Found si le panier n'est pas trouvé
         return updatedPanier != null ? new ResponseEntity<>(updatedPanier, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    //supprimer le panier
+    // Supprimer le panier
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePanier(@PathVariable int id) throws PanierNotFoundException {
         panierService.deletePanier(id);
         return ResponseEntity.noContent().build();
     }
-    // modifier la quantite du produit
+    // Modifier la quantite du produit
     @PatchMapping("/{id}/modif-quantite")
     public PanierDto modifierQuantite(@PathVariable int id, @RequestBody ItemPanierDto itemPanierDto) throws PanierNotFoundException, ItemPanierNotFoundException {
         return panierService.modifierQuantite(id, itemPanierDto);
     }
 
-    //Affchier le prix total du panier
+    // Afficher le prix total du panier
     @GetMapping("/{id}/prix-total")
     public double getPrixTotalPanier(@PathVariable int id) {
         return panierService.getPrixTotalPanier(id);
     }
 
-
+    // Ajouter un article dans le panier
     @PostMapping("/{id}/ajout-article")
     public PanierDto ajoutArticle(@PathVariable int id, @RequestBody ProduitDto produitDto) throws ProduitException, PanierNotFoundException {
         return panierService.ajoutArticle(id, produitDto);
     }
-    
 
-    /*
+    // Valider un panier
     @PostMapping("/{id}/valider-panier")
-    public PanierDto validerPanier(@PathVariable int id) throws PanierNotFoundException {
-        return panierService.validerPanier(id);
+    public ResponseEntity<PanierDto> validerPanier(@PathVariable int id) throws PanierNotFoundException {
+        PanierDto panierDto = panierService.validerPanier(id);
+        return new ResponseEntity<>(panierDto, HttpStatus.OK);
+    }
+    // Supprimer un article dans le panier
+    @DeleteMapping("{idPanier}/supp-article/{idProduit}")
+    public ResponseEntity<PanierDto> supprimerArticle(@PathVariable int panierId, @PathVariable int produitId) throws PanierNotFoundException, ProduitException {
+        PanierDto panierDto = panierService.supprimerArticle(panierId, produitId);
+        return new ResponseEntity<>(panierDto, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/supprimer-article")
-    public PanierDto supprimerArticle(@PathVariable int id, @RequestBody ProduitDto produitDto) throws PanierNotFoundException {
-        return panierService.supprimerArticle(id, produitDto);
-    }
-
-*/
 
 }
 
