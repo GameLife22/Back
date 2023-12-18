@@ -116,6 +116,7 @@ public class PanierServiceImpl implements PanierService {
                 throw new PanierNotFoundException("Panier non trouvé avec l'ID : " + id);
             }
         }
+
     // Supprimer le panier
     @Override
     public void deletePanier(int id) throws PanierNotFoundException {
@@ -125,6 +126,7 @@ public class PanierServiceImpl implements PanierService {
         panierRepository.delete(panierEntity);
     }
 
+    
     // Mettre à jour la quantité d'un article dans un panier
     @Override
     @Transactional
@@ -147,6 +149,7 @@ public class PanierServiceImpl implements PanierService {
     }
 
     // Prix total du panier
+    //TODO passage en requete
     @Override
     public double getPrixTotalPanier(int id) {
         PanierEntity panierEntity = panierRepository.findById(id).orElse(null);
@@ -167,6 +170,7 @@ public class PanierServiceImpl implements PanierService {
             throw new ProduitException("Invalid Product ID: " + produitDto.getId());
         }
 
+
         // Récupérer le panier existant
         PanierEntity panierEntity = panierRepository.findById(id)
                 .orElseThrow(() -> new PanierNotFoundException("Panier not found with id: " + id));
@@ -174,6 +178,7 @@ public class PanierServiceImpl implements PanierService {
         // Récupérer le produit à ajouter au panier
         ProduitEntity produitEntity = produitRepository.findById(produitDto.getId())
                 .orElseThrow(() -> new ProduitException("Produit not found with id: " + produitDto.getId()));
+
 
         // Rechercher l'ItemPanierEntity dans la liste ItemPaniers du panier
         Optional<ItemPanierEntity> existingItemPanier = panierEntity.getItemPaniers().stream()
@@ -211,7 +216,18 @@ public class PanierServiceImpl implements PanierService {
             if (panierEntity.getItemPaniers().isEmpty()) {
                 throw new IllegalStateException("Cannot validate an empty panier (id: " + id + ")");
             }
+            // Déduire le stock des produits dans le panier
+            for (ItemPanierEntity itemPanierEntity : panierEntity.getItemPaniers()) {
+                ProduitEntity produitEntity = itemPanierEntity.getProduit();
+                int newQuantityStock = produitEntity.getStock() - itemPanierEntity.getQuantite();
 
+                if (newQuantityStock < 0) {
+                    throw new IllegalStateException("Insufficient stock for produit with id: " + produitEntity.getId());
+                }
+
+                produitEntity.setStock(newQuantityStock);
+                produitRepository.save(produitEntity);
+            }
             panierEntity.setEtat((byte) 1);
 
             panierEntity = panierRepository.save(panierEntity);
