@@ -1,40 +1,51 @@
 version: "3.8"
 
 services:
-  mysqldb:
-    image: mysql:5.7
+  database:
+    container_name: database
+    hostname: database
+    image: postgres:16.1
     restart: always
+    env_file: ./.env
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=gamelife
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=totoAdmin17
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_USER_PASSWORD
+      - POSTGRES_DB=$DB_DATABASE
+
     ports:
-      - 3307:3306
+      - ${DB_DOCKER_PORT}:${DB_LOCAL_PORT}
     volumes:
-      - ./Back/gamelife/db/gamelifev0.3.4.sql:/docker-entrypoint-initdb.d/0_init.sql
-    networks:
-      - gamelife
+      - type: bind
+        source: ./db/gamelifev0.3.4.sql
+        target: /docker-entrypoint-initdb.d/insert.sql
+        read_only: true
+#      - type: volume
+#        source: vol_postgresql_db
+#        target: /var/lib/postgresql/data
+
 
   back:
+    env_file: ./.env
     depends_on:
-      - mysqldb
-    build: ./Back/gamelife/target
+      - database
+    build:
+     context: ../gamelife
+    environment:
+      - SPRING_APPLICATION_JSON={"spring.datasource.url":"jdbc:postgresql://database:$DB_DOCKER_PORT/$DB_DATABASE?useSSL=false&serverTimezone=Europe/Paris&allowPublicKeyRetrieval=true","spring.datasource.username":"$DB_USER","spring.datasource.password":"$DB_USER_PASSWORD"}
     restart: always
     ports:
       - 8080:8080
-    environment:
-      SPRING_DATASOURCE_URL : jdbc:mysql://mysqldb:3306/gamelife?autoReconnect=true&useSSL=false
-    networks:
-      - gamelife
+    links:
+      - database
+    volumes:
+      - ../.m2:/root/.m2
+    stdin_open: true
+    tty: true
 
   front:
-    build: ./Front/gamelife
+    build: ../../Front/gamelife
     restart: always
     ports:
       - 4200:80
-    networks:
-      - gamelife
-
-networks:
-    gamelife:
+    depends_on:
+      - back
