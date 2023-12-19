@@ -100,8 +100,7 @@ public class SecurityConfig {
                         .antMatchers("/panier/{id}/prix-total").permitAll()
                         .antMatchers("/panier/{id}/ajout-article").permitAll()
                         .antMatchers("/panier/{id}/valider-panier").permitAll()
-                        .antMatchers("/panier/{idPanier}/supp-articles/{idProduit}").permitAll()
-
+                        .antMatchers("/panier/{idPanier}/supp-article/{idProduit}").permitAll()
                         .anyRequest().authenticated()
 
                 )

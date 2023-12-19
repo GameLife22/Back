@@ -32,5 +32,5 @@ public interface PanierService {
 
     PanierDto validerPanier(int id) throws PanierNotFoundException;
 
-    PanierDto supprimerArticle(int idPanier, int idProduit) throws PanierNotFoundException, ProduitException;
+    PanierDto supprimerArticle(int idPanier, int idProduit) throws PanierNotFoundException, ProduitException, ItemPanierNotFoundException;
 }
