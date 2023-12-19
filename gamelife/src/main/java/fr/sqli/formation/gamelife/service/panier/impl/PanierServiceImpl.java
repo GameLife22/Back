@@ -241,19 +241,26 @@ public class PanierServiceImpl implements PanierService {
 
     // Supprimer un article dans le panier
     @Override
-    public PanierDto supprimerArticle(int idPanier, int idProduit) throws PanierNotFoundException, ProduitException {
+    @Transactional
+    public PanierDto supprimerArticle(int idPanier, int idProduit) throws PanierNotFoundException, ProduitException, ItemPanierNotFoundException {
         // Récupérer le panier
         PanierEntity panierEntity = panierRepository.findById(idPanier)
-                .orElseThrow(() -> new PanierNotFoundException("Panier introuvable avec l'ID : " + idPanier));
+                .orElseThrow(() -> new PanierNotFoundException("Panier non trouvé avec l'ID : " + idPanier));
 
-        // Récupérer l'article dans le panier
-        ItemPanierEntity itemPanierEntity = itemPanierRepository.findById(new ItemPanierPK(idPanier, idProduit))
-                .orElseThrow(() -> new ProduitException("Produit introuvable avec l'ID : " + idProduit));
+        // Récupérer l'article du panier
+        ItemPanierEntity itemPanierEntity = panierEntity.getItemPaniers().stream()
+                .filter(item -> item.getProduit().getId() == idProduit)
+                .findFirst()
+                .orElseThrow(() -> new ItemPanierNotFoundException("Article non trouvé dans le panier avec l'ID du produit : " + idProduit));
 
-        panierEntity.getItemPaniers().remove(itemPanierEntity);
+        // Supprimer l'article du panier
+        panierEntity.removeItemPanier(itemPanierEntity);
         panierRepository.save(panierEntity);
 
+        // Supprimer l'article de la base de données
+        itemPanierRepository.delete(itemPanierEntity);
+
+        // Mettez à jour et renvoyez le panier DTO
         return panierDtoHandler.entityToDto(panierEntity);
     }
-
 }

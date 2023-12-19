@@ -90,10 +90,10 @@ public class PanierControler {
         return new ResponseEntity<>(panierDto, HttpStatus.OK);
     }
     // Supprimer un article dans le panier
-    @DeleteMapping("{idPanier}/supp-article/{idProduit}")
-    public ResponseEntity<PanierDto> supprimerArticle(@PathVariable int panierId, @PathVariable int produitId) throws PanierNotFoundException, ProduitException {
-        PanierDto panierDto = panierService.supprimerArticle(panierId, produitId);
-        return new ResponseEntity<>(panierDto, HttpStatus.OK);
+    @DeleteMapping("/{idPanier}/supp-article/{idProduit}")
+    public ResponseEntity<String> supprimerArticle(@PathVariable int idPanier, @PathVariable int idProduit) throws PanierNotFoundException, ItemPanierNotFoundException, ProduitException {
+        panierService.supprimerArticle(idPanier, idProduit);
+        return new ResponseEntity<>("Article supprimé avec succès", HttpStatus.OK);
     }
 
 
