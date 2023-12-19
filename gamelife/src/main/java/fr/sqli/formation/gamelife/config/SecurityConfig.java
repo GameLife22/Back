@@ -8,14 +8,21 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import fr.sqli.formation.gamelife.service.authentication.AuthDetailsService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +31,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,16 +42,20 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfig  {
+public class SecurityConfig {
+
+    @Autowired
+    protected Environment env;
+
+    private static final Logger LOG = LogManager.getLogger();
 
     private final RsaKeyProperties rsaKeys;
     private final AuthDetailsService authDetailsService;
+
     public SecurityConfig(RsaKeyProperties rsaKeys, AuthDetailsService authDetailsService) {
         this.rsaKeys = rsaKeys;
         this.authDetailsService = authDetailsService;
     }
-
-
 
     @Bean
     public AuthenticationManager authManager(AuthDetailsService authDetailsService) {
@@ -54,11 +66,21 @@ public class SecurityConfig  {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        final var h2Url = env.getProperty("spring.h2.console.path", "/h2");
+        return web -> web.ignoring().requestMatchers(new AntPathRequestMatcher(h2Url + "/**"));
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeRequests(auth -> auth
+        LOG.debug("SpringSecurityConfigurationSecured - Apply rules");
+        final var h2Url = env.getProperty("spring.h2.console.path", "/h2");
+        LOG.debug("SpringSecurityConfigurationSecured - H2 console is on {}", h2Url);
+        http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher(h2Url + "/**") // h2
+                ).permitAll()).headers(header -> {
+                    header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
+                }).authorizeHttpRequests(auth -> auth
                         .antMatchers("/utilisateur/auth").permitAll()
                         .antMatchers("/utilisateur/id").permitAll()
                         .antMatchers("/utilisateur/mdpoublie").permitAll()
@@ -70,14 +92,14 @@ public class SecurityConfig  {
                         .antMatchers("/inscription/siret").permitAll()
                         .antMatchers("/inscription/activer").permitAll()
                         .antMatchers("/inscription/validation").permitAll()
+                        .antMatchers("/h2-console").permitAll()
                         .anyRequest().authenticated()
 
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .userDetailsService(authDetailsService)
-                .build();
-
+                .userDetailsService(authDetailsService);
+        return http.build();
     }
 
     @Bean
@@ -93,6 +115,7 @@ public class SecurityConfig  {
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
+
     @Bean
     /* Encode password */
     public BCryptPasswordEncoder passwordEncoder() {

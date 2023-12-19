@@ -23,6 +23,9 @@ class GestionCompteServiceTest {
     @Autowired
     BCryptPasswordEncoder encoder;
 
+    // La différence entre un test unitaire et un test d'intégration est que le test unitaire est autonome, il ne fait appel à aucune BDD
+    // Le tes d'intégration lui utilise l'environement complet pour s'effectuer.
+    // Dans notre cas nous avons trouvé plus pertinant d'utiliser des test qui s'effectue dans un environnement similaire à la prod
 
     // Methode modificationCompte
     @Test
