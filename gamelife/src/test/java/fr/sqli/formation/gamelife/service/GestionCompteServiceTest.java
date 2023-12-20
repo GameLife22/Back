@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Rollback
 @Transactional
-@ActiveProfiles("application-test")
+@ActiveProfiles("test")
 class GestionCompteServiceTest {
     @Autowired
     GestionCompteService service;

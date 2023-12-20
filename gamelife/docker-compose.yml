@@ -14,11 +14,11 @@ services:
 
     ports:
       - ${DB_DOCKER_PORT}:${DB_LOCAL_PORT}
-#    volumes:
-#      - type: bind
-#        source: ./db/gamelifev0.3.4.sql
-#        target: /docker-entrypoint-initdb.d/insert.sql
-#        read_only: true
+    volumes:
+      - type: bind
+        source: ./db/gamelifev0.4.0.sql
+        target: /docker-entrypoint-initdb.d/insert.sql
+        read_only: true
 #      - type: volume
 #        source: vol_postgresql_db
 #        target: /var/lib/postgresql/data
