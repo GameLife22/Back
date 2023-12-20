@@ -1,4 +1,5 @@
-package fr.sqli.formation.gamelife.entity;
+package fr.sqli.formation.gamelife.entityGen;
+import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,10 +9,10 @@ import java.util.Collection;
 
 public class SecurityUser implements UserDetails {
 
-    private final UtilisateurEntity user;
+    private final fr.sqli.formation.gamelife.entity.UtilisateurEntity user;
 
 
-    public SecurityUser(UtilisateurEntity user) {
+    public SecurityUser(fr.sqli.formation.gamelife.entity.UtilisateurEntity user) {
         this.user = user;
     }
 
