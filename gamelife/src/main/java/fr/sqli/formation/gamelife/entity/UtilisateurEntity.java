@@ -46,7 +46,7 @@ public class UtilisateurEntity implements Serializable {
 
 	//bi-directional many-to-one association to Commande
 	@OneToMany(mappedBy="utilisateur")
-	private List<PanierEntity> commandes;
+	private List<CommandeEntity> commandes;
 
 	//bi-directional many-to-one association to Produit
 	@OneToMany(mappedBy="utilisateur")
@@ -177,22 +177,22 @@ public class UtilisateurEntity implements Serializable {
 		this.ville = ville;
 	}
 
-	public List<PanierEntity> getCommandes() {
+	public List<CommandeEntity> getCommandes() {
 		return this.commandes;
 	}
 
-	public void setCommandes(List<PanierEntity> commandes) {
+	public void setCommandes(List<CommandeEntity> commandes) {
 		this.commandes = commandes;
 	}
 
-	public PanierEntity addCommande(PanierEntity commande) {
+	public CommandeEntity addCommande(CommandeEntity commande) {
 		getCommandes().add(commande);
 		commande.setUtilisateur(this);
 
 		return commande;
 	}
 
-	public PanierEntity removeCommande(PanierEntity commande) {
+	public CommandeEntity removeCommande(CommandeEntity commande) {
 		getCommandes().remove(commande);
 		commande.setUtilisateur(null);
 

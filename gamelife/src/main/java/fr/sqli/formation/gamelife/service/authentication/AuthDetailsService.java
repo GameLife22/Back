@@ -1,6 +1,6 @@
 package fr.sqli.formation.gamelife.service.authentication;
 
-import fr.sqli.formation.gamelife.entityGen.SecurityUser;
+import fr.sqli.formation.gamelife.entity.SecurityUser;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

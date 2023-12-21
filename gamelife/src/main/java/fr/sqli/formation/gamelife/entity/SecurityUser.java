@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.entityGen;
+package fr.sqli.formation.gamelife.entity;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

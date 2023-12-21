@@ -1,7 +1,5 @@
 package fr.sqli.formation.gamelife.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -30,10 +28,6 @@ public class ProduitEntity implements Serializable {
 
 	private String plateforme;
 
-	private BigDecimal prix;
-
-	private int stock;
-
 	@Lob
 	@Column(name="texte_descriptif")
 	private String texteDescriptif;
@@ -44,7 +38,7 @@ public class ProduitEntity implements Serializable {
 
 	//bi-directional many-to-one association to ItemPanier
 	@OneToMany(mappedBy="produit")
-	private List<ItemPanierEntity> ItemPaniers;
+	private List<ItemCommandeEntity> ItemPaniers;
 
 	//bi-directional many-to-one association to Utilisateur
 	@ManyToOne
@@ -94,22 +88,6 @@ public class ProduitEntity implements Serializable {
 		this.plateforme = plateforme;
 	}
 
-	public BigDecimal getPrix() {
-		return this.prix;
-	}
-
-	public void setPrix(BigDecimal prix) {
-		this.prix = prix;
-	}
-
-	public int getStock() {
-		return this.stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
-
 	public String getTexteDescriptif() {
 		return this.texteDescriptif;
 	}
@@ -140,22 +118,22 @@ public class ProduitEntity implements Serializable {
 		return image;
 	}
 
-	public List<ItemPanierEntity> getItemPaniers() {
+	public List<ItemCommandeEntity> getItemPaniers() {
 		return this.ItemPaniers;
 	}
 
-	public void setItemPaniers(List<ItemPanierEntity> ItemPaniers) {
+	public void setItemPaniers(List<ItemCommandeEntity> ItemPaniers) {
 		this.ItemPaniers = ItemPaniers;
 	}
 
-	public ItemPanierEntity addItemPanier(ItemPanierEntity ItemPanier) {
+	public ItemCommandeEntity addItemPanier(ItemCommandeEntity ItemPanier) {
 		getItemPaniers().add(ItemPanier);
-		ItemPanier.setProduit(this);
+		//ItemPanier.setProduit(this);
 
 		return ItemPanier;
 	}
 
-	public ItemPanierEntity removeItemPanier(ItemPanierEntity ItemPanier) {
+	public ItemCommandeEntity removeItemPanier(ItemCommandeEntity ItemPanier) {
 		getItemPaniers().remove(ItemPanier);
 		ItemPanier.setProduit(null);
 

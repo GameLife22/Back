@@ -11,8 +11,8 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="panier")
-public class PanierEntity implements Serializable {
+@Table(name="commande")
+public class CommandeEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -31,10 +31,10 @@ public class PanierEntity implements Serializable {
 	private UtilisateurEntity utilisateur;
 
 	//bi-directional many-to-one association to ItemPanier
-	@OneToMany(mappedBy="panier")
-	private List<ItemPanierEntity> ItemPaniers;
+	@OneToMany(mappedBy= "commande")
+	private List<ItemCommandeEntity> ItemPaniers;
 
-	public PanierEntity() {
+	public CommandeEntity() {
 	}
 
 	public int getId() {
@@ -69,24 +69,24 @@ public class PanierEntity implements Serializable {
 		this.utilisateur = utilisateur;
 	}
 
-	public List<ItemPanierEntity> getItemPaniers() {
+	public List<ItemCommandeEntity> getItemPaniers() {
 		return this.ItemPaniers;
 	}
 
-	public void setItemPaniers(List<ItemPanierEntity> ItemPaniers) {
+	public void setItemPaniers(List<ItemCommandeEntity> ItemPaniers) {
 		this.ItemPaniers = ItemPaniers;
 	}
 
-	public ItemPanierEntity addItemPanier(ItemPanierEntity ItemPanier) {
+	public ItemCommandeEntity addItemPanier(ItemCommandeEntity ItemPanier) {
 		getItemPaniers().add(ItemPanier);
-		ItemPanier.setPanier(this);
+		ItemPanier.setCommande(this);
 
 		return ItemPanier;
 	}
 
-	public ItemPanierEntity removeItemPanier(ItemPanierEntity ItemPanier) {
+	public ItemCommandeEntity removeItemPanier(ItemCommandeEntity ItemPanier) {
 		getItemPaniers().remove(ItemPanier);
-		ItemPanier.setPanier(null);
+		ItemPanier.setCommande(null);
 
 		return ItemPanier;
 	}

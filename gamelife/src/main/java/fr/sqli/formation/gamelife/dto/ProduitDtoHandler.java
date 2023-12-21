@@ -1,6 +1,7 @@
 package fr.sqli.formation.gamelife.dto;
 
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
+import fr.sqli.formation.gamelife.entity.ProduitRevendeurEntity;
 
 public class ProduitDtoHandler {
 
@@ -11,7 +12,6 @@ public class ProduitDtoHandler {
 		resu.setNom(entity.getNom());
 		resu.setDetail(entity.getDetail());
 		resu.setPlateforme(entity.getPlateforme());
-		resu.setPrix(entity.getPrix());
 		resu.setId(entity.getId());
 		resu.setImages(entity.getImages());
 		return resu;

@@ -22,7 +22,7 @@ public class ProduitDto {
 
 	private String plateforme;
 
-	private BigDecimal prix;
+	private int prix;
 
 	private List<ImageEntity> images;
 
@@ -74,11 +74,11 @@ public class ProduitDto {
 		this.plateforme = plateforme;
 	}
 
-	public BigDecimal getPrix() {
+	public int getPrix() {
 		return this.prix;
 	}
 
-	public void setPrix(BigDecimal prix) {
+	public void setPrix(int prix) {
 		this.prix = prix;
 	}
 

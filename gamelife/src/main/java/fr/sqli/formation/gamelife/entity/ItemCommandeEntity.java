@@ -9,9 +9,9 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="item_panier")
-@NamedQuery(name="ItemPanierEntity.findAll", query="SELECT p FROM ItemPanierEntity p")
-public class ItemPanierEntity implements Serializable {
+@Table(name="item_commande")
+@NamedQuery(name="ItemCommandeEntity.findAll", query="SELECT p FROM ItemCommandeEntity p")
+public class ItemCommandeEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
@@ -22,15 +22,15 @@ public class ItemPanierEntity implements Serializable {
 
 	//bi-directional many-to-one association to Commande
 	@ManyToOne
-	@JoinColumn(name="id_panier", nullable=false, insertable=false, updatable=false)
-	private PanierEntity panier;
+	@JoinColumn(name="id_commande", nullable=false, insertable=false, updatable=false)
+	private CommandeEntity commande;
 
 	//bi-directional many-to-one association to Produit
 	@ManyToOne
 	@JoinColumn(name="id_produit", nullable=false, insertable=false, updatable=false)
-	private ProduitEntity produit;
+	private ProduitRevendeurEntity produit;
 
-	public ItemPanierEntity() {
+	public ItemCommandeEntity() {
 	}
 
 	public ItemPanierPK getId() {
@@ -49,19 +49,19 @@ public class ItemPanierEntity implements Serializable {
 		this.quantite = quantite;
 	}
 
-	public PanierEntity getPanier() {
-		return panier;
+	public CommandeEntity getCommande() {
+		return commande;
 	}
 
-	public void setPanier(PanierEntity panier) {
-		this.panier = panier;
+	public void setCommande(CommandeEntity panier) {
+		this.commande = panier;
 	}
 
-	public ProduitEntity getProduit() {
+	public ProduitRevendeurEntity getProduit() {
 		return this.produit;
 	}
 
-	public void setProduit(ProduitEntity produit) {
+	public void setProduit(ProduitRevendeurEntity produit) {
 		this.produit = produit;
 	}
 
