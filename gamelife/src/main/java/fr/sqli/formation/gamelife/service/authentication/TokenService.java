@@ -29,7 +29,7 @@ public class TokenService {
     private UtilisateurService utilisateurService;
 
     public String generateToken(Authentication authentication) throws Exception {
-        if(utilisateurService.getUtilistateurByEmail(authentication.getName()).getEtatCompte() == 0){
+        if(utilisateurService.getUtilistateurByEmail(authentication.getName()).getEmail() == null){
             throw new CompteDesactiveException("Compte desactive");
         }
         String id = String.valueOf(utilisateurService.getUtilistateurByEmail(authentication.getName()).getId());

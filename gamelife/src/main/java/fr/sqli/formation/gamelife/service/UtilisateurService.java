@@ -69,7 +69,7 @@ public class UtilisateurService {
         var result = this.repository.findByEmail(pEmail);
         if (result.isPresent()) {
             var user = result.get();
-            if (user.getEtatCompte() == 1) {
+            if (user.getEtatCompte()) {
                 UtilisateurService.LOG.debug("forgotPassword - found user with id {}", user.getId());
                 String token = RandomString.make(30);
 

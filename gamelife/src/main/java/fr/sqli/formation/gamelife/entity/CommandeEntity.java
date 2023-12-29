@@ -1,95 +1,140 @@
 package fr.sqli.formation.gamelife.entity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
 
-
-/**
- * The persistent class for the commande database table.
- * 
- */
 @Entity
-@Table(name="commande")
+@Table(name = "glcommande", schema = "gamelife")
 public class CommandeEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="date")
-	private Date date;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_utilisateur", nullable = false)
+    private UtilisateurEntity idUtilisateur;
 
-	private byte etat;
+    @Column(name = "etat", nullable = false, length = 80)
+    private String etat;
 
-	//bi-directional many-to-one association to Utilisateur
-	@ManyToOne
-	@JoinColumn(name="id_utilisateur")
-	private UtilisateurEntity utilisateur;
+    @Column(name = "num_rue_livraison", nullable = false)
+    private Integer numRueLivraison;
 
-	//bi-directional many-to-one association to ItemPanier
-	@OneToMany(mappedBy= "commande")
-	private List<ItemCommandeEntity> ItemPaniers;
+    @Column(name = "rue_livraison", nullable = false)
+    private String rueLivraison;
 
-	public CommandeEntity() {
-	}
+    @Column(name = "ville_livraison", nullable = false, length = 80)
+    private String villeLivraison;
 
-	public int getId() {
-		return this.id;
-	}
+    @Column(name = "code_postal_livraison")
+    private Integer codePostalLivraison;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
-	public Date getDate() {
-		return date;
-	}
+    public CommandeEntity() {
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public byte getEtat() {
-		return this.etat;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setEtat(byte etat) {
-		this.etat = etat;
-	}
+    public UtilisateurEntity getIdUtilisateur() {
+        return idUtilisateur;
+    }
 
-	public UtilisateurEntity getUtilisateur() {
-		return this.utilisateur;
-	}
+    public void setIdUtilisateur(UtilisateurEntity idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
+    }
 
-	public void setUtilisateur(UtilisateurEntity utilisateur) {
-		this.utilisateur = utilisateur;
-	}
+    public String getEtat() {
+        return etat;
+    }
 
-	public List<ItemCommandeEntity> getItemPaniers() {
-		return this.ItemPaniers;
-	}
+    public void setEtat(String etat) {
+        this.etat = etat;
+    }
 
-	public void setItemPaniers(List<ItemCommandeEntity> ItemPaniers) {
-		this.ItemPaniers = ItemPaniers;
-	}
+    public Integer getNumRueLivraison() {
+        return numRueLivraison;
+    }
 
-	public ItemCommandeEntity addItemPanier(ItemCommandeEntity ItemPanier) {
-		getItemPaniers().add(ItemPanier);
-		ItemPanier.setCommande(this);
+    public void setNumRueLivraison(Integer numRueLivraison) {
+        this.numRueLivraison = numRueLivraison;
+    }
 
-		return ItemPanier;
-	}
+    public String getRueLivraison() {
+        return rueLivraison;
+    }
 
-	public ItemCommandeEntity removeItemPanier(ItemCommandeEntity ItemPanier) {
-		getItemPaniers().remove(ItemPanier);
-		ItemPanier.setCommande(null);
+    public void setRueLivraison(String rueLivraison) {
+        this.rueLivraison = rueLivraison;
+    }
 
-		return ItemPanier;
-	}
+    public String getVilleLivraison() {
+        return villeLivraison;
+    }
 
+    public void setVilleLivraison(String villeLivraison) {
+        this.villeLivraison = villeLivraison;
+    }
 
+    public Integer getCodePostalLivraison() {
+        return codePostalLivraison;
+    }
+
+    public void setCodePostalLivraison(Integer codePostalLivraison) {
+        this.codePostalLivraison = codePostalLivraison;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommandeEntity that = (CommandeEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(idUtilisateur, that.idUtilisateur) && Objects.equals(etat, that.etat) && Objects.equals(numRueLivraison, that.numRueLivraison) && Objects.equals(rueLivraison, that.rueLivraison) && Objects.equals(villeLivraison, that.villeLivraison) && Objects.equals(codePostalLivraison, that.codePostalLivraison) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, idUtilisateur, etat, numRueLivraison, rueLivraison, villeLivraison, codePostalLivraison, date);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("CommandeEntity{");
+        sb.append("id=").append(id);
+        sb.append(", idUtilisateur=").append(idUtilisateur);
+        sb.append(", etat='").append(etat).append('\'');
+        sb.append(", numRueLivraison=").append(numRueLivraison);
+        sb.append(", rueLivraison='").append(rueLivraison).append('\'');
+        sb.append(", villeLivraison='").append(villeLivraison).append('\'');
+        sb.append(", codePostalLivraison=").append(codePostalLivraison);
+        sb.append(", date=").append(date);
+        sb.append('}');
+        return sb.toString();
+    }
 }

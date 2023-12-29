@@ -4,17 +4,16 @@ package fr.sqli.formation.gamelife.controler;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import fr.sqli.formation.gamelife.dto.ProduitDto;
 import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
-import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import fr.sqli.formation.gamelife.service.ProduitService;
 
 /**

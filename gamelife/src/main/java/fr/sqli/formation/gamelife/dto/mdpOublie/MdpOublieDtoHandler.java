@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.dto.mdpOublie;
 
-import fr.sqli.formation.gamelife.dto.login.LoginDtoOut;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
 public class MdpOublieDtoHandler {

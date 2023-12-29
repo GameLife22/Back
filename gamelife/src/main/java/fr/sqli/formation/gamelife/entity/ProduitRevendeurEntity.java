@@ -1,73 +1,93 @@
 package fr.sqli.formation.gamelife.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "produit_revendeur", schema = "public", catalog = "gamelife")
-public class ProduitRevendeurEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "glproduit_revendeur", schema = "gamelife")
+public class ProduitRevendeurEntity implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "id")
-    private int id;
-    @Basic
-    @Column(name = "stock")
-    private int stock;
-    @Basic
-    @Column(name = "prix")
-    private int prix;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_produit")
-    private ProduitEntity produit;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_utilisateur")
-    private UtilisateurEntity utilisateur;
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
 
-    public int getId() {
+    @Column(name = "prix", nullable = false, precision = 10)
+    private BigDecimal prix;
+
+    @Column(name = "etat", nullable = false, length = 20)
+    private String etat;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_produit", nullable = false)
+    private ProduitEntity idProduit;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_utilisateur", nullable = false)
+    private UtilisateurEntity idUtilisateur;
+
+    public ProduitRevendeurEntity() {
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public int getPrix() {
+    public BigDecimal getPrix() {
         return prix;
     }
 
-    public void setPrix(int prix) {
+    public void setPrix(BigDecimal prix) {
         this.prix = prix;
     }
 
-    public ProduitEntity getProduit() {
-        return produit;
+    public String getEtat() {
+        return etat;
     }
 
-    public void setProduit(ProduitEntity produit) {
-        this.produit = produit;
+    public void setEtat(String etat) {
+        this.etat = etat;
     }
 
-    public UtilisateurEntity getUtilisateur() {
-        return utilisateur;
+    public ProduitEntity getIdProduit() {
+        return idProduit;
     }
 
-    public void setUtilisateur(UtilisateurEntity utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setIdProduit(ProduitEntity idProduit) {
+        this.idProduit = idProduit;
+    }
+
+    public UtilisateurEntity getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(UtilisateurEntity idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 
     @Override
@@ -75,11 +95,24 @@ public class ProduitRevendeurEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProduitRevendeurEntity that = (ProduitRevendeurEntity) o;
-        return id == that.id && stock == that.stock && prix == that.prix && produit == that.produit && utilisateur == that.utilisateur;
+        return Objects.equals(id, that.id) && Objects.equals(stock, that.stock) && Objects.equals(prix, that.prix) && Objects.equals(etat, that.etat) && Objects.equals(idProduit, that.idProduit) && Objects.equals(idUtilisateur, that.idUtilisateur);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, stock, prix, produit, utilisateur);
+        return Objects.hash(id, stock, prix, etat, idProduit, idUtilisateur);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ProduitRevendeurEntity{");
+        sb.append("id=").append(id);
+        sb.append(", stock=").append(stock);
+        sb.append(", prix=").append(prix);
+        sb.append(", etat='").append(etat).append('\'');
+        sb.append(", idProduit=").append(idProduit);
+        sb.append(", idUtilisateur=").append(idUtilisateur);
+        sb.append('}');
+        return sb.toString();
     }
 }

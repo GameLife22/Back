@@ -1,91 +1,97 @@
 package fr.sqli.formation.gamelife.entity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Objects;
 
-
-/**
- * The persistent class for the ItemPanier database table.
- * 
- */
 @Entity
-@Table(name="item_commande")
-@NamedQuery(name="ItemCommandeEntity.findAll", query="SELECT p FROM ItemCommandeEntity p")
+@Table(name = "glitem_commande", schema = "gamelife")
 public class ItemCommandeEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private ItemPanierPK id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-	@Column(nullable=false)
-	private int quantite;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_commande", nullable = false)
+    private CommandeEntity idCommande;
 
-	//bi-directional many-to-one association to Commande
-	@ManyToOne
-	@JoinColumn(name="id_commande", nullable=false, insertable=false, updatable=false)
-	private CommandeEntity commande;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_produit_revendeur", nullable = false)
+    private ProduitRevendeurEntity idProduitRevendeur;
 
-	//bi-directional many-to-one association to Produit
-	@ManyToOne
-	@JoinColumn(name="id_produit", nullable=false, insertable=false, updatable=false)
-	private ProduitRevendeurEntity produit;
+    @Column(name = "quantite", nullable = false)
+    private Integer quantite;
 
-	public ItemCommandeEntity() {
-	}
+    public ItemCommandeEntity() {
+    }
 
-	public ItemPanierPK getId() {
-		return this.id;
-	}
+    public ItemCommandeEntity(Integer id) {
+        this.id = id;
+    }
 
-	public void setId(ItemPanierPK id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public int getQuantite() {
-		return this.quantite;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setQuantite(int quantite) {
-		this.quantite = quantite;
-	}
+    public CommandeEntity getIdCommande() {
+        return idCommande;
+    }
 
-	public CommandeEntity getCommande() {
-		return commande;
-	}
+    public void setIdCommande(CommandeEntity idCommande) {
+        this.idCommande = idCommande;
+    }
 
-	public void setCommande(CommandeEntity panier) {
-		this.commande = panier;
-	}
+    public ProduitRevendeurEntity getIdProduitRevendeur() {
+        return idProduitRevendeur;
+    }
 
-	public ProduitRevendeurEntity getProduit() {
-		return this.produit;
-	}
+    public void setIdProduitRevendeur(ProduitRevendeurEntity idProduitRevendeur) {
+        this.idProduitRevendeur = idProduitRevendeur;
+    }
 
-	public void setProduit(ProduitRevendeurEntity produit) {
-		this.produit = produit;
-	}
+    public Integer getQuantite() {
+        return quantite;
+    }
 
-	/**
-	 * Cette Fonction Permet de verifier si les parametres sont suprieur à 0
-	 * puisque l'id et la quantitée commence de 1
-	 * @param id
-	 * @param quantite
-	 * @throws IllegalArgumentException
-	 */
-	public static void validateAll(ItemPanierPK id ,int quantite) throws Exception{
-		if(id.getIdProduit() < 0  && id.getIdPanier() <0  && quantite < 0){
-			throw new IllegalArgumentException("Erreur Id_commande || Id_Prroduit || Quantite");
-		}
-	}
+    public void setQuantite(Integer quantite) {
+        this.quantite = quantite;
+    }
 
-	/**
-	 * Cette Fonction Permet de verifier si les parametres sont suprieur à 0
-	 * @param id
-	 * @throws IllegalArgumentException
-	 */
-	public static void validateId(ItemPanierPK id) throws Exception{
-		if(id.getIdProduit() < 0  && id.getIdPanier() <0 ){
-			throw new IllegalArgumentException("Erreur Id_commande || Id_Prroduit ");
-		}
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemCommandeEntity that = (ItemCommandeEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(idCommande, that.idCommande) && Objects.equals(idProduitRevendeur, that.idProduitRevendeur) && Objects.equals(quantite, that.quantite);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, idCommande, idProduitRevendeur, quantite);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ItemCommandeEntity{");
+        sb.append("id=").append(id);
+        sb.append(", idCommande=").append(idCommande);
+        sb.append(", idProduitRevendeur=").append(idProduitRevendeur);
+        sb.append(", quantite=").append(quantite);
+        sb.append('}');
+        return sb.toString();
+    }
 }

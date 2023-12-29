@@ -1,248 +1,230 @@
 package fr.sqli.formation.gamelife.entity;
 
-import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Objects;
 
-
-/**
- * The persistent class for the utilisateur database table.
- * 
- */
 @Entity
-@Table(name="utilisateur")
+@Table(name = "glutilisateur", schema = "gamelife")
 public class UtilisateurEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-	private String email;
+    @Column(name = "nom", nullable = false, length = 50)
+    private String nom;
 
-	@Column(name="etat_compte")
-	private Integer etatCompte;
+    @Column(name = "prenom", nullable = false, length = 50)
+    private String prenom;
 
-	private String mdp;
+    @Column(name = "mdp", nullable = false, length = 80)
+    private String mdp;
 
-	private String nom;
+    @Column(name = "email", nullable = false, length = 80)
+    private String email;
 
-	@Column(name="num_rue")
-	private int num_rue;
+    @Column(name = "num_rue", nullable = false)
+    private Integer numRue;
 
-	@Column(name="num_siren")
-	private String numSiren;
+    @Column(name = "rue", nullable = false)
+    private String rue;
 
-	private String prenom;
+    @Column(name = "ville", nullable = false, length = 80)
+    private String ville;
 
-	private String role;
+    @Column(name = "code_postal")
+    private Integer codePostal;
 
-	private String rue;
+    @Column(name = "role", nullable = false, length = 50)
+    private String role;
 
-	private String ville;
+    @Column(name = "num_siren", length = 9)
+    private String numSiren;
 
-	@Column(name="code_postal")
-	private int codePostal;
+    @Column(name = "etat_compte", nullable = false)
+    private Boolean etatCompte = false;
 
-	//bi-directional many-to-one association to Commande
-	@OneToMany(mappedBy="utilisateur")
-	private List<CommandeEntity> commandes;
+    @Column(name = "reset_password_token", length = 30)
+    private String resetPasswordToken;
 
-	//bi-directional many-to-one association to Produit
-	@OneToMany(mappedBy="utilisateur")
-	private List<ProduitEntity> produits;
+    public UtilisateurEntity() {
+    }
 
-	@Column(name = "reset_password_token")
-	private String resetPasswordToken;
+    public UtilisateurEntity(String email, Boolean etatCompte, String mdp, String nom, int numRue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
+        this.email = email;
+        this.etatCompte = etatCompte;
+        this.mdp = mdp;
+        this.nom = nom;
+        this.numRue = numRue;
+        this.codePostal = codePostal;
+        this.numSiren = numSiren;
+        this.prenom = prenom;
+        this.role = role;
+        this.rue = rue;
+        this.ville = ville;
+        this.resetPasswordToken = resetPasswordToken;
+    }
 
+    public UtilisateurEntity(String email, String mdp) {
+        this.email = email;
+        this.mdp = mdp;
+    }
 
-	public UtilisateurEntity() {
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public UtilisateurEntity(String email, Integer etatCompte, String mdp, String nom, int num_rue, String numSiren, String prenom, String role, String rue, String ville, int codePostal, String resetPasswordToken) {
-		this.email = email;
-		this.etatCompte = etatCompte;
-		this.mdp = mdp;
-		this.nom = nom;
-		this.num_rue = num_rue;
-		this.codePostal = codePostal;
-		this.numSiren = numSiren;
-		this.prenom = prenom;
-		this.role = role;
-		this.rue = rue;
-		this.ville = ville;
-		this.resetPasswordToken = resetPasswordToken;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public UtilisateurEntity(String email, String mdp) {
-		this.email = email;
-		this.mdp = mdp;
-	}
+    public String getNom() {
+        return nom;
+    }
 
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public int getCodePostal() {
-		return codePostal;
-	}
+    public String getPrenom() {
+        return prenom;
+    }
 
-	public void setCodePostal(int cp) {
-		this.codePostal = cp;
-	}
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
 
+    public String getMdp() {
+        return mdp;
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getEmail() {
-		return this.email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public Integer getNumRue() {
+        return numRue;
+    }
 
-	public Integer getEtatCompte() {
-		return this.etatCompte;
-	}
+    public void setNumRue(Integer numRue) {
+        this.numRue = numRue;
+    }
 
-	public void setEtatCompte(Integer etatCompte) {
-		this.etatCompte = etatCompte;
-	}
+    public String getRue() {
+        return rue;
+    }
 
-	public String getMdp() {
-		return this.mdp;
-	}
+    public void setRue(String rue) {
+        this.rue = rue;
+    }
 
-	public void setMdp(String mdp) {
-		this.mdp = mdp;
-	}
+    public String getVille() {
+        return ville;
+    }
 
-	public String getNom() {
-		return this.nom;
-	}
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    public Integer getCodePostal() {
+        return codePostal;
+    }
 
-	public int getNum_rue() {
-		return num_rue;
-	}
+    public void setCodePostal(Integer codePostal) {
+        this.codePostal = codePostal;
+    }
 
-	public void setNum_rue(int num_rue) {
-		this.num_rue = num_rue;
-	}
+    public String getRole() {
+        return role;
+    }
 
-	public String getNumSiret() {
-		return this.numSiren;
-	}
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-	public void setNumSiret(String numSiret) {
-		this.numSiren = numSiret;
-	}
+    public String getNumSiren() {
+        return numSiren;
+    }
 
-	public String getPrenom() {
-		return this.prenom;
-	}
+    public void setNumSiren(String numSiren) {
+        this.numSiren = numSiren;
+    }
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
+    public Boolean getEtatCompte() {
+        return etatCompte;
+    }
 
-	public String getRole() {
-		return this.role;
-	}
+    public void setEtatCompte(Boolean etatCompte) {
+        this.etatCompte = etatCompte;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
 
-	public String getRue() {
-		return this.rue;
-	}
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
 
-	public void setRue(String rue) {
-		this.rue = rue;
-	}
+    public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String num_Siren, Integer code_postal) throws Exception{
+        if(!(nom != null && !nom.trim().isEmpty() &&
+                prenom != null && !prenom.trim().isEmpty() &&
+                email != null && !email.trim().isEmpty() &&
+                email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") &&
+                pwd != null && !pwd.trim().isEmpty() &&
+                pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
+                num_rue != null && num_rue >= 0 &&
+                rue != null && !rue.trim().isEmpty() &&
+                ville != null && !ville.trim().isEmpty()) &&
+                code_postal != null && code_postal > 0){
+            throw new IllegalArgumentException("Champs invalides");
 
-	public String getVille() {
-		return this.ville;
-	}
+        }
+    }
 
-	public void setVille(String ville) {
-		this.ville = ville;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UtilisateurEntity that = (UtilisateurEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(mdp, that.mdp) && Objects.equals(email, that.email) && Objects.equals(numRue, that.numRue) && Objects.equals(rue, that.rue) && Objects.equals(ville, that.ville) && Objects.equals(codePostal, that.codePostal) && Objects.equals(role, that.role) && Objects.equals(numSiren, that.numSiren) && Objects.equals(etatCompte, that.etatCompte) && Objects.equals(resetPasswordToken, that.resetPasswordToken);
+    }
 
-	public List<CommandeEntity> getCommandes() {
-		return this.commandes;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nom, prenom, mdp, email, numRue, rue, ville, codePostal, role, numSiren, etatCompte, resetPasswordToken);
+    }
 
-	public void setCommandes(List<CommandeEntity> commandes) {
-		this.commandes = commandes;
-	}
-
-	public CommandeEntity addCommande(CommandeEntity commande) {
-		getCommandes().add(commande);
-		commande.setUtilisateur(this);
-
-		return commande;
-	}
-
-	public CommandeEntity removeCommande(CommandeEntity commande) {
-		getCommandes().remove(commande);
-		commande.setUtilisateur(null);
-
-		return commande;
-	}
-
-	public List<ProduitEntity> getProduits() {
-		return this.produits;
-	}
-
-	public void setProduits(List<ProduitEntity> produits) {
-		this.produits = produits;
-	}
-
-	public ProduitEntity addProduit(ProduitEntity produit) {
-		getProduits().add(produit);
-		produit.setUtilisateur(this);
-
-		return produit;
-	}
-
-	public ProduitEntity removeProduit(ProduitEntity produit) {
-		getProduits().remove(produit);
-		produit.setUtilisateur(null);
-
-		return produit;
-	}
-
-	public String getResetPasswordToken() {
-		return resetPasswordToken;
-	}
-
-	public void setResetPasswordToken(String resetPasswordToken) {
-		this.resetPasswordToken = resetPasswordToken;
-	}
-
-	public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String num_Siren, Integer code_postal) throws Exception{
-		if(!(nom != null && !nom.trim().isEmpty() &&
-				prenom != null && !prenom.trim().isEmpty() &&
-				email != null && !email.trim().isEmpty() &&
-				email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") &&
-				pwd != null && !pwd.trim().isEmpty() &&
-				pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
-				num_rue != null && num_rue >= 0 &&
-				rue != null && !rue.trim().isEmpty() &&
-				ville != null && !ville.trim().isEmpty()) &&
-				code_postal != null && code_postal > 0){
-			throw new IllegalArgumentException("Champs invalides");
-
-		}
-	}
-
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("UtilisateurEntity{");
+        sb.append("id=").append(id);
+        sb.append(", nom='").append(nom).append('\'');
+        sb.append(", prenom='").append(prenom).append('\'');
+        sb.append(", mdp='").append(mdp).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", numRue=").append(numRue);
+        sb.append(", rue='").append(rue).append('\'');
+        sb.append(", ville='").append(ville).append('\'');
+        sb.append(", codePostal=").append(codePostal);
+        sb.append(", role='").append(role).append('\'');
+        sb.append(", numSiren='").append(numSiren).append('\'');
+        sb.append(", etatCompte=").append(etatCompte);
+        sb.append(", resetPasswordToken='").append(resetPasswordToken).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

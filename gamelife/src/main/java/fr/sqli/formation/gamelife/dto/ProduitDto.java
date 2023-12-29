@@ -2,7 +2,6 @@ package fr.sqli.formation.gamelife.dto;
 
 import fr.sqli.formation.gamelife.entity.ImageEntity;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
