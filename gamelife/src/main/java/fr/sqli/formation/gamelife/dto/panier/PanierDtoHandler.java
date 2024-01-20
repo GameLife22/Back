@@ -1,10 +1,7 @@
 package fr.sqli.formation.gamelife.dto.panier;
 
 import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
-import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
 import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDtoHandler;
-import fr.sqli.formation.gamelife.entity.ItemPanierEntity;
-import fr.sqli.formation.gamelife.entity.PanierEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
