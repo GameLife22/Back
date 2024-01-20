@@ -1,7 +1,5 @@
 package fr.sqli.formation.gamelife.dto.panier;
 
-import fr.sqli.formation.gamelife.entity.ItemPanierPK;
-
 public class ItemPanierPKDtoHandler {
 
     public static ItemPanierPKDto fromEntity(ItemPanierPK entity) {

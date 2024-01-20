@@ -1,7 +1,6 @@
 package fr.sqli.formation.gamelife.dto.panier;
 
 import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
-import fr.sqli.formation.gamelife.entity.ItemPanierEntity;
 
 public class ItemPanierDtoHandler {
     public ItemPanierDto fromEntity(ItemPanierEntity entity) {

@@ -1,6 +1,6 @@
 package fr.sqli.formation.gamelife.ex;
 
-import fr.sqli.formation.gamelife.ex.panier.PanierNotFoundException;
+import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
 import org.apache.catalina.connector.ClientAbortException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,14 +65,14 @@ public class ExceptionControlerAdvice {
         ResponseEntity<Exception> resu = new ResponseEntity<Exception>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
-    @ExceptionHandler(PanierNotFoundException.class)
-    public ResponseEntity<String> handlePanierNotFoundException(PanierNotFoundException ex) {
+    @ExceptionHandler(CommandeNotFoundException.class)
+    public ResponseEntity<String> handlePanierNotFoundException(CommandeNotFoundException ex) {
         LOG.info("Panier introuvable: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ProduitException.class)
-    public ResponseEntity<String> handleProduitException(ProduitException ex) {
+    @ExceptionHandler(ProduitRevendeutException.class)
+    public ResponseEntity<String> handleProduitException(ProduitRevendeutException ex) {
         LOG.info("Produit introuvable: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
