@@ -25,7 +25,6 @@ public class ItemPanierEntity implements Serializable {
 	//bi-directional many-to-one association to Commande
 	@ManyToOne
 	@JoinColumn(name="id_panier", nullable=false, insertable=false, updatable=false)
-	@JsonIgnore
 	private PanierEntity panier;
 
 	//bi-directional many-to-one association to Produit
@@ -35,6 +34,7 @@ public class ItemPanierEntity implements Serializable {
 
 	public ItemPanierEntity() {
 	}
+
 
 	public ItemPanierPK getId() {
 		return this.id;

@@ -32,13 +32,28 @@ public class PanierEntity implements Serializable {
 	private UtilisateurEntity utilisateur;
 
 	//bi-directional many-to-one association to ItemPanier
-	@OneToMany(mappedBy="panier", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="panier", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<ItemPanierEntity> itemPaniers;
 
+	public ItemPanierEntity addItemPanier(ItemPanierEntity itemPaniers) {
+		getItemPaniers().add(itemPaniers);
+		itemPaniers.setPanier(this);
+
+		return itemPaniers;
+	}
+
+	public ItemPanierEntity removeItemPanier(ItemPanierEntity itemPaniers) {
+		getItemPaniers().remove(itemPaniers);
+		itemPaniers.setPanier(null);
+
+		return itemPaniers;
+	}
 	public PanierEntity() {
 		this.itemPaniers = new ArrayList<>();
 
 	}
+
+
 	public int getId() {
 		return this.id;
 	}
@@ -78,19 +93,7 @@ public class PanierEntity implements Serializable {
 		this.itemPaniers = ItemPaniers;
 	}
 
-	public ItemPanierEntity addItemPanier(ItemPanierEntity itemPaniers) {
-		getItemPaniers().add(itemPaniers);
-		itemPaniers.setPanier(this);
 
-		return itemPaniers;
-	}
-
-	public ItemPanierEntity removeItemPanier(ItemPanierEntity itemPaniers) {
-		getItemPaniers().remove(itemPaniers);
-		itemPaniers.setPanier(null);
-
-		return itemPaniers;
-	}
 
 
 }
