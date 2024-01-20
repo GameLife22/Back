@@ -3,6 +3,8 @@ package fr.sqli.formation.gamelife.controler;
 import fr.sqli.formation.gamelife.dto.ProduitDto;
 import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
+import fr.sqli.formation.gamelife.dto.panier.PanierDtoHandler;
+import fr.sqli.formation.gamelife.entity.PanierEntity;
 import fr.sqli.formation.gamelife.ex.ProduitException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.panier.ItemPanierNotFoundException;
@@ -12,10 +14,7 @@ import fr.sqli.formation.gamelife.service.panier.PanierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -27,19 +26,19 @@ public class PanierControler {
     @Autowired
     private PanierRepository panierRepository;
 
+    @Autowired
+    private PanierDtoHandler panierDtoHandler;
+
     @GetMapping("/all")
     public List<PanierDto> getAllPaniers() {
         return panierService.getAllPaniers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PanierDto> getPanierById(@PathVariable int id) {
-        try {
-            PanierDto panierDto = panierService.getPanierById(id);
-            return new ResponseEntity<>(panierDto, HttpStatus.OK);
-        } catch (PanierNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public PanierDto getPanierById(@PathVariable int id) throws PanierNotFoundException {
+        PanierEntity panierEntity = panierRepository.findByIdWithItemPaniers(id)
+                .orElseThrow(() -> new PanierNotFoundException("Panier not found with id: " + id));
+        return panierDtoHandler.entityToDto(panierEntity);
     }
 
     @PostMapping("/creer")
@@ -80,6 +79,7 @@ public class PanierControler {
     public PanierDto ajoutArticle(@PathVariable int id, @RequestBody ProduitDto produitDto) throws ProduitException, PanierNotFoundException {
         return panierService.ajoutArticle(id, produitDto);
     }
+    
 
     /*
     @PostMapping("/{id}/valider-panier")

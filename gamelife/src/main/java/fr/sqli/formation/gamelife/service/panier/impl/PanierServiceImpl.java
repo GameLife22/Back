@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,10 @@ public class PanierServiceImpl implements PanierService {
     private ModelMapper modelMapper;
     @Autowired
     private PanierDtoHandler panierDtoHandler;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
 
     private PanierDto panierDto;
     @Autowired
@@ -137,32 +143,39 @@ public class PanierServiceImpl implements PanierService {
         return 0.0;
     }
 
-
     @Override
-    public PanierDto ajoutArticle(int idPanier, ProduitDto produitDto) throws PanierNotFoundException, ProduitException {
+    @Transactional
+    public PanierDto ajoutArticle(int id, ProduitDto produitDto) throws ProduitException, PanierNotFoundException {
+        // Vérifier si l'ID du produit est valide
+        if (produitDto.getId() <= 0) {
+            throw new ProduitException("Invalid Product ID: " + produitDto.getId());
+        }
+
         // Récupérer le panier existant
-        PanierEntity panierEntity = panierRepository.findById(idPanier)
-                .orElseThrow(() -> new PanierNotFoundException("Panier not found with id: " + idPanier));
+        PanierEntity panierEntity = panierRepository.findById(id)
+                .orElseThrow(() -> new PanierNotFoundException("Panier not found with id: " + id));
 
         // Récupérer le produit à ajouter au panier
         ProduitEntity produitEntity = produitRepository.findById(produitDto.getId())
                 .orElseThrow(() -> new ProduitException("Produit not found with id: " + produitDto.getId()));
 
-        // Vérifier si le produit est déjà dans le panier
+        // Rechercher l'ItemPanierEntity dans la liste ItemPaniers du panier
         Optional<ItemPanierEntity> existingItemPanier = panierEntity.getItemPaniers().stream()
-                .filter(itemPanier -> itemPanier.getProduit().getId() == produitEntity.getId())
+                .filter(itemPanier -> itemPanier.getId().getIdProduit() == produitDto.getId())
                 .findFirst();
 
         if (existingItemPanier.isPresent()) {
-            // Si le produit est déjà dans le panier, augmenter la quantité
-            ItemPanierEntity itemPanierEntity = existingItemPanier.get();
-            itemPanierEntity.setQuantite(itemPanierEntity.getQuantite() + 1);
+            // Si l'ItemPanierEntity existe, augmenter la quantité
+            existingItemPanier.get().setQuantite(existingItemPanier.get().getQuantite() + 1);
         } else {
-            // Si le produit n'est pas dans le panier, créer un nouvel ItemPanierEntity
+            // Si l'ItemPanierEntity n'existe pas, créer un nouvel ItemPanierEntity
             ItemPanierEntity newItemPanier = new ItemPanierEntity();
+            ItemPanierPK itemPanierPK = new ItemPanierPK(id, produitDto.getId());
+            newItemPanier.setId(itemPanierPK);
+            newItemPanier.setQuantite(1);
             newItemPanier.setPanier(panierEntity);
             newItemPanier.setProduit(produitEntity);
-            newItemPanier.setQuantite(1);
+
             panierEntity.getItemPaniers().add(newItemPanier);
         }
 
@@ -172,8 +185,6 @@ public class PanierServiceImpl implements PanierService {
         // Retourner le panier mis à jour sous forme de DTO
         return panierDtoHandler.entityToDto(panierEntity);
     }
-
-
 
 
 

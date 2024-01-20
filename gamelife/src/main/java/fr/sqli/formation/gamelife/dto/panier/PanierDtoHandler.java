@@ -24,10 +24,18 @@ public class PanierDtoHandler {
                 List<ItemPanierDto> itemPanierDtos = new ArrayList<>();
                 for (ItemPanierEntity itemPanierEntity : panierEntity.getItemPaniers()) {
                     ItemPanierDto itemPanierDto = new ItemPanierDto();
+
                     // Ajoutez la conversion des propriétés de ItemPanierEntity vers ItemPanierDto ici
-                    itemPanierDto.setId(ItemPanierPKDtoHandler.fromEntity(itemPanierEntity.getId()));
+                    if (itemPanierEntity.getId() != null) {
+                        itemPanierDto.setId(ItemPanierPKDtoHandler.fromEntity(itemPanierEntity.getId()));
+                    }
+
                     itemPanierDto.setQuantite(itemPanierEntity.getQuantite());
-                    itemPanierDto.setProduit(ProduitDtoHandler.fromEntity(itemPanierEntity.getProduit()));
+
+                    if (itemPanierEntity.getProduit() != null) {
+                        itemPanierDto.setProduit(ProduitDtoHandler.fromEntity(itemPanierEntity.getProduit()));
+                    }
+
                     itemPanierDtos.add(itemPanierDto);
                 }
                 panierDto.setItemPaniers(itemPanierDtos);

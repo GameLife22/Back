@@ -25,6 +25,21 @@ public class ProduitDto {
 
 	private List<ImageEntity> images;
 
+	public ProduitDto(int id, String categorie, String texteDescriptif, String detail, String nom, String plateforme, BigDecimal prix, List<ImageEntity> images) {
+		this.id = id;
+		this.categorie = categorie;
+		this.texteDescriptif = texteDescriptif;
+		this.detail = detail;
+		this.nom = nom;
+		this.plateforme = plateforme;
+		this.prix = prix;
+		this.images = images;
+	}
+
+	public ProduitDto() {
+
+	}
+
 	public int getId() {
 		return this.id;
 	}

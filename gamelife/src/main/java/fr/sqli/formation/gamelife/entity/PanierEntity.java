@@ -36,9 +36,9 @@ public class PanierEntity implements Serializable {
 	private List<ItemPanierEntity> itemPaniers;
 
 	public PanierEntity() {
+		this.itemPaniers = new ArrayList<>();
 
 	}
-
 	public int getId() {
 		return this.id;
 	}
@@ -74,10 +74,8 @@ public class PanierEntity implements Serializable {
 	public List<ItemPanierEntity> getItemPaniers() {
 		return this.itemPaniers;
 	}
-
-	// Initialiser ItemPaniers dans le constructeur
-	public void setItemPaniers(List<ItemPanierEntity> itemPaniers) {
-		this.itemPaniers = itemPaniers;
+	public void setItemPaniers(List<ItemPanierEntity> ItemPaniers) {
+		this.itemPaniers = ItemPaniers;
 	}
 
 	public ItemPanierEntity addItemPanier(ItemPanierEntity itemPaniers) {
