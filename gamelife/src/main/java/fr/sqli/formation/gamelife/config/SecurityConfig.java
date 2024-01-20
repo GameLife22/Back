@@ -93,6 +93,7 @@ public class SecurityConfig {
                         .antMatchers("/inscription/activer").permitAll()
                         .antMatchers("/inscription/validation").permitAll()
                         .antMatchers("/h2-console").permitAll()
+                        .antMatchers("/panier/all").permitAll()
                         .anyRequest().authenticated()
 
                 )

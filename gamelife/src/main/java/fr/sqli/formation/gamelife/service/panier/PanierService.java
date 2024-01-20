@@ -1,2 +1,38 @@
-package fr.sqli.formation.gamelife.service.panier;public interface PanierService {
+package fr.sqli.formation.gamelife.service.panier;
+
+import fr.sqli.formation.gamelife.dto.ProduitDto;
+import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
+import fr.sqli.formation.gamelife.dto.panier.PanierDto;
+import fr.sqli.formation.gamelife.ex.PanierNotFoundException;
+import fr.sqli.formation.gamelife.repository.PanierRepository;
+import java.util.List;
+
+public interface PanierService {
+
+    // Opérations liées à la gestion d'un panier il y a : la récupération de tous les paniers, la création, la mise à jour et
+    // la suppression d'un panier,a modification de la quantité d'articles, le calcul du prix total du panier,
+    // l'ajout, la validation et la suppression d'articles.
+    List<PanierDto> getAllPaniers();
+
+
+    PanierDto getPanierById(int id) throws PanierNotFoundException;
+
+    PanierDto createPanier(PanierDto panierDto);
+
+    PanierDto updatePanier(int id, PanierDto panierDto) throws PanierNotFoundException;
+
+    void deletePanier(int id) throws PanierNotFoundException;
+
+ /*
+    PanierDto modifierQuantite(int id, ItemPanierDto itemPanierDto);
+
+    double getPrixTotalPanier(int id);
+
+    PanierDto ajoutArticle(int id, ProduitDto produitDto);
+
+    PanierDto validerPanier(int id);
+
+    PanierDto supprimerArticle(int id, ProduitDto produitDto);
+
+     */
 }
