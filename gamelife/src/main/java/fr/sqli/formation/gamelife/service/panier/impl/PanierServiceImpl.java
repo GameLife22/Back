@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.service.panier.impl;
 
 import fr.sqli.formation.gamelife.dto.ProduitDto;
 import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
+import fr.sqli.formation.gamelife.dto.panier.ItemPanierDtoHandler;
 import fr.sqli.formation.gamelife.dto.panier.ItemPanierPKDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDto;
 import fr.sqli.formation.gamelife.dto.panier.PanierDtoHandler;
@@ -50,6 +51,7 @@ public class PanierServiceImpl implements PanierService {
     private PanierDto panierDto;
     @Autowired
     private UtilisateurRepository utilisateurRepository;
+    private ItemPanierDtoHandler itemPanierDtoHandler;
 
 
     //Recuperation de tous les paniers
@@ -69,20 +71,35 @@ public class PanierServiceImpl implements PanierService {
         return panierDtoHandler.entityToDto(panierEntity);
     }
 
-    //Creation du panier
-
+    // Création du panier
     @Override
     public PanierDto createPanier(PanierDto panierDto) throws UtilisateurNonExistantException {
+        // Vérifiez si l'utilisateur existe avant de continuer
+        UtilisateurEntity utilisateur = utilisateurRepository.findById(panierDto.getUtilisateur().getId())
+                .orElseThrow(() -> new UtilisateurNonExistantException("Utilisateur not found"));
+
         PanierEntity panierEntity = panierDtoHandler.dtoToEntity(panierDto);
 
-        // Récupérez l'utilisateur associé au panier
-        UtilisateurEntity utilisateur = UtilisateurDtoHandler.fromDto(panierDto.getUtilisateur());
         panierEntity.setUtilisateur(utilisateur);
+        utilisateur.addCommande(panierEntity);
+
+        // Ajoutez les ItemPanier à la liste du panier
+        if (panierDto.getItemPaniers() != null) {
+            for (ItemPanierDto itemPanierDto : panierDto.getItemPaniers()) {
+                ItemPanierEntity itemPanierEntity = itemPanierDtoHandler.toEntity(itemPanierDto);
+                itemPanierEntity.setPanier(panierEntity);
+
+                panierEntity.addItemPanier(itemPanierEntity);
+            }
+        }
 
         // Enregistrez le panier dans la base de données
         panierEntity = panierRepository.save(panierEntity);
+
         return panierDtoHandler.entityToDto(panierEntity);
     }
+
+
 
     // Panier mise à jour
     @Override
