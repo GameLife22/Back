@@ -11,5 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PanierRepository extends JpaRepository<PanierEntity,Integer> {
+    @Query("SELECT p FROM PanierEntity p LEFT JOIN FETCH p.itemPaniers WHERE p.id = :id")
+    Optional<PanierEntity> findByIdWithItemPaniers(@Param("id") int id);
 
 }
