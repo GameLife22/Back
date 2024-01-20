@@ -6,8 +6,8 @@ public class UtilisateurDtoHandler {
     public static UtilisateurDto fromEntity(UtilisateurEntity entity) {
         var u = new UtilisateurDto();
         u.setId(entity.getId());
-        u.setPrenom(entity.getPrenom());
         u.setNom(entity.getNom());
+        u.setPrenom(entity.getPrenom());
         return u;
     }
 

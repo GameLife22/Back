@@ -1,19 +1,42 @@
 package fr.sqli.formation.gamelife.dto.panier;
 
+import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
+import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDtoHandler;
+import fr.sqli.formation.gamelife.entity.ItemPanierEntity;
 import fr.sqli.formation.gamelife.entity.PanierEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class PanierDtoHandler {
-    public PanierDto entityToDto(PanierEntity panierEntity) {
-        PanierDto panierDto = new PanierDto();
-        panierDto.setId(panierEntity.getId());
-        panierDto.setDate(panierEntity.getDate());
-        panierDto.setEtat(panierEntity.getEtat());
-        panierDto.setUtilisateur(new UtilisateurDto());
-        return panierDto;
-    }
+        public PanierDto entityToDto(PanierEntity panierEntity) {
+            PanierDto panierDto = new PanierDto();
+            panierDto.setId(panierEntity.getId());
+            panierDto.setDate(panierEntity.getDate());
+            panierDto.setEtat(panierEntity.getEtat());
+            panierDto.setUtilisateur(UtilisateurDtoHandler.fromEntity(panierEntity.getUtilisateur()));
+
+            // Mettez à jour la conversion de ItemPanierEntity vers ItemPanierDto ici
+            if (panierEntity.getItemPaniers() != null) {
+                List<ItemPanierDto> itemPanierDtos = new ArrayList<>();
+                for (ItemPanierEntity itemPanierEntity : panierEntity.getItemPaniers()) {
+                    ItemPanierDto itemPanierDto = new ItemPanierDto();
+                    // Ajoutez la conversion des propriétés de ItemPanierEntity vers ItemPanierDto ici
+                    itemPanierDto.setId(ItemPanierPKDtoHandler.fromEntity(itemPanierEntity.getId()));
+                    itemPanierDto.setQuantite(itemPanierEntity.getQuantite());
+                    itemPanierDto.setProduit(ProduitDtoHandler.fromEntity(itemPanierEntity.getProduit()));
+                    itemPanierDtos.add(itemPanierDto);
+                }
+                panierDto.setItemPaniers(itemPanierDtos);
+            }
+
+            return panierDto;
+        }
+
+
 
     public PanierEntity dtoToEntity(PanierDto panierDto) {
         PanierEntity panierEntity = new PanierEntity();

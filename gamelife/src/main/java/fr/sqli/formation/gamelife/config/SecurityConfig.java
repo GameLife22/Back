@@ -97,6 +97,9 @@ public class SecurityConfig {
                         .antMatchers("/panier/all").permitAll()
                         .antMatchers("/panier/creer").permitAll()
                         .antMatchers("/panier/{id}").permitAll()
+                        .antMatchers("/panier/{id}/modif-quantite").permitAll()
+                        .antMatchers("/panier/{id}/prix-total").permitAll()
+                        .antMatchers("/panier/{id}/ajout-article").permitAll()
                         .anyRequest().authenticated()
 
                 )
