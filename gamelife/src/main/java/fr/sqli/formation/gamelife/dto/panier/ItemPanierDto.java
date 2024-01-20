@@ -7,7 +7,7 @@ public class ItemPanierDto {
     //les informations liées à un élément dans un panier
     private ItemPanierPKDto id;
     private int quantite;
-    private ProduitDto produitDto;
+    private ProduitDto produit;
 
     public ItemPanierPKDto getId() {
         return id;
@@ -25,11 +25,11 @@ public class ItemPanierDto {
         this.quantite = quantite;
     }
 
-    public ProduitDto getProduitDto() {
-        return produitDto;
+    public ProduitDto getProduit() {
+        return produit;
     }
 
-    public void setProduitDto(ProduitDto produitDto) {
-        this.produitDto = produitDto;
+    public void setProduit(ProduitDto produit) {
+        this.produit = produit;
     }
 }

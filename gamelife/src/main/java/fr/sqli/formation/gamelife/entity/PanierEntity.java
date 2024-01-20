@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +32,11 @@ public class PanierEntity implements Serializable {
 	private UtilisateurEntity utilisateur;
 
 	//bi-directional many-to-one association to ItemPanier
-	@OneToMany(mappedBy="panier")
+	@OneToMany(mappedBy="panier", fetch = FetchType.EAGER)
 	private List<ItemPanierEntity> itemPaniers;
 
 	public PanierEntity() {
+
 	}
 
 	public int getId() {
@@ -73,6 +75,7 @@ public class PanierEntity implements Serializable {
 		return this.itemPaniers;
 	}
 
+	// Initialiser ItemPaniers dans le constructeur
 	public void setItemPaniers(List<ItemPanierEntity> itemPaniers) {
 		this.itemPaniers = itemPaniers;
 	}

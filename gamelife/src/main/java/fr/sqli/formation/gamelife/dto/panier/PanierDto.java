@@ -13,6 +13,10 @@ public class PanierDto {
     private UtilisateurDto utilisateur;
     private List<ItemPanierDto> itemPaniers;
 
+    public PanierDto() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -52,4 +56,6 @@ public class PanierDto {
     public void setItemPaniers(List<ItemPanierDto> itemPaniers) {
         this.itemPaniers = itemPaniers;
     }
+
+
 }
