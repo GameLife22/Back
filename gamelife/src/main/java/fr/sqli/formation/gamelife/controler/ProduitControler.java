@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import fr.sqli.formation.gamelife.dto.ProduitDto;
-import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.service.ProduitService;
 
 /**

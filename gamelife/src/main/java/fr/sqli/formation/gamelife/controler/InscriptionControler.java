@@ -1,7 +1,7 @@
 package fr.sqli.formation.gamelife.controler;
 
 import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
-import fr.sqli.formation.gamelife.dto.SiretDto;
+import fr.sqli.formation.gamelife.dto.SirenDto;
 import fr.sqli.formation.gamelife.dto.mdpOublie.EmailDtoOut;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.service.InscriptionService;
@@ -26,8 +26,8 @@ public class InscriptionControler {
         LOG.info("InscriptionControler : OUT {}", res);
         return res.getResetPasswordToken();
     }
-    @PostMapping("/siret")
-    public boolean checkSirret(@RequestBody SiretDto monbody) throws Exception{
+    @PostMapping("/siren")
+    public boolean checkSirret(@RequestBody SirenDto monbody) throws Exception{
         LOG.info("InscriptionControler : IN {}", monbody);
         LOG.info("InscriptionControler : OUT {}", service.checkSiret(monbody));
         return service.checkSiret(monbody);
