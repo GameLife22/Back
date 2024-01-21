@@ -1,17 +1,13 @@
 package fr.sqli.formation.gamelife.service.commande.impl;
 
-import fr.sqli.formation.gamelife.dto.ProduitDto;
-import fr.sqli.formation.gamelife.dto.panier.ItemPanierDto;
-import fr.sqli.formation.gamelife.dto.panier.ItemPanierDtoHandler;
-import fr.sqli.formation.gamelife.dto.panier.ItemPanierPKDto;
-import fr.sqli.formation.gamelife.dto.panier.PanierDto;
-import fr.sqli.formation.gamelife.dto.panier.PanierDtoHandler;
+import fr.sqli.formation.gamelife.dto.in.CommandeDtoIn;
+import fr.sqli.formation.gamelife.dto.handler.CommandeDtoHandler;
 import fr.sqli.formation.gamelife.entity.*;
 import fr.sqli.formation.gamelife.ex.ProduitRevendeutException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
 import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
-import fr.sqli.formation.gamelife.repository.ItemPanierRepository;
+import fr.sqli.formation.gamelife.repository.ItemCommandeRepository;
 import fr.sqli.formation.gamelife.repository.CommandeRepository;
 import fr.sqli.formation.gamelife.repository.ProduitRepository;
 import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
@@ -34,192 +30,192 @@ public class CommandeServiceImpl implements CommandeService {
     @Autowired
     private CommandeRepository commandeRepository;
     @Autowired
-    private ItemPanierRepository itemPanierRepository;
+    private ItemCommandeRepository itemCommandeRepository;
     @Autowired
     private ProduitRepository produitRepository;
     @Autowired // ModelMapper permet de transférer automatiquement les données d'un objet source vers un objet cible
     private ModelMapper modelMapper;
     @Autowired
-    private PanierDtoHandler panierDtoHandler;
+    private CommandeDtoHandler commandeDtoHandler;
 
     @PersistenceContext
     private EntityManager entityManager;
 
 
-    private PanierDto panierDto;
+    private CommandeDtoIn commandeDto;
     @Autowired
     private UtilisateurRepository utilisateurRepository;
-    private ItemPanierDtoHandler itemPanierDtoHandler;
+    private ItemCommandeDtoHandler itemCommandeDtoHandler;
 
 
     // Recuperation de tous les paniers
     @Override
-    public List<PanierDto> getAllPaniers() {
-        List<PanierEntity> panierEntities = commandeRepository.findAll();
+    public List<CommandeDtoIn> getAllCommandes() {
+        List<CommandeEntity> panierEntities = commandeRepository.findAll();
         return panierEntities.stream()
-                .map(panierDtoHandler::entityToDto)
+                .map(commandeDtoHandler::entityToDto)
                 .collect(Collectors.toList());
     }
 
-    // Récupère un panier en utilisant un ID
+    // Récupère un commande en utilisant un ID
     @Override
-    public PanierDto getPanierById(int id) throws CommandeNotFoundException {
-        PanierEntity panierEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Panier not found with id: " + id));
-        return panierDtoHandler.entityToDto(panierEntity);
+    public CommandeDtoIn getCommandeById(int id) throws CommandeNotFoundException {
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
+        return commandeDtoHandler.entityToDto(commandeEntity);
     }
 
-    // Création du panier
+    // Création du commande
     @Override
-    public PanierDto createPanier(PanierDto panierDto) throws UtilisateurNonExistantException {
+    public CommandeDtoIn createCommande(CommandeDtoIn commandeDto) throws UtilisateurNonExistantException {
         // Vérifiez si l'utilisateur existe avant de continuer
-        UtilisateurEntity utilisateur = utilisateurRepository.findById(panierDto.getUtilisateur().getId())
+        UtilisateurEntity utilisateur = utilisateurRepository.findById(commandeDto.getUtilisateur().getId())
                 .orElseThrow(() -> new UtilisateurNonExistantException("Utilisateur not found"));
 
-        PanierEntity panierEntity = panierDtoHandler.dtoToEntity(panierDto);
+        CommandeEntity commandeEntity = commandeDtoHandler.dtoToEntity(commandeDto);
 
-        panierEntity.setUtilisateur(utilisateur);
-        utilisateur.addCommande(panierEntity);
+        commandeEntity.setUtilisateur(utilisateur);
+        utilisateur.addCommande(commandeEntity);
 
-        // Ajoutez les ItemPanier à la liste du panier
-        if (panierDto.getItemPaniers() != null) {
-            for (ItemPanierDto itemPanierDto : panierDto.getItemPaniers()) {
-                ItemPanierEntity itemPanierEntity = itemPanierDtoHandler.toEntity(itemPanierDto);
-                itemPanierEntity.setPanier(panierEntity);
+        // Ajoutez les ItemCommande à la liste du commande
+        if (commandeDto.getItemCommandes() != null) {
+            for (ItemCommandeDto itemCommandeDto : commandeDto.getItemCommandes()) {
+                ItemCommandeEntity itemCommandeEntity = itemCommandeDtoHandler.toEntity(itemCommandeDto);
+                itemCommandeEntity.setCommande(commandeEntity);
 
-                panierEntity.addItemPanier(itemPanierEntity);
+                commandeEntity.addItemCommande(itemCommandeEntity);
             }
         }
-        // Enregistrez le panier dans la base de données
-        panierEntity = commandeRepository.save(panierEntity);
+        // Enregistrez le commande dans la base de données
+        commandeEntity = commandeRepository.save(commandeEntity);
 
-        return panierDtoHandler.entityToDto(panierEntity);
+        return commandeDtoHandler.entityToDto(commandeEntity);
     }
 
 
 
-    // Panier mise à jour ex : gerer l'etat du panier, modifier la date de la livraison
+    // Commande mise à jour ex : gerer l'etat du commande, modifier la date de la livraison
     @Override
-    public PanierDto updatePanier(int id, PanierDto panierDto) throws CommandeNotFoundException {
-            Optional<PanierEntity> panierEntityOptional = commandeRepository.findById(id);
+    public CommandeDtoIn updateCommande(int id, CommandeDtoIn commandeDto) throws CommandeNotFoundException {
+            Optional<CommandeEntity> panierEntityOptional = commandeRepository.findById(id);
             if (panierEntityOptional.isPresent()) {
-                PanierEntity existingPanierEntity = panierEntityOptional.get();
-                // Mettre à jour les propriétés du panier existant avec celles du DTO
-                existingPanierEntity.setDate(panierDto.getDate());
-                existingPanierEntity.setEtat(panierDto.getEtat());
+                CommandeEntity existingCommandeEntity = panierEntityOptional.get();
+                // Mettre à jour les propriétés du commande existant avec celles du DTO
+                existingCommandeEntity.setDate(commandeDto.getDate());
+                existingCommandeEntity.setEtat(commandeDto.getEtat());
                 // Enregistrez les modifications dans la base de données
-                PanierEntity updatedPanierEntity = commandeRepository.save(existingPanierEntity);
+                CommandeEntity updatedCommandeEntity = commandeRepository.save(existingCommandeEntity);
                 // Convertissez l'entité mise à jour en DTO avant de le renvoyer
-                PanierDto updatedPanierDto = panierDtoHandler.entityToDto(updatedPanierEntity);
-                return updatedPanierDto;
+                CommandeDtoIn updatedCommandeDto = commandeDtoHandler.entityToDto(updatedCommandeEntity);
+                return updatedCommandeDto;
             } else {
-                throw new CommandeNotFoundException("Panier non trouvé avec l'ID : " + id);
+                throw new CommandeNotFoundException("Commande non trouvé avec l'ID : " + id);
             }
         }
 
-    // Supprimer le panier
+    // Supprimer le commande
     @Override
-    public void deletePanier(int id) throws CommandeNotFoundException {
-        PanierEntity panierEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Panier not found with id: " + id));
+    public void deleteCommande(int id) throws CommandeNotFoundException {
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
 
-        commandeRepository.delete(panierEntity);
+        commandeRepository.delete(commandeEntity);
     }
 
     
-    // Mettre à jour la quantité d'un article dans un panier
+    // Mettre à jour la quantité d'un article dans un commande
     @Override
     @Transactional
-    public PanierDto modifierQuantite(int id, ItemPanierDto itemPanierDto) throws CommandeNotFoundException, ItemCommandeNotFoundException {
-        PanierEntity panierEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Panier not found with id: " + id));
+    public CommandeDtoIn modifierQuantite(int id, ItemCommandeDto itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException {
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
 
-        ItemPanierPKDto itemPanierPKDto = itemPanierDto.getId();
-        ItemPanierPK itemPanierPK = new ItemPanierPK();
-        itemPanierPK.setIdPanier(itemPanierPKDto.getIdPanier());
-        itemPanierPK.setIdProduit(itemPanierPKDto.getIdProduit());
+        ItemCommandePKDto itemCommandePKDto = itemCommandeDto.getId();
+        ItemCommandePK itemCommandePK = new ItemCommandePK();
+        itemCommandePK.setIdCommande(itemCommandePKDto.getIdCommande());
+        itemCommandePK.setIdProduit(itemCommandePKDto.getIdProduit());
 
-        ItemPanierEntity itemPanierEntity = itemPanierRepository.findById(itemPanierPK)
-                .orElseThrow(() -> new ItemCommandeNotFoundException("ItemPanier not found with id: " + itemPanierPK));
+        ItemCommandeEntity itemCommandeEntity = itemCommandeRepository.findById(itemCommandePK)
+                .orElseThrow(() -> new ItemCommandeNotFoundException("ItemCommande not found with id: " + itemCommandePK));
 
-        itemPanierEntity.setQuantite(itemPanierDto.getQuantite());
-        itemPanierRepository.save(itemPanierEntity);
+        itemCommandeEntity.setQuantite(itemCommandeDto.getQuantite());
+        itemCommandeRepository.save(itemCommandeEntity);
 
-        return panierDtoHandler.entityToDto(panierEntity);
+        return commandeDtoHandler.entityToDto(commandeEntity);
     }
 
-    // Prix total du panier
+    // Prix total du commande
     //TODO passage en requete
     @Override
-    public double getPrixTotalPanier(int id) {
-        PanierEntity panierEntity = commandeRepository.findById(id).orElse(null);
-        if (panierEntity != null) {
-            return panierEntity.getItemPaniers().stream()
-                    .mapToDouble(itemPanier -> itemPanier.getProduit().getPrix().multiply(BigDecimal.valueOf(itemPanier.getQuantite())).doubleValue())
+    public double getPrixTotalCommande(int id) {
+        CommandeEntity commandeEntity = commandeRepository.findById(id).orElse(null);
+        if (commandeEntity != null) {
+            return commandeEntity.getItemCommandes().stream()
+                    .mapToDouble(itemCommande -> itemCommande.getProduit().getPrix().multiply(BigDecimal.valueOf(itemCommande.getQuantite())).doubleValue())
                     .sum();
         }
         return 0.0;
     }
 
-    // Ajouter un article dans le panier
+    // Ajouter un article dans le commande
     @Override
     @Transactional
-    public PanierDto ajoutArticle(int id, ProduitDto produitDto) throws ProduitRevendeutException, CommandeNotFoundException {
+    public CommandeDtoIn ajoutArticle(int id, ProduitDto produitDto) throws ProduitRevendeutException, CommandeNotFoundException {
         // Vérifier si l'ID du produit est valide
         if (produitDto.getId() <= 0) {
             throw new ProduitRevendeutException("Invalid Product ID: " + produitDto.getId());
         }
 
 
-        // Récupérer le panier existant
-        PanierEntity panierEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Panier not found with id: " + id));
+        // Récupérer le commande existant
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
 
-        // Récupérer le produit à ajouter au panier
+        // Récupérer le produit à ajouter au commande
         ProduitEntity produitEntity = produitRepository.findById(produitDto.getId())
                 .orElseThrow(() -> new ProduitRevendeutException("Produit not found with id: " + produitDto.getId()));
 
 
-        // Rechercher l'ItemPanierEntity dans la liste ItemPaniers du panier
-        Optional<ItemPanierEntity> existingItemPanier = panierEntity.getItemPaniers().stream()
-                .filter(itemPanier -> itemPanier.getId().getIdProduit() == produitDto.getId())
+        // Rechercher l'ItemCommandeEntity dans la liste ItemCommandes du commande
+        Optional<ItemCommandeEntity> existingItemCommande = commandeEntity.getItemCommandes().stream()
+                .filter(itemCommande -> itemCommande.getId().getIdProduit() == produitDto.getId())
                 .findFirst();
 
-        if (existingItemPanier.isPresent()) {
-            // Si l'ItemPanierEntity existe, augmenter la quantité
-            existingItemPanier.get().setQuantite(existingItemPanier.get().getQuantite() + 1);
+        if (existingItemCommande.isPresent()) {
+            // Si l'ItemCommandeEntity existe, augmenter la quantité
+            existingItemCommande.get().setQuantite(existingItemCommande.get().getQuantite() + 1);
         } else {
-            // Si l'ItemPanierEntity n'existe pas  créer un nouvel ItemPanierEntity
-            ItemPanierEntity newItemPanier = new ItemPanierEntity();
-            ItemPanierPK itemPanierPK = new ItemPanierPK(id, produitDto.getId());
-            newItemPanier.setId(itemPanierPK);
-            newItemPanier.setQuantite(1);
-            newItemPanier.setPanier(panierEntity);
-            newItemPanier.setProduit(produitEntity);
+            // Si l'ItemCommandeEntity n'existe pas  créer un nouvel ItemCommandeEntity
+            ItemCommandeEntity newItemCommande = new ItemCommandeEntity();
+            ItemCommandePK itemCommandePK = new ItemCommandePK(id, produitDto.getId());
+            newItemCommande.setId(itemCommandePK);
+            newItemCommande.setQuantite(1);
+            newItemCommande.setCommande(commandeEntity);
+            newItemCommande.setProduit(produitEntity);
 
-            panierEntity.getItemPaniers().add(newItemPanier);
+            commandeEntity.getItemCommandes().add(newItemCommande);
         }
 
         // Enregistrer les modifications dans la base de données
-        commandeRepository.save(panierEntity);
+        commandeRepository.save(commandeEntity);
 
-        return panierDtoHandler.entityToDto(panierEntity);
+        return commandeDtoHandler.entityToDto(commandeEntity);
     }
 
-    // Validation du panier
+    // Validation du commande
     @Override
-    public PanierDto validerPanier(int id) throws CommandeNotFoundException {
-        PanierEntity panierEntity = commandeRepository.findByIdWithItemPaniers(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Panier not found with id: " + id));
+    public CommandeDtoIn validerCommande(int id) throws CommandeNotFoundException {
+        CommandeEntity commandeEntity = commandeRepository.findByIdWithItemCommandes(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
 
-        if (panierEntity.getEtat() != 1) {
-            if (panierEntity.getItemPaniers().isEmpty()) {
-                throw new IllegalStateException("Cannot validate an empty panier (id: " + id + ")");
+        if (commandeEntity.getEtat() != 1) {
+            if (commandeEntity.getItemCommandes().isEmpty()) {
+                throw new IllegalStateException("Cannot validate an empty commande (id: " + id + ")");
             }
-            // Déduire le stock des produits dans le panier
-            for (ItemPanierEntity itemPanierEntity : panierEntity.getItemPaniers()) {
-                ProduitEntity produitEntity = itemPanierEntity.getProduit();
-                int newQuantityStock = produitEntity.getStock() - itemPanierEntity.getQuantite();
+            // Déduire le stock des produits dans le commande
+            for (ItemCommandeEntity itemCommandeEntity : commandeEntity.getItemCommandes()) {
+                ProduitEntity produitEntity = itemCommandeEntity.getProduit();
+                int newQuantityStock = produitEntity.getStock() - itemCommandeEntity.getQuantite();
 
                 if (newQuantityStock < 0) {
                     throw new IllegalStateException("Insufficient stock for produit with id: " + produitEntity.getId());
@@ -228,39 +224,39 @@ public class CommandeServiceImpl implements CommandeService {
                 produitEntity.setStock(newQuantityStock);
                 produitRepository.save(produitEntity);
             }
-            panierEntity.setEtat((byte) 1);
+            commandeEntity.setEtat((byte) 1);
 
-            panierEntity = commandeRepository.save(panierEntity);
+            commandeEntity = commandeRepository.save(commandeEntity);
 
-            return panierDtoHandler.entityToDto(panierEntity);
+            return commandeDtoHandler.entityToDto(commandeEntity);
 
         } else {
-            throw new IllegalStateException("Panier with id " + id + " is already validated.");
+            throw new IllegalStateException("Commande with id " + id + " is already validated.");
         }
     }
 
-    // Supprimer un article dans le panier
+    // Supprimer un article dans le commande
     @Override
     @Transactional
-    public PanierDto supprimerArticle(int idPanier, int idProduit) throws CommandeNotFoundException, ProduitRevendeutException, ItemCommandeNotFoundException {
-        // Récupérer le panier
-        PanierEntity panierEntity = commandeRepository.findById(idPanier)
-                .orElseThrow(() -> new CommandeNotFoundException("Panier non trouvé avec l'ID : " + idPanier));
+    public CommandeDtoIn supprimerArticle(int idCommande, int idProduit) throws CommandeNotFoundException, ProduitRevendeutException, ItemCommandeNotFoundException {
+        // Récupérer le commande
+        CommandeEntity commandeEntity = commandeRepository.findById(idCommande)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvé avec l'ID : " + idCommande));
 
-        // Récupérer l'article du panier
-        ItemPanierEntity itemPanierEntity = panierEntity.getItemPaniers().stream()
+        // Récupérer l'article du commande
+        ItemCommandeEntity itemCommandeEntity = commandeEntity.getItemCommandes().stream()
                 .filter(item -> item.getProduit().getId() == idProduit)
                 .findFirst()
-                .orElseThrow(() -> new ItemCommandeNotFoundException("Article non trouvé dans le panier avec l'ID du produit : " + idProduit));
+                .orElseThrow(() -> new ItemCommandeNotFoundException("Article non trouvé dans le commande avec l'ID du produit : " + idProduit));
 
-        // Supprimer l'article du panier
-        panierEntity.removeItemPanier(itemPanierEntity);
-        commandeRepository.save(panierEntity);
+        // Supprimer l'article du commande
+        commandeEntity.removeItemCommande(itemCommandeEntity);
+        commandeRepository.save(commandeEntity);
 
         // Supprimer l'article de la base de données
-        itemPanierRepository.delete(itemPanierEntity);
+        itemCommandeRepository.delete(itemCommandeEntity);
 
-        // Mettez à jour et renvoyez le panier DTO
-        return panierDtoHandler.entityToDto(panierEntity);
+        // Mettez à jour et renvoyez le commande DTO
+        return commandeDtoHandler.entityToDto(commandeEntity);
     }
 }

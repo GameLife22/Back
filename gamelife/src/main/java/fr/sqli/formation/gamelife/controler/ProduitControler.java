@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import fr.sqli.formation.gamelife.dto.ProduitDto;
-import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.service.ProduitService;
 
 /**

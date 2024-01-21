@@ -67,7 +67,7 @@ public class ExceptionControlerAdvice {
     }
     @ExceptionHandler(CommandeNotFoundException.class)
     public ResponseEntity<String> handlePanierNotFoundException(CommandeNotFoundException ex) {
-        LOG.info("Panier introuvable: {}", ex.getMessage());
+        LOG.info("Commande introuvable: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

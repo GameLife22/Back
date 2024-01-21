@@ -2,7 +2,7 @@ package fr.sqli.formation.gamelife.service;
 
 import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
 import fr.sqli.formation.gamelife.dto.inscription.InscriptionDtoHandler;
-import fr.sqli.formation.gamelife.dto.SiretDto;
+import fr.sqli.formation.gamelife.dto.SirenDto;
 import fr.sqli.formation.gamelife.dto.mdpOublie.EmailDtoOut;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
@@ -67,9 +67,9 @@ public class InscriptionService {
                 }
             }
     }
-    public boolean checkSiret(SiretDto dto){
-        String siret = dto.getSiret();
-        String url = "https://api.insee.fr/entreprises/sirene/V3/siret="+siret;
+    public boolean checkSiret(SirenDto dto){
+        String siren = dto.getSiret();
+        String url = "https://api.insee.fr/entreprises/sirene/V3/siren="+siren;
         RestTemplate restTemplate = new RestTemplate();
 
         Object[] response = restTemplate.getForObject(url, Object[].class);
