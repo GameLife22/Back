@@ -67,19 +67,6 @@ public class ImageEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ImageEntity that = (ImageEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(idProduit, that.idProduit) && Objects.equals(image, that.image) && Objects.equals(titre, that.titre);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, idProduit, image, titre);
-    }
-
-    @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ImageEntity{");
         sb.append("id=").append(id);

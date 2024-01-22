@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "glproduit_revendeur", schema = "gamelife")
@@ -27,7 +26,8 @@ public class ProduitRevendeurEntity implements Serializable {
     private BigDecimal prix;
 
     @Column(name = "etat", nullable = false, length = 20)
-    private String etat;
+    @Enumerated(EnumType.STRING)
+    private String etat = EtatProduitRevendeur.NOUVEAU.toString();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -88,19 +88,6 @@ public class ProduitRevendeurEntity implements Serializable {
 
     public void setIdUtilisateur(UtilisateurEntity idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProduitRevendeurEntity that = (ProduitRevendeurEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(stock, that.stock) && Objects.equals(prix, that.prix) && Objects.equals(etat, that.etat) && Objects.equals(idProduit, that.idProduit) && Objects.equals(idUtilisateur, that.idUtilisateur);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, stock, prix, etat, idProduit, idUtilisateur);
     }
 
     @Override

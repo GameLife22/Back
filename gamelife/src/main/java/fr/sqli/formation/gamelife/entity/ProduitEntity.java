@@ -26,13 +26,15 @@ public class ProduitEntity implements Serializable {
     private String description;
 
     @Column(name = "categorie", nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
     private String categorie;
 
     @Column(name = "plateforme", nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
     private String plateforme;
 
     @Column(name = "etat", nullable = false)
-    private Boolean etat;
+    private Boolean etat = true;
 
     public ProduitEntity() {
     }
@@ -83,19 +85,6 @@ public class ProduitEntity implements Serializable {
 
     public void setEtat(Boolean etat) {
         this.etat = etat;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProduitEntity that = (ProduitEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(nom, that.nom) && Objects.equals(description, that.description) && Objects.equals(categorie, that.categorie) && Objects.equals(plateforme, that.plateforme) && Objects.equals(etat, that.etat);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nom, description, categorie, plateforme, etat);
     }
 
     @Override

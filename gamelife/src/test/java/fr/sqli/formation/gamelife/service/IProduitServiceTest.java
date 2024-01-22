@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ProduitServiceTest {
+public class IProduitServiceTest {
 
     @Autowired
-    private ProduitService service;
+    private IProduitService service;
 
 
     @Test

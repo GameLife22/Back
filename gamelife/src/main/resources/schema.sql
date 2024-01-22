@@ -40,9 +40,9 @@ CREATE TABLE gamelife.glproduit
     id          SERIAL PRIMARY KEY,
     nom         VARCHAR(255) NOT NULL,
     description TEXT         NOT NULL,
-    categorie   VARCHAR(50)  NOT NULL,
-    plateforme  VARCHAR(50)  NOT NULL,
-    etat        BOOLEAN      NOT NULL
+    categorie   VARCHAR(25)  NOT NULL,
+    plateforme  VARCHAR(25)  NOT NULL,
+    etat        BOOLEAN      DEFAULT TRUE
 );
 
 CREATE TABLE gamelife.glimage
@@ -59,7 +59,7 @@ CREATE TABLE gamelife.glproduit_revendeur
     id             SERIAL PRIMARY KEY,
     stock          INT            NOT NULL,
     prix           DECIMAL(10, 0) NOT NULL,
-    etat           VARCHAR(20)    NOT NULL,
+    etat           VARCHAR(25)    NOT NULL,
     id_produit     INT            NOT NULL,
     id_utilisateur INT            NOT NULL,
     FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (id) ON DELETE CASCADE ON UPDATE CASCADE,

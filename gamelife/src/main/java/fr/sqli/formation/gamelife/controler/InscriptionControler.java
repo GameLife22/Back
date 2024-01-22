@@ -26,7 +26,7 @@ public class InscriptionControler {
         LOG.info("InscriptionControler : OUT {}", res);
         return res.getResetPasswordToken();
     }
-    @PostMapping("/siren")
+    @PostMapping("/siret")
     public boolean checkSirret(@RequestBody SirenDto monbody) throws Exception{
         LOG.info("InscriptionControler : IN {}", monbody);
         LOG.info("InscriptionControler : OUT {}", service.checkSiret(monbody));

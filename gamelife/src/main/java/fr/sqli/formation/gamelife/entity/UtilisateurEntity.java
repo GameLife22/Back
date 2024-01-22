@@ -196,19 +196,6 @@ public class UtilisateurEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UtilisateurEntity that = (UtilisateurEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(mdp, that.mdp) && Objects.equals(email, that.email) && Objects.equals(numRue, that.numRue) && Objects.equals(rue, that.rue) && Objects.equals(ville, that.ville) && Objects.equals(codePostal, that.codePostal) && Objects.equals(role, that.role) && Objects.equals(numSiren, that.numSiren) && Objects.equals(etatCompte, that.etatCompte) && Objects.equals(resetPasswordToken, that.resetPasswordToken);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nom, prenom, mdp, email, numRue, rue, ville, codePostal, role, numSiren, etatCompte, resetPasswordToken);
-    }
-
-    @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("UtilisateurEntity{");
         sb.append("id=").append(id);

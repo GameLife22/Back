@@ -111,19 +111,6 @@ public class CommandeEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CommandeEntity that = (CommandeEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(idUtilisateur, that.idUtilisateur) && Objects.equals(etat, that.etat) && Objects.equals(numRueLivraison, that.numRueLivraison) && Objects.equals(rueLivraison, that.rueLivraison) && Objects.equals(villeLivraison, that.villeLivraison) && Objects.equals(codePostalLivraison, that.codePostalLivraison) && Objects.equals(date, that.date);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, idUtilisateur, etat, numRueLivraison, rueLivraison, villeLivraison, codePostalLivraison, date);
-    }
-
-    @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("CommandeEntity{");
         sb.append("id=").append(id);

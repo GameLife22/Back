@@ -72,19 +72,6 @@ public class ItemCommandeEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ItemCommandeEntity that = (ItemCommandeEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(idCommande, that.idCommande) && Objects.equals(idProduitRevendeur, that.idProduitRevendeur) && Objects.equals(quantite, that.quantite);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, idCommande, idProduitRevendeur, quantite);
-    }
-
-    @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ItemCommandeEntity{");
         sb.append("id=").append(id);
