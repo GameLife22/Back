@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +25,9 @@ public class CommandeEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_utilisateur", nullable = false)
     private UtilisateurEntity idUtilisateur;
+
+    @OneToMany(mappedBy = "idCommande", cascade = CascadeType.ALL)
+    private List<ItemCommandeEntity> items;
 
     @Column(name = "etat", nullable = false, length = 80)
     private String etat;
@@ -44,6 +48,13 @@ public class CommandeEntity implements Serializable {
     private LocalDate date;
 
     public CommandeEntity() {
+
+    }
+    public List<ItemCommandeEntity> getItems() {
+        return items;
+    }
+    public void setItems(List<ItemCommandeEntity> items) {
+        this.items = items;
     }
 
     public Integer getId() {
@@ -109,6 +120,9 @@ public class CommandeEntity implements Serializable {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+
+
 
     @Override
     public boolean equals(Object o) {

@@ -3,6 +3,7 @@ package fr.sqli.formation.gamelife.entity;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +16,9 @@ public class UtilisateurEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+
+    @OneToMany(mappedBy = "idUtilisateur", cascade = CascadeType.ALL)
+    private List<CommandeEntity> commandes;
 
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
@@ -52,6 +56,7 @@ public class UtilisateurEntity implements Serializable {
     @Column(name = "reset_password_token", length = 30)
     private String resetPasswordToken;
 
+
     public UtilisateurEntity() {
     }
 
@@ -73,6 +78,17 @@ public class UtilisateurEntity implements Serializable {
     public UtilisateurEntity(String email, String mdp) {
         this.email = email;
         this.mdp = mdp;
+    }
+
+    public UtilisateurEntity(Integer idUtilisateur) {
+    }
+
+    public List<CommandeEntity> getCommandes() {
+        return commandes;
+    }
+
+    public void setCommandes(List<CommandeEntity> commandes) {
+        this.commandes = commandes;
     }
 
     public Integer getId() {

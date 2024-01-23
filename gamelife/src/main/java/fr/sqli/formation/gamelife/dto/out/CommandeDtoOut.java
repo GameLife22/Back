@@ -16,6 +16,16 @@ public class CommandeDtoOut extends AbstractDtoOut {
     private List<Integer> idItemsCommande;
     private LocalDate date;
 
+    private List<ItemCommandeDtoOut> itemsCommande;
+
+    public List<ItemCommandeDtoOut> getItemsCommande() {
+        return itemsCommande;
+    }
+
+    public void setItemsCommande(List<ItemCommandeDtoOut> itemsCommande) {
+        this.itemsCommande = itemsCommande;
+    }
+
     public String getEtat() {
         return etat;
     }

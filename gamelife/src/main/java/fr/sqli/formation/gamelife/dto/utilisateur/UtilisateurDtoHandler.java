@@ -19,4 +19,10 @@ public class UtilisateurDtoHandler {
         u.setPrenom(dto.getPrenom());
         return u;
     }
+
+    public static UtilisateurEntity fromId(Integer userId) {
+        UtilisateurEntity utilisateurEntity = new UtilisateurEntity();
+        utilisateurEntity.setId(userId);
+        return utilisateurEntity;
+    }
 }

@@ -21,6 +21,16 @@ public class CommandeDtoIn extends AbstractDtoIn {
     private List<Integer> idItemsCommande;
     private LocalDate date;
 
+    private List<ItemCommandeDtoIn> itemsCommande;
+
+    public List<ItemCommandeDtoIn> getItemsCommande() {
+        return itemsCommande;
+    }
+
+    public void setItemsCommande(List<ItemCommandeDtoIn> itemsCommande) {
+        this.itemsCommande = itemsCommande;
+    }
+
     public Integer getIdUtilisateur() {
         return idUtilisateur;
     }
