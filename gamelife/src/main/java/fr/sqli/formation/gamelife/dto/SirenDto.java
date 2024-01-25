@@ -10,11 +10,11 @@ public class SirenDto {
         this.siren = siren;
     }
 
-    public String getSiret() {
+    public String getSiren() {
         return siren;
     }
 
-    public void setSiret(String siren) {
+    public void setSiren(String siren) {
         this.siren = siren;
     }
 }

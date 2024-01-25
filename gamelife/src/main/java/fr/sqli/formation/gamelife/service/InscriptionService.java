@@ -67,7 +67,7 @@ public class InscriptionService {
             }
     }
     public boolean checkSiret(SirenDto dto){
-        String siren = dto.getSiret();
+        String siren = dto.getSiren();
         String url = "https://api.insee.fr/entreprises/sirene/V3/siren="+siren;
         RestTemplate restTemplate = new RestTemplate();
 
