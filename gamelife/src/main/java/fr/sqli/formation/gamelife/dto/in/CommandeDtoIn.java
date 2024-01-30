@@ -10,8 +10,6 @@ import java.util.List;
 public class CommandeDtoIn extends AbstractDtoIn {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(CommandeDtoIn.class);
-
     private Integer idUtilisateur;
     private String etat;
     private Integer numRueLivraison;
