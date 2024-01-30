@@ -9,28 +9,28 @@ import fr.sqli.formation.gamelife.entity.ProduitRevendeurEntity;
 public class ItemCommandeDtoHandler {
 
     public static ItemCommandeEntity DtoToEntity(ItemCommandeDtoIn dto) {
-        ItemCommandeEntity entity = new ItemCommandeEntity();
+        ItemCommandeEntity itemCommandeEntity = new ItemCommandeEntity();
 
         CommandeEntity commandeEntity = new CommandeEntity();
         commandeEntity.setId(dto.getIdCommande());
-        entity.setIdCommande(commandeEntity);
+        itemCommandeEntity.setIdCommande(commandeEntity);
 
         ProduitRevendeurEntity produitRevendeurEntity = new ProduitRevendeurEntity();
         produitRevendeurEntity.setId(dto.getIdProduitRevendeur());
-        entity.setIdProduitRevendeur(produitRevendeurEntity);
+        itemCommandeEntity.setIdProduitRevendeur(produitRevendeurEntity);
 
-        entity.setQuantite(dto.getQuantite());
+        itemCommandeEntity.setQuantite(dto.getQuantite());
 
-        return entity;
+        return itemCommandeEntity;
     }
 
 
     public static ItemCommandeDtoOut EntityToDto(ItemCommandeEntity entity) {
-        ItemCommandeDtoOut dto = new ItemCommandeDtoOut();
-        dto.setId(entity.getId());
-        dto.setIdCommande(entity.getIdCommande().getId());
-        dto.setIdProduitRevendeur(entity.getIdProduitRevendeur().getId());
-        dto.setQuantite(entity.getQuantite());
-        return dto;
+        ItemCommandeDtoOut itemCommandeDtoOut = new ItemCommandeDtoOut();
+        itemCommandeDtoOut.setId(entity.getId());
+        itemCommandeDtoOut.setIdCommande(entity.getIdCommande().getId());
+        itemCommandeDtoOut.setIdProduitRevendeur(entity.getIdProduitRevendeur().getId());
+        itemCommandeDtoOut.setQuantite(entity.getQuantite());
+        return itemCommandeDtoOut;
     }
 }

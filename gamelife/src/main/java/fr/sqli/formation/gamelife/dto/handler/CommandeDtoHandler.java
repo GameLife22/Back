@@ -12,44 +12,44 @@ import java.util.stream.Collectors;
 public class CommandeDtoHandler {
 
     public static CommandeEntity DtoToEntity(CommandeDtoIn dto) {
-        CommandeEntity entity = new CommandeEntity();
+        CommandeEntity CommandeEntity = new CommandeEntity();
         // Mapper les propriétés de dto vers entity
-        entity.setIdUtilisateur(new UtilisateurEntity(dto.getIdUtilisateur()));
-        entity.setEtat(dto.getEtat());
-        entity.setNumRueLivraison(dto.getNumRueLivraison());
-        entity.setRueLivraison(dto.getRueLivraison());
-        entity.setVilleLivraison(dto.getVilleLivraison());
-        entity.setCodePostalLivraison(dto.getCodePostalLivraison());
-        entity.setDate(dto.getDate());
+         CommandeEntity.setIdUtilisateur(new UtilisateurEntity(dto.getIdUtilisateur()));
+         CommandeEntity.setEtat(dto.getEtat());
+         CommandeEntity.setNumRueLivraison(dto.getNumRueLivraison());
+         CommandeEntity.setRueLivraison(dto.getRueLivraison());
+         CommandeEntity.setVilleLivraison(dto.getVilleLivraison());
+         CommandeEntity.setCodePostalLivraison(dto.getCodePostalLivraison());
+         CommandeEntity.setDate(dto.getDate());
 
         if (dto.getIdItemsCommande() != null) {
             List<ItemCommandeEntity> items = dto.getIdItemsCommande().stream()
                     .map(itemId -> new ItemCommandeEntity(itemId))
                     .collect(Collectors.toList());
-            entity.setItems(items);
+            CommandeEntity.setItems(items);
         }
 
-        return entity;
+        return CommandeEntity;
     }
 
     public static CommandeDtoOut EntityToDto(CommandeEntity entity) {
-        CommandeDtoOut dto = new CommandeDtoOut();
+        CommandeDtoOut CommandeDtoOut = new CommandeDtoOut();
         // Mapper les propriétés de entity vers dto
-        dto.setEtat(entity.getEtat());
-        dto.setNumRueLivraison(entity.getNumRueLivraison());
-        dto.setRueLivraison(entity.getRueLivraison());
-        dto.setVilleLivraison(entity.getVilleLivraison());
-        dto.setCodePostalLivraison(entity.getCodePostalLivraison());
-        dto.setDate(entity.getDate());
+        CommandeDtoOut.setEtat(entity.getEtat());
+        CommandeDtoOut.setNumRueLivraison(entity.getNumRueLivraison());
+        CommandeDtoOut.setRueLivraison(entity.getRueLivraison());
+        CommandeDtoOut.setVilleLivraison(entity.getVilleLivraison());
+        CommandeDtoOut.setCodePostalLivraison(entity.getCodePostalLivraison());
+        CommandeDtoOut.setDate(entity.getDate());
 
         if (entity.getItems() != null) {
             List<Integer> itemIds = entity.getItems().stream()
                     .map(ItemCommandeEntity::getId)
                     .collect(Collectors.toList());
-            dto.setIdItemsCommande(itemIds);
+            CommandeDtoOut.setIdItemsCommande(itemIds);
         }
 
-        return dto;
+        return CommandeDtoOut;
     }
 
 }
