@@ -56,11 +56,6 @@ public class ProduitRevendeurDtoIn extends AbstractDtoIn {
     }
 
     @Override
-    public void validate() {
-
-    }
-
-    @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ProduitRevendeurDtoIn{");
         sb.append("stock=").append(stock);

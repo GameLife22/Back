@@ -4,17 +4,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sqli.formation.gamelife.dto.AbstractDto;
 
 import java.io.Serial;
+import java.util.Objects;
 
-public abstract class AbstractDtoIn extends AbstractDto {
+abstract class AbstractDtoIn extends AbstractDto {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    private Integer id;
 
     protected AbstractDtoIn() {
         super();
     }
 
-    @JsonIgnore
-    public abstract void validate();
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer pId) {
+        id = pId;
+    }
+
+    @Override
+    public boolean equals(Object pO) {
+        if (this == pO) return true;
+        if (pO == null || getClass() != pO.getClass()) return false;
+        AbstractDtoIn that = (AbstractDtoIn) pO;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     @Override
     public String toString() {

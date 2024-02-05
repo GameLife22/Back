@@ -26,12 +26,10 @@ public class ProduitEntity implements Serializable {
     private String description;
 
     @Column(name = "categorie", nullable = false, length = 50)
-    @Enumerated(EnumType.STRING)
-    private Categorie categorie;
+    private String categorie;
 
     @Column(name = "plateforme", nullable = false, length = 50)
-    @Enumerated(EnumType.STRING)
-    private Plateforme plateforme;
+    private String plateforme;
 
     @Column(name = "etat", nullable = false)
     private Boolean etat = true;
@@ -63,19 +61,19 @@ public class ProduitEntity implements Serializable {
         this.description = description;
     }
 
-    public Categorie getCategorie() {
+    public String getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(Categorie pCategorie) {
+    public void setCategorie(String pCategorie) {
         categorie = pCategorie;
     }
 
-    public Plateforme getPlateforme() {
+    public String getPlateforme() {
         return plateforme;
     }
 
-    public void setPlateforme(Plateforme pPlateforme) {
+    public void setPlateforme(String pPlateforme) {
         plateforme = pPlateforme;
     }
 
@@ -93,8 +91,8 @@ public class ProduitEntity implements Serializable {
         sb.append("id=").append(id);
         sb.append(", nom='").append(nom).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", categorie=").append(categorie);
-        sb.append(", plateforme=").append(plateforme);
+        sb.append(", categorie='").append(categorie).append('\'');
+        sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
         sb.append('}');
         return sb.toString();

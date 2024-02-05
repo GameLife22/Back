@@ -1,20 +1,15 @@
 package fr.sqli.formation.gamelife.dto.handler;
 
-import fr.sqli.formation.gamelife.controler.ProduitRevendeurRestController;
 import fr.sqli.formation.gamelife.dto.in.ProduitDtoIn;
 import fr.sqli.formation.gamelife.dto.out.ProduitDtoOut;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public interface ProduitDtoHandler {
-    public static final Logger LOG = LoggerFactory.getLogger(ProduitRevendeurRestController.class);
-
     public static ProduitEntity toEntity(ProduitDtoIn pProduitDtoIn) {
         var result = new ProduitEntity();
         result.setNom(pProduitDtoIn.getNom());
@@ -27,6 +22,7 @@ public interface ProduitDtoHandler {
 
     public static ProduitDtoOut dtoOutFromEntity(ProduitEntity pProduitEntity) {
         var result = new ProduitDtoOut();
+        result.setId(pProduitEntity.getId());
         result.setNom(pProduitEntity.getNom());
         result.setDescription(pProduitEntity.getDescription());
         result.setCategorie(pProduitEntity.getCategorie());
@@ -36,18 +32,10 @@ public interface ProduitDtoHandler {
     }
 
     public static List<ProduitDtoOut> dtosOutFromEntity(List<ProduitEntity> pProduitEntities) {
-        return pProduitEntities.stream()
-                .map(ProduitDtoHandler::dtoOutFromEntity)
-                .collect(Collectors.toList());
-    }
-
-    public static ProduitDtoIn dtoInFromEntity(ProduitEntity pProduitEntity) {
-        var result = new ProduitDtoIn();
-        result.setNom(pProduitEntity.getNom());
-        result.setDescription(pProduitEntity.getDescription());
-        result.setCategorie(pProduitEntity.getCategorie());
-        result.setPlateforme(pProduitEntity.getPlateforme());
-        result.setEtat(pProduitEntity.getEtat());
-        return result;
+        List<ProduitDtoOut> produits = new ArrayList<>();
+        if (pProduitEntities != null && !pProduitEntities.isEmpty()) {
+            pProduitEntities.forEach(produit -> produits.add(dtoOutFromEntity(produit)));
+        }
+        return produits;
     }
 }

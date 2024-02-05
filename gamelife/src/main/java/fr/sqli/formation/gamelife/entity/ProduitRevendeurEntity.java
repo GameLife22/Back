@@ -27,7 +27,7 @@ public class ProduitRevendeurEntity implements Serializable {
 
     @Column(name = "etat", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private String etat = EtatProduitRevendeur.NOUVEAU.toString();
+    private EtatProduitRevendeur etat = EtatProduitRevendeur.NOUVEAU;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -66,12 +66,12 @@ public class ProduitRevendeurEntity implements Serializable {
         this.prix = prix;
     }
 
-    public String getEtat() {
+    public EtatProduitRevendeur getEtat() {
         return etat;
     }
 
-    public void setEtat(String etat) {
-        this.etat = etat;
+    public void setEtat(EtatProduitRevendeur pEtat) {
+        etat = pEtat;
     }
 
     public ProduitEntity getIdProduit() {

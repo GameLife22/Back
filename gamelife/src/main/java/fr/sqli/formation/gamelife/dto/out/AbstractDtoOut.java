@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sqli.formation.gamelife.dto.AbstractDto;
 
 import java.io.Serial;
+import java.util.Objects;
 
-public abstract class AbstractDtoOut extends AbstractDto {
+abstract class AbstractDtoOut extends AbstractDto {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -21,6 +22,19 @@ public abstract class AbstractDtoOut extends AbstractDto {
 
     public final void setId(Integer pId) {
         id = pId;
+    }
+
+    @Override
+    public boolean equals(Object pO) {
+        if (this == pO) return true;
+        if (pO == null || getClass() != pO.getClass()) return false;
+        AbstractDtoOut that = (AbstractDtoOut) pO;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

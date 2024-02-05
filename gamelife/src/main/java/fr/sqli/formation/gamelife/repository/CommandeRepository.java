@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface CommandeRepository extends JpaRepository<CommandeEntity,Integer> {
-    Optional<CommandeEntity> findByIdWithItemPaniers(@Param("id") int id);
+    //Optional<CommandeEntity> findByIdWithItemPaniers(@Param("id") int id);
 }
