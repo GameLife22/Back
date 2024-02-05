@@ -1,9 +1,10 @@
-DROP TABLE IF EXISTS glutilisateur CASCADE;
-DROP TABLE IF EXISTS glcommande CASCADE;
-DROP TABLE IF EXISTS glproduit CASCADE;
-DROP TABLE IF EXISTS glimage CASCADE;
-DROP TABLE IF EXISTS glitem_commande CASCADE;
-DROP TABLE IF EXISTS glproduit_revendeur CASCADE;
+DROP TABLE IF EXISTS gamelife.glutilisateur CASCADE;
+DROP TABLE IF EXISTS gamelife.glcommande CASCADE;
+DROP TABLE IF EXISTS gamelife.glproduit CASCADE;
+DROP TABLE IF EXISTS gamelife.glimage CASCADE;
+DROP TABLE IF EXISTS gamelife.glitem_commande CASCADE;
+DROP TABLE IF EXISTS gamelife.glproduit_revendeur CASCADE;
+
 
 CREATE TABLE gamelife.glutilisateur
 (
