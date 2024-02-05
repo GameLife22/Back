@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.dto.in;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sqli.formation.gamelife.entity.Categorie;
 import fr.sqli.formation.gamelife.entity.Plateforme;
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ import java.io.Serial;
 public class ProduitDtoIn extends AbstractDtoIn {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(CommandeDtoIn.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProduitDtoIn.class);
 
     private String nom;
     private String description;
@@ -59,8 +60,32 @@ public class ProduitDtoIn extends AbstractDtoIn {
     }
 
     @Override
+    @JsonIgnore
     public void validate() {
+        if(this.getNom() == null) {
+            ProduitDtoIn.LOG.error("Validate(nom est null)");
+            throw new IllegalArgumentException("Le nom est null ou vide !");
+        }
 
+        if(this.getDescription() == null) {
+            ProduitDtoIn.LOG.error("Validate(description est null)");
+            throw new IllegalArgumentException("La description est null ou vide !");
+        }
+
+        if(this.getCategorie() == null) {
+            ProduitDtoIn.LOG.error("Validate(catégorie est null)");
+            throw new IllegalArgumentException("La catégorie est null ou vide !");
+        }
+
+        if(this.getPlateforme() == null) {
+            ProduitDtoIn.LOG.error("Validate(plateforme est null)");
+            throw new IllegalArgumentException("La plateforme est null ou vide !");
+        }
+
+        if(this.getEtat() == null) { //TODO: check
+            ProduitDtoIn.LOG.error("Validate(etat est null)");
+            throw new IllegalArgumentException("L'état est null ou vide !");
+        }
     }
 
     @Override

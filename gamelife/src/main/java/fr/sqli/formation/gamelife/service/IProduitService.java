@@ -10,5 +10,6 @@ public interface IProduitService {
     public List<ProduitDtoOut> getProduits();
     public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn);
     public ProduitDtoOut updateProduit(Integer pIdProduit, ProduitDtoIn pProduitDtoIn);
+    public ProduitDtoOut disableProduit(Integer pIdProduit);
     public Boolean deleteProduit(Integer pIdProduit);
 }

@@ -39,6 +39,11 @@ public class ProduitServiceImpl implements IProduitService {
     }
 
     @Override
+    public ProduitDtoOut disableProduit(Integer pIdProduit) {
+        return null;
+    }
+
+    @Override
     public Boolean deleteProduit(Integer pIdProduit) {
         return null;
     }

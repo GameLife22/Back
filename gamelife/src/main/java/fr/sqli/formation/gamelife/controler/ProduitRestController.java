@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// TODO: add logs
 @RestController
 @RequestMapping("/produit")
 public class ProduitRestController {
@@ -49,7 +50,13 @@ public class ProduitRestController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/delete/{idProduit}")
+    @PostMapping("/disable/{idProduit}")
+    public ResponseEntity<ProduitDtoOut> disableProduit(@PathVariable Integer pIdProduit) {
+        var result = this.service.disableProduit(pIdProduit);
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/delete/{idProduit}")
     public ResponseEntity<Boolean> deleteProduit(@PathVariable Integer pIdProduit) {
         var result = this.service.deleteProduit(pIdProduit);
         return ResponseEntity.ok(result);
