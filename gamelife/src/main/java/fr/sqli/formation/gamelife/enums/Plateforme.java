@@ -1,7 +1,5 @@
-package fr.sqli.formation.gamelife.entity;
+package fr.sqli.formation.gamelife.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import fr.sqli.formation.gamelife.ex.ParameterException;
 
 public enum Plateforme {
@@ -58,14 +56,26 @@ public enum Plateforme {
     NEOGEO("neogeo"),
     WEB("web");
 
-    private final String nomPlateforme;
+    private final String libelle;
 
-    Plateforme(String pNomPlateforme) {
-        this.nomPlateforme = pNomPlateforme;
+    Plateforme(String pLibelle) {
+        this.libelle = pLibelle;
     }
 
-    @JsonValue // TODO: check
-    public String getNomPlateforme() {
-        return nomPlateforme;
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public static String fromString(String pLibelle) throws ParameterException {
+        if (Character.isDigit(pLibelle.charAt(0))) {
+            pLibelle = "_" + pLibelle;
+        }
+
+        for (Plateforme plateforme : Plateforme.values()) {
+            if (plateforme.getLibelle().equalsIgnoreCase(pLibelle)) {
+                return pLibelle;
+            }
+        }
+        throw new ParameterException("Plateforme invalide : " + pLibelle);
     }
 }

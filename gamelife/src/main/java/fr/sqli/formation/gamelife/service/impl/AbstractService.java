@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-abstract class AbstractService<T> {
-    public T findEntity(Integer pEntityPrimaryKey) throws EntityNotFoundException, ParameterException {
+abstract class AbstractService<E> {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractService.class);
+
+    public E findEntity(Integer pEntityPrimaryKey) throws EntityNotFoundException, ParameterException {
         ValidationUtils.isNotNull(pEntityPrimaryKey, "findEntity - l'id est null");
 
         var optionalResult = this.getTargetedDao().findById(pEntityPrimaryKey);
@@ -24,16 +26,11 @@ abstract class AbstractService<T> {
         return optionalResult.get();
     }
 
-    public List<T> findAllEntities() {
-        final Logger LOG = LoggerFactory.getLogger(AbstractService.class);
-
+    public List<E> findAllEntities() {
         var iterable = this.getTargetedDao().findAll();
-        List<T> result = new ArrayList<>(iterable);
-        if(result.size() == 0) {
-            LOG.error("findAllEntities - la base de données est vide");
-        }
+        List<E> result = new ArrayList<>(iterable);
         return result;
     }
 
-    protected abstract JpaRepository<T, Integer> getTargetedDao();
+    protected abstract JpaRepository<E, Integer> getTargetedDao();
 }

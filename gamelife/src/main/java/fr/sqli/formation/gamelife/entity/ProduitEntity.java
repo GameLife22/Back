@@ -5,7 +5,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Table(name = "glproduit", schema = "gamelife")
@@ -34,6 +34,9 @@ public class ProduitEntity implements Serializable {
     @Column(name = "etat", nullable = false)
     private Boolean etat = true;
 
+    @OneToMany(mappedBy = "produit")
+    private List<ImageEntity> images;
+
     public ProduitEntity() {
     }
 
@@ -41,24 +44,24 @@ public class ProduitEntity implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer pId) {
+        id = pId;
     }
 
     public String getNom() {
         return nom;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setNom(String pNom) {
+        nom = pNom;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String pDescription) {
+        description = pDescription;
     }
 
     public String getCategorie() {
@@ -81,8 +84,16 @@ public class ProduitEntity implements Serializable {
         return etat;
     }
 
-    public void setEtat(Boolean etat) {
-        this.etat = etat;
+    public void setEtat(Boolean pEtat) {
+        etat = pEtat;
+    }
+
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> pImages) {
+        images = pImages;
     }
 
     @Override
@@ -94,6 +105,7 @@ public class ProduitEntity implements Serializable {
         sb.append(", categorie='").append(categorie).append('\'');
         sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
+        //sb.append(", images=").append(images);
         sb.append('}');
         return sb.toString();
     }

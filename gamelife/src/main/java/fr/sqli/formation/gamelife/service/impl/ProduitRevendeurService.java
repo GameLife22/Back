@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProduitRevendeurServiceImpl implements IProduitRevendeurService {
+public class ProduitRevendeurService implements IProduitRevendeurService {
     private final IProduitRevendeurRepository dao;
 
     @Autowired
-    public ProduitRevendeurServiceImpl(IProduitRevendeurRepository pDao) {
+    public ProduitRevendeurService(IProduitRevendeurRepository pDao) {
         dao = pDao;
     }
 

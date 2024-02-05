@@ -1,29 +1,22 @@
 package fr.sqli.formation.gamelife.dto.in;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.sqli.formation.gamelife.repository.IProduitDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.sqli.formation.gamelife.entity.ImageEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.Serial;
+import java.util.List;
 
 @Component
 public class ProduitDtoIn extends AbstractDtoIn {
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // TODO: check
 
     private String nom;
-
     private String description;
-
     private String categorie;
-
     private String plateforme;
-
     private Boolean etat;
-
-    private IProduitDao produitDao;
+    private List<ImageEntity> images;
 
     public ProduitDtoIn() {
     }
@@ -68,15 +61,23 @@ public class ProduitDtoIn extends AbstractDtoIn {
         etat = pEtat;
     }
 
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> pImages) {
+        images = pImages;
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ProduitDtoIn{");
-        sb.append("id='").append(super.getId()).append('\'');
-        sb.append(", nom='").append(nom).append('\'');
+        sb.append("nom='").append(nom).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", categorie='").append(categorie).append('\'');
         sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
+        sb.append(", images=").append(images);
         sb.append('}');
         return sb.toString();
     }

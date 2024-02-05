@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,7 +24,8 @@ public class ImageEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_produit", nullable = false)
-    private ProduitEntity idProduit;
+    @JsonIgnore
+    private ProduitEntity produit;
 
     @Column(name = "image", nullable = false)
     private String image;
@@ -38,39 +40,39 @@ public class ImageEntity implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer pId) {
+        id = pId;
     }
 
-    public ProduitEntity getIdProduit() {
-        return idProduit;
+    public ProduitEntity getProduit() {
+        return produit;
     }
 
-    public void setIdProduit(ProduitEntity idProduit) {
-        this.idProduit = idProduit;
+    public void setProduit(ProduitEntity pProduit) {
+        produit = pProduit;
     }
 
     public String getImage() {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(String pImage) {
+        image = pImage;
     }
 
     public String getTitre() {
         return titre;
     }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
+    public void setTitre(String pTitre) {
+        titre = pTitre;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ImageEntity{");
         sb.append("id=").append(id);
-        sb.append(", idProduit=").append(idProduit);
+        sb.append(", produit=").append(produit);
         sb.append(", image='").append(image).append('\'');
         sb.append(", titre='").append(titre).append('\'');
         sb.append('}');

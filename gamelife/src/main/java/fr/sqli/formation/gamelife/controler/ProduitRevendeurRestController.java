@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+// TODO : rename file
 @RestController
 @RequestMapping("/profil/{idUtilisateur}/product")
 public class ProduitRevendeurRestController {

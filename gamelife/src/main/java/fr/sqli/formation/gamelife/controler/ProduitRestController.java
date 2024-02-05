@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/produit")
 public class ProduitRestController {
-
     private static final Logger LOG = LoggerFactory.getLogger(ProduitRestController.class);
 
     private final IProduitService service;
@@ -49,7 +48,7 @@ public class ProduitRestController {
     }
 
     @PatchMapping("/update/{idProduit}")
-    public ResponseEntity<ProduitDtoOut> updateProduit(@PathVariable Integer pIdProduit, @RequestBody ProduitDtoIn pProduitDtoIn) throws ParameterException, EntityNotFoundException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public ResponseEntity<ProduitDtoOut> updateProduit(@PathVariable Integer pIdProduit, @RequestBody ProduitDtoIn pProduitDtoIn) throws ParameterException, EntityNotFoundException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, EntityExistException {
         var result = this.service.updateProduit(pProduitDtoIn);
         return ResponseEntity.ok(result);
     }

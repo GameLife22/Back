@@ -13,6 +13,6 @@ public interface IProduitService {
     public ProduitDtoOut getProduit(Integer pIdProduit) throws ParameterException, EntityNotFoundException;
     public List<ProduitDtoOut> getProduits();
     public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn) throws ParameterException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, EntityExistException;
-    public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn) throws ParameterException, EntityNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException;
+    public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn) throws ParameterException, EntityNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, EntityExistException;
     public Boolean deleteProduit(Integer pIdProduit) throws ParameterException, EntityNotFoundException; //TODO: add disableProduit
 }
