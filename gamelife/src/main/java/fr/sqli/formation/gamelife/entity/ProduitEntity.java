@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,10 +13,10 @@ import java.util.Objects;
 public class ProduitEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id_produit", nullable = false)
     private Integer id;
 
     @Column(name = "nom", nullable = false)
@@ -33,6 +34,9 @@ public class ProduitEntity implements Serializable {
 
     @Column(name = "etat", nullable = false)
     private Boolean etat;
+
+    @OneToMany(mappedBy = "produit")
+    private List<ImageEntity> images;
 
     public ProduitEntity() {
     }
@@ -85,6 +89,14 @@ public class ProduitEntity implements Serializable {
         this.etat = etat;
     }
 
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,6 +118,7 @@ public class ProduitEntity implements Serializable {
         sb.append(", description='").append(description).append('\'');
         sb.append(", categorie='").append(categorie).append('\'');
         sb.append(", plateforme='").append(plateforme).append('\'');
+        sb.append(", images='").append(images.size()).append('\'');
         sb.append(", etat=").append(etat);
         sb.append('}');
         return sb.toString();

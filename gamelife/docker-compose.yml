@@ -19,9 +19,7 @@ services:
         source: ./db/gamelifev0.4.0.sql
         target: /docker-entrypoint-initdb.d/insert.sql
         read_only: true
-#      - type: volume
-#        source: vol_postgresql_db
-#        target: /var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
 
   back:
@@ -49,3 +47,6 @@ services:
       - 4200:80
     depends_on:
       - back
+
+volumes:
+  postgres-data:

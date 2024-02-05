@@ -26,6 +26,7 @@ public class ProduitService {
 	public List<ProduitEntity> getAllProduit() {
         List<ProduitEntity> produit = new ArrayList<>();
         this.produitRepository.findAll().forEach(p -> produit.add(p));
+		LOG.info("produit {}",produit);
         return produit;
     }
 
