@@ -30,7 +30,7 @@ CREATE TABLE gamelife.glcommande
 (
     id                    SERIAL PRIMARY KEY,
     id_utilisateur        INT          NOT NULL,
-    etat                  VARCHAR(80)  NOT NULL,
+    etat                  INT  NOT NULL,
     num_rue_livraison     INT          NOT NULL,
     rue_livraison         VARCHAR(255) NOT NULL,
     ville_livraison       VARCHAR(80)  NOT NULL,
@@ -79,6 +79,17 @@ CREATE TABLE gamelife.glitem_commande
     FOREIGN KEY (id_commande) REFERENCES gamelife.glcommande (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_produit_revendeur) REFERENCES gamelife.glproduit_revendeur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Procedure stockée
+-- -----------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE archiving_canceled_orders()
+    LANGUAGE SQL
+    AS $$
+        SET TIMEZONE='Europe/Paris';
+        UPDATE gamelife.glcommande SET etat = 7 WHERE date < now() - INTERVAL '6 months' AND etat = 2;
+    $$;
 
 -- -----------------------------------------------------
 -- Insertion dans la table glutilisateur
