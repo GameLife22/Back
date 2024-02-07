@@ -1,79 +1,93 @@
 package fr.sqli.formation.gamelife.entity;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Objects;
 
-
-/**
- * The persistent class for the image database table.
- * 
- */
 @Entity
-@Table(name="image")
+@Table(name = "glimage", schema = "gamelife")
 public class ImageEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-	@Lob
-	private String description;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_produit", nullable = false)
+    @JsonIgnore
+    private ProduitEntity produit;
 
-	@Lob
-	private String image;
+    @Column(name = "image", nullable = false)
+    private String image;
 
-	private String titre;
+    @Column(name = "titre", nullable = false)
+    private String titre;
 
-	//bi-directional many-to-one association to Produit
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="id_produit")
-	@JsonIgnore
-	private ProduitEntity produit;
+    public ImageEntity() {
+    }
 
-	public ImageEntity() {
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public ProduitEntity getProduit() {
+        return produit;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public void setProduit(ProduitEntity idProduit) {
+        this.produit = idProduit;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public String getImage() {
-		return this.image;
-	}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public String getTitre() {
+        return titre;
+    }
 
-	public String getTitre() {
-		return this.titre;
-	}
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
 
-	public void setTitre(String titre) {
-		this.titre = titre;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImageEntity that = (ImageEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(produit, that.produit) && Objects.equals(image, that.image) && Objects.equals(titre, that.titre);
+    }
 
-	public ProduitEntity getProduit() {
-		return this.produit;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, produit, image, titre);
+    }
 
-	public void setProduit(ProduitEntity produit) {
-		this.produit = produit;
-	}
-
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ImageEntity{");
+        sb.append("id=").append(id);
+        sb.append(", idProduit=").append(produit.getId());
+        sb.append(", image='").append(image).append('\'');
+        sb.append(", titre='").append(titre).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

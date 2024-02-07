@@ -1,19 +1,16 @@
 package fr.sqli.formation.gamelife.service;
 
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
-import fr.sqli.formation.gamelife.ex.ProduitException;
-import fr.sqli.formation.gamelife.repository.ProduitRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class ProduitServiceTest {
 
     @Autowired
@@ -23,6 +20,7 @@ public class ProduitServiceTest {
     @Test
     void testGetAllProducts01() {
         var games = this.service.getAllProduit();
+
         Assertions.assertNotNull(games);
     }
 
@@ -30,6 +28,7 @@ public class ProduitServiceTest {
     void testGetProductsByName01() throws Exception {
         String game = "call";
         var aGame = service.getProductsByName(game);
+
         Assertions.assertNotNull(aGame);
         Assertions.assertEquals(1, aGame.size());
         for (ProduitEntity g : aGame) {
@@ -41,6 +40,7 @@ public class ProduitServiceTest {
     void testGetProductsByName02() throws Exception {
         String keyword = "Call";
         var game = service.getProductsByName(keyword);
+
         Assertions.assertNotNull(game);
         Assertions.assertEquals(1, game.size());
         for (ProduitEntity g : game) {
@@ -51,6 +51,7 @@ public class ProduitServiceTest {
     @Test
     void testGetProductsByName03() {
         String keyword = "";
+
         Assertions.assertThrows(IllegalArgumentException.class, () -> service.getProductsByName(keyword));
     }
 
@@ -58,6 +59,7 @@ public class ProduitServiceTest {
     void testGetProductsByName04() {
         String keyword = "%ds";
         var games = service.getProductsByName(keyword);
+
         Assertions.assertNotNull(games);
         Assertions.assertEquals(new ArrayList<>(), games);
     }
@@ -66,6 +68,7 @@ public class ProduitServiceTest {
     void testGetProductsById01() {
         String id = "1";
         var game = this.service.getProductById(id);
+
         Assertions.assertNotNull(game);
         Assertions.assertEquals(1, game.getId());
     }
@@ -73,6 +76,7 @@ public class ProduitServiceTest {
     @Test
     void testGetProductsById02() {
         String id = "";
+
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.getProductById(id));
     }
 
@@ -81,7 +85,8 @@ public class ProduitServiceTest {
     void testGetProductsById03() {
         String id = "1000000000";
         var game = this.service.getProductById(id);
-        Assertions.assertTrue(game.getId() == 0);
+
+        Assertions.assertNull(game.getId());
     }
 
 }

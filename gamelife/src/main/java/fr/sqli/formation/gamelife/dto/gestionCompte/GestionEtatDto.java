@@ -2,18 +2,18 @@ package fr.sqli.formation.gamelife.dto.gestionCompte;
 
 public class GestionEtatDto {
 
+    private Integer id;
+    private Boolean new_etat;
+
     public GestionEtatDto() {
     }
 
-    public GestionEtatDto(Integer id, Integer new_etat) {
+    public GestionEtatDto(Integer id, Boolean new_etat) {
         this.new_etat = new_etat;
         this.id = id;
     }
 
-    private Integer new_etat;
-    private Integer id;
-
-    public Integer getNew_etat() {
+    public Boolean getNew_etat() {
         return new_etat;
     }
 

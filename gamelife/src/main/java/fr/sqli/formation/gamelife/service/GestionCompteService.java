@@ -40,7 +40,7 @@ public class GestionCompteService {
                 }
             }
             if (dto.getNum_rue() != null && dto.getNum_rue() != 0) {
-                u.setNum_rue(dto.getNum_rue());
+                u.setNumRue(dto.getNum_rue());
             }
             if (dto.getRue() != null && !dto.getRue().isEmpty()) {
                 u.setRue(dto.getRue());
@@ -52,7 +52,7 @@ public class GestionCompteService {
                 u.setCodePostal(dto.getCodePostal());
             }
             if (dto.getNumSiren() != null && !dto.getNumSiren().isEmpty()) {
-                u.setNumSiret(dto.getNumSiren());
+                u.setNumSiren(dto.getNumSiren());
             }
             return uDao.save(u);
         }else {
@@ -100,7 +100,7 @@ public class GestionCompteService {
             throw new UtilisateurExistantException("utilisateur inexistant");
         }
         UtilisateurEntity u = uDao.findById(id).get();
-        if (u.getNumSiret() != null && !u.getNumSiret().isEmpty()) {
+        if (u.getNumSiren() != null && !u.getNumSiren().isEmpty()) {
             return true;
         }
         return false;

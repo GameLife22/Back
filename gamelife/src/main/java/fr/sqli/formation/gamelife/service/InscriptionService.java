@@ -38,12 +38,12 @@ public class InscriptionService {
                     u.setRole("ROLE_REVENDEUR");
                 }
                 u.setMdp(encoder.encode(u.getMdp()));
-                u.setEtatCompte(0);
+                u.setEtatCompte(false);
                 u.setResetPasswordToken(token);
                 return uDao.save(u);
             }else {
-                if(newUser.get().getEtatCompte() == 0){
-                    newUser.get().setEtatCompte(0);
+                if(!newUser.get().getEtatCompte()){
+                    newUser.get().setEtatCompte(false);
                     newUser.get().setNom(dto.getNom());
                     newUser.get().setPrenom(dto.getPrenom());
                     newUser.get().setMdp(encoder.encode(dto.getMdp()));
@@ -51,7 +51,7 @@ public class InscriptionService {
                     newUser.get().setVille(dto.getVille());
                     newUser.get().setCodePostal(dto.getCode_postal());
                     newUser.get().setRue(dto.getRue());
-                    newUser.get().setNum_rue(dto.getNum_rue());
+                    newUser.get().setNumRue(dto.getNum_rue());
 
                     if( dto.getNum_siret() == null ){
                         newUser.get().setRole("ROLE_ACHETEUR");
@@ -59,8 +59,8 @@ public class InscriptionService {
                         newUser.get().setRole("ROLE_REVENDEUR");
                     }
 
-                    newUser.get().setNumSiret(dto.getNum_siret());
-                     return uDao.save(newUser.get());
+                    newUser.get().setNumSiren(dto.getNum_siret());
+                    return uDao.save(newUser.get());
                 }else{
                     throw new UtilisateurExistantException("Utilisateur deja enregistre");
                 }
@@ -90,7 +90,7 @@ public class InscriptionService {
         var result = this.uDao.findByEmail(email);
         if (result.isPresent()) {
             var user = result.get();
-            if (user.getEtatCompte() == 0) {
+            if (!user.getEtatCompte()) {
                 LOG.info("validateAccount - found user with id {}", user.getId());
 
 
@@ -109,7 +109,7 @@ public class InscriptionService {
     }
     public void activateAccount(String token){
         UtilisateurEntity u = uDao.findByResetPasswordToken(token);
-        u.setEtatCompte(1);
+        u.setEtatCompte(true);
         u.setResetPasswordToken(null);
         uDao.save(u);
     }

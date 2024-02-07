@@ -1,7 +1,6 @@
 package fr.sqli.formation.gamelife.dto.inscription;
 
 
-import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
 public class InscriptionDtoHandler {
@@ -14,8 +13,8 @@ public class InscriptionDtoHandler {
 		u.setEmail(entity.getEmail());
 		u.setVille(entity.getVille());
 		u.setRue(entity.getRue());
-		u.setNum_rue(entity.getNum_rue());
-		u.setNum_siret(entity.getNumSiret());
+		u.setNum_rue(entity.getNumRue());
+		u.setNum_siret(entity.getNumSiren());
 		u.setCode_postal(entity.getCodePostal());
 		return u;
 	}
@@ -29,8 +28,8 @@ public class InscriptionDtoHandler {
 		u.setEmail(dto.getEmail());
 		u.setVille(dto.getVille());
 		u.setRue(dto.getRue());
-		u.setNum_rue(dto.getNum_rue());
-		u.setNumSiret(dto.getNum_siret());
+		u.setNumRue(dto.getNum_rue());
+		u.setNumSiren(dto.getNum_siret());
 		u.setCodePostal(dto.getCode_postal());
 		return u;
 	}

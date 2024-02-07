@@ -1,173 +1,126 @@
 package fr.sqli.formation.gamelife.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Type;
 
-import java.io.Serializable;
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-
-/**
- * The persistent class for the produit database table.
- * 
- */
 @Entity
-@Table(name="produit")
+@Table(name = "glproduit", schema = "gamelife")
 public class ProduitEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_produit", nullable = false)
+    private Integer id;
 
-	private String categorie;
+    @Column(name = "nom", nullable = false)
+    private String nom;
 
-	@Lob
-	private String detail;
+    @Column(name = "description", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
+    private String description;
 
-	private String nom;
+    @Column(name = "categorie", nullable = false, length = 50)
+    private String categorie;
 
-	private String plateforme;
+    @Column(name = "plateforme", nullable = false, length = 50)
+    private String plateforme;
 
-	private BigDecimal prix;
+    @Column(name = "etat", nullable = false)
+    private Boolean etat;
 
-	private int stock;
+    @OneToMany(mappedBy = "produit")
+    private List<ImageEntity> images;
 
-	@Lob
-	@Column(name="texte_descriptif")
-	private String texteDescriptif;
+    public ProduitEntity() {
+    }
 
-	//bi-directional many-to-one association to Image
-	@OneToMany(mappedBy="produit")
-	private List<ImageEntity> images;
+    public Integer getId() {
+        return id;
+    }
 
-	//bi-directional many-to-one association to ItemPanier
-	@OneToMany(mappedBy="produit")
-	private List<ItemPanierEntity> ItemPaniers;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	//bi-directional many-to-one association to Utilisateur
-	@ManyToOne
-	@JoinColumn(name="id_utilisateur")
-	private UtilisateurEntity utilisateur;
+    public String getNom() {
+        return nom;
+    }
 
-	public ProduitEntity() {
-	}
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getCategorie() {
-		return this.categorie;
-	}
+    public String getCategorie() {
+        return categorie;
+    }
 
-	public void setCategorie(String categorie) {
-		this.categorie = categorie;
-	}
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
+    }
 
-	public String getDetail() {
-		return this.detail;
-	}
+    public String getPlateforme() {
+        return plateforme;
+    }
 
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
+    public void setPlateforme(String plateforme) {
+        this.plateforme = plateforme;
+    }
 
-	public String getNom() {
-		return this.nom;
-	}
+    public Boolean getEtat() {
+        return etat;
+    }
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    public void setEtat(Boolean etat) {
+        this.etat = etat;
+    }
 
-	public String getPlateforme() {
-		return this.plateforme;
-	}
+    public List<ImageEntity> getImages() {
+        return images;
+    }
 
-	public void setPlateforme(String plateforme) {
-		this.plateforme = plateforme;
-	}
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+    }
 
-	public BigDecimal getPrix() {
-		return this.prix;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProduitEntity that = (ProduitEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(nom, that.nom) && Objects.equals(description, that.description) && Objects.equals(categorie, that.categorie) && Objects.equals(plateforme, that.plateforme) && Objects.equals(etat, that.etat);
+    }
 
-	public void setPrix(BigDecimal prix) {
-		this.prix = prix;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nom, description, categorie, plateforme, etat);
+    }
 
-	public int getStock() {
-		return this.stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
-
-	public String getTexteDescriptif() {
-		return this.texteDescriptif;
-	}
-
-	public void setTexteDescriptif(String texteDescriptif) {
-		this.texteDescriptif = texteDescriptif;
-	}
-
-	public List<ImageEntity> getImages() {
-		return this.images;
-	}
-
-	public void setImages(List<ImageEntity> images) {
-		this.images = images;
-	}
-
-	public ImageEntity addImage(ImageEntity image) {
-		getImages().add(image);
-		image.setProduit(this);
-
-		return image;
-	}
-
-	public ImageEntity removeImage(ImageEntity image) {
-		getImages().remove(image);
-		image.setProduit(null);
-
-		return image;
-	}
-
-	public List<ItemPanierEntity> getItemPaniers() {
-		return this.ItemPaniers;
-	}
-
-	public void setItemPaniers(List<ItemPanierEntity> ItemPaniers) {
-		this.ItemPaniers = ItemPaniers;
-	}
-
-	public ItemPanierEntity addItemPanier(ItemPanierEntity ItemPanier) {
-		getItemPaniers().add(ItemPanier);
-		ItemPanier.setProduit(this);
-
-		return ItemPanier;
-	}
-
-	public ItemPanierEntity removeItemPanier(ItemPanierEntity ItemPanier) {
-		getItemPaniers().remove(ItemPanier);
-		ItemPanier.setProduit(null);
-
-		return ItemPanier;
-	}
-
-	public UtilisateurEntity getUtilisateur() {
-		return this.utilisateur;
-	}
-
-	public void setUtilisateur(UtilisateurEntity utilisateur) {
-		this.utilisateur = utilisateur;
-	}
-
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ProduitEntity{");
+        sb.append("id=").append(id);
+        sb.append(", nom='").append(nom).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", categorie='").append(categorie).append('\'');
+        sb.append(", plateforme='").append(plateforme).append('\'');
+        sb.append(", images='").append(images.size()).append('\'');
+        sb.append(", etat=").append(etat);
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -4,7 +4,7 @@ public class LoginDtoOut {
     private Integer id;
     private String email;
 
-    private Integer etat;
+    private Boolean etat;
 
     private String nom;
 
@@ -23,7 +23,7 @@ public class LoginDtoOut {
     public LoginDtoOut() {
     }
 
-    public LoginDtoOut(Integer id,String email, Integer etat, String nom, int num_rue, String num_siren, String prenom, String rue, String ville, int code_postal) {
+    public LoginDtoOut(Integer id,String email, Boolean etat, String nom, int num_rue, String num_siren, String prenom, String rue, String ville, int code_postal) {
         this.id = id;
         this.email = email;
         this.etat = etat;
@@ -52,11 +52,11 @@ public class LoginDtoOut {
         this.email = email;
     }
 
-    public Integer getEtat() {
+    public Boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Integer etat) {
+    public void setEtat(Boolean etat) {
         this.etat = etat;
     }
 

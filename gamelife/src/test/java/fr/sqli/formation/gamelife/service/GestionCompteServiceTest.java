@@ -10,28 +10,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Rollback
 @Transactional
+@ActiveProfiles("test")
 class GestionCompteServiceTest {
     @Autowired
     GestionCompteService service;
     @Autowired
     BCryptPasswordEncoder encoder;
 
+    // La différence entre un test unitaire et un test d'intégration est que le test unitaire est autonome, il ne fait appel à aucune BDD
+    // Le tes d'intégration lui utilise l'environement complet pour s'effectuer.
+    // Dans notre cas nous avons trouvé plus pertinant d'utiliser des test qui s'effectue dans un environnement similaire à la prod
 
     // Methode modificationCompte
     @Test
     void testModificationCompte01() throws Exception {
-        GestionCompteDto dto = new GestionCompteDto(4, "dubois","henry","acheteur002@outlook.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
+        GestionCompteDto dto = new GestionCompteDto(4, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
         UtilisateurEntity test = service.modificationCompte(dto);
         Assertions.assertEquals("Ballancourt",test.getVille());
     }
     @Test
     void testModificationCompte02() throws Exception {
-        GestionCompteDto dto = new GestionCompteDto(24, "dubois","henry","acheteur002@outlook.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
+        GestionCompteDto dto = new GestionCompteDto(24, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationCompte(dto));
 
     }
@@ -61,13 +66,13 @@ class GestionCompteServiceTest {
 
 @Test
     void testModificationEtat01() throws Exception {
-    GestionEtatDto dto = new GestionEtatDto(1,0);
+    GestionEtatDto dto = new GestionEtatDto(1,true);
     UtilisateurEntity test = service.modificationEtat(dto);
-    Assertions.assertEquals(0,test.getEtatCompte());
+    Assertions.assertTrue(test.getEtatCompte().booleanValue());
     }
     @Test
     void testModificationEtat02() throws Exception {
-        GestionEtatDto dto = new GestionEtatDto(45,0);
+        GestionEtatDto dto = new GestionEtatDto(45,true);
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationEtat(dto));
     }
 

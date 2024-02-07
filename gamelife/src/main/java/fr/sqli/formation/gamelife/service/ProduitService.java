@@ -3,13 +3,13 @@ package fr.sqli.formation.gamelife.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import fr.sqli.formation.gamelife.repository.ProduitRepository;
 
 /**
@@ -26,6 +26,7 @@ public class ProduitService {
 	public List<ProduitEntity> getAllProduit() {
         List<ProduitEntity> produit = new ArrayList<>();
         this.produitRepository.findAll().forEach(p -> produit.add(p));
+		LOG.info("produit {}",produit);
         return produit;
     }
 
@@ -62,7 +63,7 @@ public class ProduitService {
 	 */
 	public List<ProduitEntity> getProductsByName(String name) {
 		if (name != null && !name.trim().isEmpty()) {
-			var games= produitRepository.findByNomIsContaining(name);
+			var games = produitRepository.findByNomIsContainingIgnoreCase(name);
 
 			if (games.get().size() > 0) {
 

@@ -4,12 +4,10 @@ import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
 import fr.sqli.formation.gamelife.dto.SiretDto;
 import fr.sqli.formation.gamelife.dto.mdpOublie.EmailDtoOut;
 import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.service.EmailService;
 import fr.sqli.formation.gamelife.service.InscriptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -8,10 +8,10 @@ import java.util.Collection;
 
 public class SecurityUser implements UserDetails {
 
-    private final UtilisateurEntity user;
+    private final fr.sqli.formation.gamelife.entity.UtilisateurEntity user;
 
 
-    public SecurityUser(UtilisateurEntity user) {
+    public SecurityUser(fr.sqli.formation.gamelife.entity.UtilisateurEntity user) {
         this.user = user;
     }
 
