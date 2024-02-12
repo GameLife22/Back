@@ -1,13 +1,13 @@
 CREATE SCHEMA IF NOT EXISTS gamelife;
 
-DROP TABLE IF EXISTS gamelife.glutilisateur CASCADE;
-DROP TABLE IF EXISTS gamelife.glimage CASCADE;
-DROP TABLE IF EXISTS gamelife.glproduit_revendeur CASCADE;
-DROP TABLE IF EXISTS gamelife.glitem_commande CASCADE;
-DROP TABLE IF EXISTS gamelife.glproduit CASCADE;
-DROP TABLE IF EXISTS gamelife.glcommande CASCADE;
+DROP TABLE IF EXISTS glutilisateur CASCADE;
+DROP TABLE IF EXISTS glcommande CASCADE;
+DROP TABLE IF EXISTS glproduit CASCADE;
+DROP TABLE IF EXISTS glimage CASCADE;
+DROP TABLE IF EXISTS glitem_commande CASCADE;
+DROP TABLE IF EXISTS glproduit_revendeur CASCADE;
 
-CREATE TABLE glutilisateur
+CREATE TABLE gamelife.glutilisateur
 (
     id                   SERIAL PRIMARY KEY,
     nom                  VARCHAR(50)          NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE glutilisateur
     num_rue              INT                  NOT NULL,
     rue                  VARCHAR(255)         NOT NULL,
     ville                VARCHAR(80)          NOT NULL,
-    code_postal          INT,
+    code_postal          INT                  NOT NULL,
     role                 VARCHAR(50)          NOT NULL,
     num_siren            CHAR(9) NULL DEFAULT NULL UNIQUE,
     etat_compte          BOOLEAN DEFAULT TRUE NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE gamelife.glcommande
     num_rue_livraison     INT          NOT NULL,
     rue_livraison         VARCHAR(255) NOT NULL,
     ville_livraison       VARCHAR(80)  NOT NULL,
-    code_postal_livraison INT,
+    code_postal_livraison INT          NOT NULL,
     date                  DATE         NOT NULL,
     FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -47,13 +47,13 @@ CREATE TABLE gamelife.glproduit
     etat        BOOLEAN      DEFAULT TRUE
 );
 
-CREATE TABLE glimage
+CREATE TABLE gamelife.glimage
 (
     id         SERIAL PRIMARY KEY,
     id_produit INT          NOT NULL,
     image      TEXT         NOT NULL,
-    titre      TEXT NOT NULL,
-    FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (id_produit) ON DELETE CASCADE ON UPDATE CASCADE
+    titre      VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE gamelife.glproduit_revendeur
@@ -61,16 +61,15 @@ CREATE TABLE gamelife.glproduit_revendeur
     id             SERIAL PRIMARY KEY,
     stock          INT            NOT NULL,
     prix           DECIMAL(10, 0) NOT NULL,
-    etat           VARCHAR(50)    NOT NULL,
+    etat           VARCHAR(25)    NOT NULL,
     id_produit     INT            NOT NULL,
     id_utilisateur INT            NOT NULL,
     FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE glitem_commande
+CREATE TABLE gamelife.glitem_commande
 (
-    id SERIAL PRIMARY KEY ,
     id_commande          INT NOT NULL,
     id_produit_revendeur INT NOT NULL,
     quantite             INT NOT NULL,

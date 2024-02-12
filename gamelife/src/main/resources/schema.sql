@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS gamelife;
+
 DROP TABLE IF EXISTS glutilisateur CASCADE;
 DROP TABLE IF EXISTS glcommande CASCADE;
 DROP TABLE IF EXISTS glproduit CASCADE;
@@ -15,7 +17,7 @@ CREATE TABLE gamelife.glutilisateur
     num_rue              INT                  NOT NULL,
     rue                  VARCHAR(255)         NOT NULL,
     ville                VARCHAR(80)          NOT NULL,
-    code_postal          INT,
+    code_postal          INT                  NOT NULL,
     role                 VARCHAR(50)          NOT NULL,
     num_siren            CHAR(9) NULL DEFAULT NULL UNIQUE,
     etat_compte          BOOLEAN DEFAULT TRUE NOT NULL,
@@ -30,7 +32,7 @@ CREATE TABLE gamelife.glcommande
     num_rue_livraison     INT          NOT NULL,
     rue_livraison         VARCHAR(255) NOT NULL,
     ville_livraison       VARCHAR(80)  NOT NULL,
-    code_postal_livraison INT,
+    code_postal_livraison INT          NOT NULL,
     date                  DATE         NOT NULL,
     FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
