@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.entity;
 
+import fr.sqli.formation.gamelife.enums.EtatCommande;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,10 +28,11 @@ public class CommandeEntity implements Serializable {
     private UtilisateurEntity idUtilisateur;
 
     @OneToMany(mappedBy = "idCommande", cascade = CascadeType.ALL)
-    private List<ItemCommandeEntity> items;
+    private List<ItemCommandeEntity> itemsCommande;
 
     @Column(name = "etat", nullable = false, length = 80)
-    private String etat;
+    @Enumerated(EnumType.STRING)
+    private EtatCommande etat;
 
     @Column(name = "num_rue_livraison", nullable = false)
     private Integer numRueLivraison;
@@ -50,11 +52,13 @@ public class CommandeEntity implements Serializable {
     public CommandeEntity() {
 
     }
-    public List<ItemCommandeEntity> getItems() {
-        return items;
+
+    public List<ItemCommandeEntity> getItemsCommande() {
+        return itemsCommande;
     }
-    public void setItems(List<ItemCommandeEntity> items) {
-        this.items = items;
+
+    public void setItemsCommande(List<ItemCommandeEntity> itemsCommande) {
+        this.itemsCommande = itemsCommande;
     }
 
     public Integer getId() {
@@ -73,11 +77,11 @@ public class CommandeEntity implements Serializable {
         this.idUtilisateur = idUtilisateur;
     }
 
-    public String getEtat() {
+    public EtatCommande getEtat() {
         return etat;
     }
 
-    public void setEtat(String etat) {
+    public void setEtat(EtatCommande etat) {
         this.etat = etat;
     }
 

@@ -1,17 +1,16 @@
 package fr.sqli.formation.gamelife.dto.in;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.sqli.formation.gamelife.enums.EtatCommande;
 
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
 
-public class CommandeDtoIn extends AbstractDtoIn {
+public class CommandeDtoIn  extends AbstractDtoIn {
     @Serial
     private static final long serialVersionUID = 1L;
     private Integer idUtilisateur;
-    private String etat;
+    private EtatCommande etat;
     private Integer numRueLivraison;
     private String rueLivraison;
     private String villeLivraison;
@@ -37,12 +36,12 @@ public class CommandeDtoIn extends AbstractDtoIn {
         idUtilisateur = pIdUtilisateur;
     }
 
-    public String getEtat() {
+    public EtatCommande getEtat() {
         return etat;
     }
 
-    public void setEtat(String pEtat) {
-        etat = pEtat;
+    public void setEtat(EtatCommande etat) {
+        this.etat = etat;
     }
 
     public Integer getNumRueLivraison() {

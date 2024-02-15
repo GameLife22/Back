@@ -9,7 +9,7 @@ import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
 
 public class ProduitRevendeurDtoHandler {
 
-    public ProduitRevendeurEntity DtoToEntity(ProduitRevendeurDtoIn produitRevendeurDtoIn) {
+    public static ProduitRevendeurEntity DtoToEntity(ProduitRevendeurDtoIn produitRevendeurDtoIn) {
         ProduitRevendeurEntity produitRevendeurEntity = new ProduitRevendeurEntity();
         produitRevendeurEntity.setStock(produitRevendeurDtoIn.getStock());
         produitRevendeurEntity.setPrix(produitRevendeurDtoIn.getPrix());

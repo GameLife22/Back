@@ -23,7 +23,7 @@ import fr.sqli.formation.gamelife.service.ProduitService;
 public class ProduitControler {
 
 	private static final Logger LOG = LogManager.getLogger();
-	
+
 	@Autowired
 	private ProduitService produitService;
 
@@ -32,9 +32,12 @@ public class ProduitControler {
 	 * @return: une liste de jeux vidéos
 	 */
 
+
+/*
 	//@PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<ProduitDto>> getAllProduit() {
+
 		LOG.info("Dans getAllProduit");
 		var r = this.produitService.getAllProduit();
 		var rd = new ArrayList<ProduitDto>();
@@ -51,6 +54,8 @@ public class ProduitControler {
 	 * @return HTTP Status + Produit DTO
 	 * @author: Fabien
 	 */
+
+	/*
 	@GetMapping("{id}")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<ProduitDto> getProductById(@PathVariable String id) {
@@ -73,6 +78,7 @@ public class ProduitControler {
 	 * @throws Exception
 	 * @author Fabien
 	 */
+	/*
 	@GetMapping("/search")
 
 	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) {
@@ -91,4 +97,7 @@ public class ProduitControler {
 
 		return ResponseEntity.ok(jeuxVideos);
 	}
+	}
+
+	 	*/
 }

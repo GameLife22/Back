@@ -1,28 +1,26 @@
 package fr.sqli.formation.gamelife.service.commande.impl;
 
+import fr.sqli.formation.gamelife.dto.handler.ItemCommandeDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.CommandeDtoIn;
 import fr.sqli.formation.gamelife.dto.handler.CommandeDtoHandler;
+import fr.sqli.formation.gamelife.dto.in.ItemCommandeDtoIn;
+import fr.sqli.formation.gamelife.dto.in.ProduitRevendeurDtoIn;
+import fr.sqli.formation.gamelife.dto.out.CommandeDtoOut;
 import fr.sqli.formation.gamelife.entity.*;
+import fr.sqli.formation.gamelife.enums.EtatCommande;
 import fr.sqli.formation.gamelife.ex.ProduitRevendeutException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
 import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
-import fr.sqli.formation.gamelife.repository.ItemCommandeRepository;
-import fr.sqli.formation.gamelife.repository.CommandeRepository;
-import fr.sqli.formation.gamelife.repository.ProduitRepository;
-import fr.sqli.formation.gamelife.repository.UtilisateurRepository;
+import fr.sqli.formation.gamelife.repository.*;
 import fr.sqli.formation.gamelife.service.commande.CommandeService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CommandeServiceImpl implements CommandeService {
@@ -33,8 +31,7 @@ public class CommandeServiceImpl implements CommandeService {
     private ItemCommandeRepository itemCommandeRepository;
     @Autowired
     private ProduitRepository produitRepository;
-    @Autowired // ModelMapper permet de transférer automatiquement les données d'un objet source vers un objet cible
-    private ModelMapper modelMapper;
+
     @Autowired
     private CommandeDtoHandler commandeDtoHandler;
 
@@ -46,217 +43,214 @@ public class CommandeServiceImpl implements CommandeService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
     private ItemCommandeDtoHandler itemCommandeDtoHandler;
+    @Autowired
+    private ProduitRevendeurRepository produitRevendeurRepository;
 
 
-    // Recuperation de tous les paniers
-    @Override
-    public List<CommandeDtoIn> getAllCommandes() {
-        List<CommandeEntity> panierEntities = commandeRepository.findAll();
-        return panierEntities.stream()
-                .map(commandeDtoHandler::entityToDto)
-                .collect(Collectors.toList());
+    @Autowired
+    public CommandeServiceImpl(CommandeDtoHandler commandeDtoHandler) {
+        this.commandeDtoHandler = commandeDtoHandler;
     }
 
-    // Récupère un commande en utilisant un ID
+    /*
+    // Recuperation de tous les paniers
     @Override
-    public CommandeDtoIn getCommandeById(int id) throws CommandeNotFoundException {
+    public List<CommandeDtoOut> getAllCommandes() {
+        List<CommandeEntity> commandeEntities = commandeRepository.findAll();
+        return commandeEntities.stream()
+                .map(commandeDtoHandler::EntityToDto)
+                .collect(Collectors.toList());
+    }
+    */
+
+    // Recuperer une seule commande
+
+    @Override
+    public List<CommandeDtoOut> getAllCommandes() {
+        return null;
+    }
+
+    public CommandeDtoOut getCommande(int id) throws CommandeNotFoundException {
         CommandeEntity commandeEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
-        return commandeDtoHandler.entityToDto(commandeEntity);
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+
+        // Récupérer l'état de la commande depuis l'entité CommandeEntity
+        EtatCommande etat = commandeEntity.getEtat();
+
+        // Mapper l'entité CommandeEntity vers CommandeDtoOut
+        CommandeDtoOut commandeDtoOut = CommandeDtoHandler.EntityToDto(commandeEntity);
+        commandeDtoOut.setEtat(etat);
+
+        return commandeDtoOut;
     }
 
     // Création du commande
     @Override
     public CommandeDtoIn createCommande(CommandeDtoIn commandeDto) throws UtilisateurNonExistantException {
-        // Vérifiez si l'utilisateur existe avant de continuer
-        UtilisateurEntity utilisateur = utilisateurRepository.findById(commandeDto.getUtilisateur().getId())
-                .orElseThrow(() -> new UtilisateurNonExistantException("Utilisateur not found"));
+        // Vérifier si l'utilisateur existe
+        UtilisateurEntity utilisateur = utilisateurRepository.findById(commandeDto.getIdUtilisateur())
+                .orElseThrow(() -> new UtilisateurNonExistantException("User not found with id: " + commandeDto.getIdUtilisateur()));
 
-        CommandeEntity commandeEntity = commandeDtoHandler.dtoToEntity(commandeDto);
+        CommandeEntity commandeEntity = CommandeDtoHandler.DtoToEntity(commandeDto);
 
-        commandeEntity.setUtilisateur(utilisateur);
-        utilisateur.addCommande(commandeEntity);
+        commandeEntity.setIdUtilisateur(utilisateur);
 
-        // Ajoutez les ItemCommande à la liste du commande
-        if (commandeDto.getItemCommandes() != null) {
-            for (ItemCommandeDto itemCommandeDto : commandeDto.getItemCommandes()) {
-                ItemCommandeEntity itemCommandeEntity = itemCommandeDtoHandler.toEntity(itemCommandeDto);
-                itemCommandeEntity.setCommande(commandeEntity);
+        CommandeEntity savedCommandeEntity = commandeRepository.save(commandeEntity);
 
-                commandeEntity.addItemCommande(itemCommandeEntity);
-            }
-        }
-        // Enregistrez le commande dans la base de données
-        commandeEntity = commandeRepository.save(commandeEntity);
+        CommandeDtoOut savedCommandeDto = CommandeDtoHandler.EntityToDto(savedCommandeEntity);
 
-        return commandeDtoHandler.entityToDto(commandeEntity);
+        return commandeDto;
     }
 
-
-
-    // Commande mise à jour ex : gerer l'etat du commande, modifier la date de la livraison
     @Override
     public CommandeDtoIn updateCommande(int id, CommandeDtoIn commandeDto) throws CommandeNotFoundException {
-            Optional<CommandeEntity> panierEntityOptional = commandeRepository.findById(id);
-            if (panierEntityOptional.isPresent()) {
-                CommandeEntity existingCommandeEntity = panierEntityOptional.get();
-                // Mettre à jour les propriétés du commande existant avec celles du DTO
-                existingCommandeEntity.setDate(commandeDto.getDate());
-                existingCommandeEntity.setEtat(commandeDto.getEtat());
-                // Enregistrez les modifications dans la base de données
-                CommandeEntity updatedCommandeEntity = commandeRepository.save(existingCommandeEntity);
-                // Convertissez l'entité mise à jour en DTO avant de le renvoyer
-                CommandeDtoIn updatedCommandeDto = commandeDtoHandler.entityToDto(updatedCommandeEntity);
-                return updatedCommandeDto;
-            } else {
-                throw new CommandeNotFoundException("Commande non trouvé avec l'ID : " + id);
-            }
-        }
 
-    // Supprimer le commande
+        CommandeEntity existingCommande = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+
+        // Mettre à jour les informations de la commande avec les données fournies dans le DTO
+        existingCommande.setEtat(commandeDto.getEtat());
+        existingCommande.setNumRueLivraison(commandeDto.getNumRueLivraison());
+        existingCommande.setRueLivraison(commandeDto.getRueLivraison());
+        existingCommande.setVilleLivraison(commandeDto.getVilleLivraison());
+        existingCommande.setCodePostalLivraison(commandeDto.getCodePostalLivraison());
+        existingCommande.setDate(commandeDto.getDate());
+
+        commandeRepository.save(existingCommande);
+
+        return commandeDto;
+    }
+
+
     @Override
     public void deleteCommande(int id) throws CommandeNotFoundException {
-        CommandeEntity commandeEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
+        CommandeEntity commande = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        commandeRepository.delete(commandeEntity);
+        commandeRepository.delete(commande);
     }
 
-    
-    // Mettre à jour la quantité d'un article dans un commande
-    @Override
-    @Transactional
-    public CommandeDtoIn modifierQuantite(int id, ItemCommandeDto itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException {
-        CommandeEntity commandeEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
 
-        ItemCommandePKDto itemCommandePKDto = itemCommandeDto.getId();
-        ItemCommandePK itemCommandePK = new ItemCommandePK();
-        itemCommandePK.setIdCommande(itemCommandePKDto.getIdCommande());
-        itemCommandePK.setIdProduit(itemCommandePKDto.getIdProduit());
-
-        ItemCommandeEntity itemCommandeEntity = itemCommandeRepository.findById(itemCommandePK)
-                .orElseThrow(() -> new ItemCommandeNotFoundException("ItemCommande not found with id: " + itemCommandePK));
-
-        itemCommandeEntity.setQuantite(itemCommandeDto.getQuantite());
-        itemCommandeRepository.save(itemCommandeEntity);
-
-        return commandeDtoHandler.entityToDto(commandeEntity);
-    }
 
     // Prix total du commande
-    //TODO passage en requete
     @Override
-    public double getPrixTotalCommande(int id) {
-        CommandeEntity commandeEntity = commandeRepository.findById(id).orElse(null);
-        if (commandeEntity != null) {
-            return commandeEntity.getItemCommandes().stream()
-                    .mapToDouble(itemCommande -> itemCommande.getProduit().getPrix().multiply(BigDecimal.valueOf(itemCommande.getQuantite())).doubleValue())
-                    .sum();
-        }
-        return 0.0;
-    }
-
-    // Ajouter un article dans le commande
-    @Override
-    @Transactional
-    public CommandeDtoIn ajoutArticle(int id, ProduitDto produitDto) throws ProduitRevendeutException, CommandeNotFoundException {
-        // Vérifier si l'ID du produit est valide
-        if (produitDto.getId() <= 0) {
-            throw new ProduitRevendeutException("Invalid Product ID: " + produitDto.getId());
-        }
-
-
-        // Récupérer le commande existant
-        CommandeEntity commandeEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
-
-        // Récupérer le produit à ajouter au commande
-        ProduitEntity produitEntity = produitRepository.findById(produitDto.getId())
-                .orElseThrow(() -> new ProduitRevendeutException("Produit not found with id: " + produitDto.getId()));
-
-
-        // Rechercher l'ItemCommandeEntity dans la liste ItemCommandes du commande
-        Optional<ItemCommandeEntity> existingItemCommande = commandeEntity.getItemCommandes().stream()
-                .filter(itemCommande -> itemCommande.getId().getIdProduit() == produitDto.getId())
-                .findFirst();
-
-        if (existingItemCommande.isPresent()) {
-            // Si l'ItemCommandeEntity existe, augmenter la quantité
-            existingItemCommande.get().setQuantite(existingItemCommande.get().getQuantite() + 1);
-        } else {
-            // Si l'ItemCommandeEntity n'existe pas  créer un nouvel ItemCommandeEntity
-            ItemCommandeEntity newItemCommande = new ItemCommandeEntity();
-            ItemCommandePK itemCommandePK = new ItemCommandePK(id, produitDto.getId());
-            newItemCommande.setId(itemCommandePK);
-            newItemCommande.setQuantite(1);
-            newItemCommande.setCommande(commandeEntity);
-            newItemCommande.setProduit(produitEntity);
-
-            commandeEntity.getItemCommandes().add(newItemCommande);
-        }
-
-        // Enregistrer les modifications dans la base de données
-        commandeRepository.save(commandeEntity);
-
-        return commandeDtoHandler.entityToDto(commandeEntity);
-    }
-
-    // Validation du commande
-    @Override
-    public CommandeDtoIn validerCommande(int id) throws CommandeNotFoundException {
+    public double getPrixTotalCommande(int id) throws CommandeNotFoundException {
         CommandeEntity commandeEntity = commandeRepository.findByIdWithItemCommandes(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande not found with id: " + id));
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        if (commandeEntity.getEtat() != 1) {
-            if (commandeEntity.getItemCommandes().isEmpty()) {
-                throw new IllegalStateException("Cannot validate an empty commande (id: " + id + ")");
-            }
-            // Déduire le stock des produits dans le commande
-            for (ItemCommandeEntity itemCommandeEntity : commandeEntity.getItemCommandes()) {
-                ProduitEntity produitEntity = itemCommandeEntity.getProduit();
-                int newQuantityStock = produitEntity.getStock() - itemCommandeEntity.getQuantite();
+        List<ItemCommandeEntity> itemsCommande = commandeEntity.getItemsCommande();
 
-                if (newQuantityStock < 0) {
-                    throw new IllegalStateException("Insufficient stock for produit with id: " + produitEntity.getId());
-                }
-
-                produitEntity.setStock(newQuantityStock);
-                produitRepository.save(produitEntity);
-            }
-            commandeEntity.setEtat((byte) 1);
-
-            commandeEntity = commandeRepository.save(commandeEntity);
-
-            return commandeDtoHandler.entityToDto(commandeEntity);
-
-        } else {
-            throw new IllegalStateException("Commande with id " + id + " is already validated.");
+        // Vérification que la liste des éléments de commande n'est pas vide
+        if (itemsCommande.isEmpty()) {
+            throw new IllegalStateException("La liste des éléments de commande est vide pour la commande avec l'ID : " + id);
         }
+
+        return itemsCommande.stream()
+                .mapToDouble(itemCommande -> {
+
+                    if (itemCommande.getIdProduitRevendeur() == null || itemCommande.getIdProduitRevendeur().getPrix() == null) {
+                        throw new IllegalStateException("Le produit revendeur ou son prix est nul pour l'élément de commande avec l'ID : " + itemCommande.getId());
+                    }
+
+                    // Vérification des valeurs négatives
+                    if (itemCommande.getQuantite() < 0 || itemCommande.getIdProduitRevendeur().getPrix().doubleValue() < 0) {
+                        throw new IllegalStateException("La quantité ou le prix est négatif pour l'élément de commande avec l'ID : " + itemCommande.getId());
+                    }
+
+                    return itemCommande.getIdProduitRevendeur().getPrix().doubleValue() * itemCommande.getQuantite();
+                })
+                .sum();
     }
 
-    // Supprimer un article dans le commande
+
+    // Ajouter un article dans une commande
+    // TODO Verifier l'id , faire les controle d'integrité des donnees ,exception
     @Override
-    @Transactional
-    public CommandeDtoIn supprimerArticle(int idCommande, int idProduit) throws CommandeNotFoundException, ProduitRevendeutException, ItemCommandeNotFoundException {
-        // Récupérer le commande
-        CommandeEntity commandeEntity = commandeRepository.findById(idCommande)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvé avec l'ID : " + idCommande));
+    public CommandeDtoOut modifierQuantite(int id, ItemCommandeDtoIn itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException {
+        // Vérification de l'existence de la commande avec l'ID spécifié
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        // Récupérer l'article du commande
-        ItemCommandeEntity itemCommandeEntity = commandeEntity.getItemCommandes().stream()
-                .filter(item -> item.getProduit().getId() == idProduit)
-                .findFirst()
-                .orElseThrow(() -> new ItemCommandeNotFoundException("Article non trouvé dans le commande avec l'ID du produit : " + idProduit));
+        if (commandeEntity.getEtat() == EtatCommande.EXPEDIEE) {
+            throw new IllegalStateException("La commande est déjà expédiée et ne peut pas être modifiée.");
+        }
 
-        // Supprimer l'article du commande
-        commandeEntity.removeItemCommande(itemCommandeEntity);
+        if (commandeEntity.getItemsCommande() == null) {
+            throw new IllegalStateException("La liste des éléments de commande est nulle pour la commande avec l'ID : " + id);
+        }
+
+        // La quantité ne peut pas être négative
+        List<ItemCommandeEntity> itemsCommande = commandeEntity.getItemsCommande();
+        boolean itemFound = false;
+
+        for (ItemCommandeEntity item : itemsCommande) {
+            if (item.getId().equals(itemCommandeDto.getIdCommande())) {
+                if (itemCommandeDto.getQuantite() < 0) {
+                    throw new IllegalArgumentException("La quantité ne peut pas être négative.");
+                }
+                item.setQuantite(itemCommandeDto.getQuantite());
+                itemFound = true;
+                break;
+            }
+        }
+
+        if (!itemFound) {
+            throw new ItemCommandeNotFoundException("ItemCommande avec ID " + itemCommandeDto.getIdCommande() + " non trouvée dans la commande.");
+        }
+
+        commandeEntity.setItemsCommande(itemsCommande);
         commandeRepository.save(commandeEntity);
 
-        // Supprimer l'article de la base de données
-        itemCommandeRepository.delete(itemCommandeEntity);
-
-        // Mettez à jour et renvoyez le commande DTO
-        return commandeDtoHandler.entityToDto(commandeEntity);
+        return CommandeDtoHandler.EntityToDto(commandeEntity);
     }
+
+    // Ajouter un article dans une commande
+    @Override
+    public CommandeDtoOut ajoutArticle(int id, ProduitRevendeurDtoIn produitRevendeurDto) throws ProduitRevendeutException, CommandeNotFoundException {
+        // Récupérer la commande
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+
+        ProduitRevendeurEntity produitRevendeurEntity = produitRevendeurRepository.findById(produitRevendeurDto.getIdProduit())
+                .orElseThrow(() -> new ProduitRevendeutException("Produit revendeur non trouvé avec l'ID : " + produitRevendeurDto.getIdProduit()));
+
+        // Vérifier la disponibilité du produit
+        if (produitRevendeurEntity.getStock() <= 0) {
+            throw new ProduitRevendeutException("Produit revendeur en rupture de stock.");
+        }
+
+        // Vérifier si le stock disponible est suffisant pour ajouter l'article à la commande
+        int stockDisponible = produitRevendeurEntity.getStock();
+        int quantiteDemandee = 1; // On ajoute un seul article pour le moment
+        if (stockDisponible < quantiteDemandee) {
+            throw new ProduitRevendeutException("Stock insuffisant pour ajouter l'article à la commande.");
+        }
+
+        // Décrémenter le stock du produit revendeur
+        produitRevendeurEntity.setStock(stockDisponible - quantiteDemandee);
+
+        // Créer et associer le nouvel article de commande
+        ItemCommandeEntity itemCommandeEntity = new ItemCommandeEntity();
+        itemCommandeEntity.setIdProduitRevendeur(produitRevendeurEntity);
+        itemCommandeEntity.setIdCommande(commandeEntity);
+        itemCommandeEntity.setQuantite(quantiteDemandee);
+
+        // Mettre à jour la commande avec le nouvel article
+        List<ItemCommandeEntity> itemsCommande = commandeEntity.getItemsCommande();
+        if (itemsCommande == null) {
+            itemsCommande = new ArrayList<>();
+        }
+        itemsCommande.add(itemCommandeEntity);
+        commandeEntity.setItemsCommande(itemsCommande);
+
+        // Sauvegarder les modifications
+        commandeRepository.save(commandeEntity);
+        produitRevendeurRepository.save(produitRevendeurEntity);
+
+        // Convertir l'entité de commande en DTO et la retourner
+        return CommandeDtoHandler.EntityToDto(commandeEntity);
+    }
+
+
+
 }

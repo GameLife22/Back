@@ -1,6 +1,8 @@
 package fr.sqli.formation.gamelife.ex;
 
+import fr.sqli.formation.gamelife.dto.out.ExceptionDtoOut;
 import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
+import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
 import org.apache.catalina.connector.ClientAbortException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,10 +67,11 @@ public class ExceptionControlerAdvice {
         ResponseEntity<Exception> resu = new ResponseEntity<Exception>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
-    @ExceptionHandler(CommandeNotFoundException.class)
-    public ResponseEntity<String> handlePanierNotFoundException(CommandeNotFoundException ex) {
-        LOG.info("Commande introuvable: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+
+    @ExceptionHandler(ItemCommandeNotFoundException.class)
+    public ResponseEntity<ExceptionDtoOut> handlePanierNotFoundException(ItemCommandeNotFoundException ex) {
+        LOG.info("itemCommandeNotFoundException introuvable: {}", ex.getMessage());
+        return new ResponseEntity<ExceptionDtoOut>( new ExceptionDtoOut (ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ProduitRevendeutException.class)

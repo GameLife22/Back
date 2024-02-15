@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface CommandeRepository extends JpaRepository<CommandeEntity,Integer> {
-    Optional<CommandeEntity> findByIdWithItemPaniers(@Param("id") int id);
-}
+    @Repository
+    public interface CommandeRepository extends JpaRepository<CommandeEntity, Integer> {
+        @Query("SELECT c FROM CommandeEntity c JOIN FETCH c.itemsCommande WHERE c.id = :id")
+        Optional<CommandeEntity> findByIdWithItemCommandes(@Param("id") int id);
+    }
+
