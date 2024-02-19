@@ -19,7 +19,6 @@ import fr.sqli.formation.gamelife.service.commande.CommandeService;
 import fr.sqli.formation.gamelife.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -167,7 +166,6 @@ public class CommandeServiceImpl implements CommandeService {
 
 
     // Ajouter un article dans une commande
-    // TODO Verifier l'id , faire les controle d'integrité des donnees ,exception
     @Override
     public ItemCommandeDtoOut modifierQuantite(int id, ItemCommandeDtoIn itemCommandeDto)
             throws CommandeNotFoundException, ItemCommandeNotFoundException, ParameterException, IllegalAccessException {
@@ -245,5 +243,23 @@ public class CommandeServiceImpl implements CommandeService {
         return CommandeDtoHandler.EntityToDto(commandeEntity);
     }
 
+
+    // Valider une commande
+    @Override
+    public CommandeDtoOut validerCommande(int id) throws CommandeNotFoundException {
+        CommandeEntity commandeEntity = commandeRepository.findById(id)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+
+        // Vérifier si la commande est déjà validée
+        if (commandeEntity.getEtat() == EtatCommande.LIVREE) {
+            throw new IllegalStateException("La commande est déjà validée.");
+        }
+
+        // Mettre à jour l'état de la commande
+        commandeEntity.setEtat(EtatCommande.LIVREE);
+        commandeRepository.save(commandeEntity);
+
+        return CommandeDtoHandler.EntityToDto(commandeEntity);
+    }
 
 }

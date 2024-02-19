@@ -32,9 +32,9 @@ public interface CommandeService {
 
 
     CommandeDtoOut ajoutArticle(int id, ProduitRevendeurDtoIn produitRevendeurDto) throws ProduitRevendeutException, CommandeNotFoundException;
-/*
-    CommandeDtoIn validerCommande(int id) throws CommandeNotFoundException;
 
+    CommandeDtoOut validerCommande(int id) throws CommandeNotFoundException;
+/*
     CommandeDtoIn supprimerArticle(int idCommande, int idProduit) throws CommandeNotFoundException, ProduitRevendeutException, ItemCommandeNotFoundException;
 
  */

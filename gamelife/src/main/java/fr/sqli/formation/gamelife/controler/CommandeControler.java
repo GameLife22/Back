@@ -109,21 +109,22 @@ public class CommandeControler {
         }
     }
 
-    /*
 
-
-    // Ajouter un item dans une commande
-    @PostMapping("/{id}/ajout-article")
-    public CommandeDtoOut ajoutArticle(@PathVariable int id, @RequestBody ProduitDto produitDto) throws ProduitRevendeutException, CommandeNotFoundException {
-        return commandeService.ajoutArticle(id, produitDto);
-    }
 
     // Valider une commande
-    @PostMapping("/{id}/valider-commande")
-    public ResponseEntity<CommandeDtoIn> validerPanier(@PathVariable int id) throws CommandeNotFoundException {
-        CommandeDtoIn commandeDto = commandeService.validerPanier(id);
-        return new ResponseEntity<>(commandeDto, HttpStatus.OK);
+    @PutMapping("/{id}/valider-commande")
+    public ResponseEntity<?> validerCommande(@PathVariable("id") int id) {
+        try {
+            CommandeDtoOut commandeDtoOut = commandeService.validerCommande(id);
+            return ResponseEntity.ok(commandeDtoOut);
+        } catch (CommandeNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionDtoOut("Une erreur s'est produite lors de la validation de la commande."));
+        }
     }
+
+     /*
     // Supprimer un item dans une commande
     @DeleteMapping("/{idPanier}/supp-article/{idProduit}")
     public ResponseEntity<String> supprimerArticle(@PathVariable int idPanier, @PathVariable int idProduit) throws CommandeNotFoundException, ItemCommandeNotFoundException, ProduitRevendeutException {
