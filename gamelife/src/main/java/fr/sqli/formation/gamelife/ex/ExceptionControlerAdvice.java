@@ -69,10 +69,18 @@ public class ExceptionControlerAdvice {
     }
 
     @ExceptionHandler(ItemCommandeNotFoundException.class)
-    public ResponseEntity<ExceptionDtoOut> handlePanierNotFoundException(ItemCommandeNotFoundException ex) {
-        LOG.info("itemCommandeNotFoundException introuvable: {}", ex.getMessage());
-        return new ResponseEntity<ExceptionDtoOut>( new ExceptionDtoOut (ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ExceptionDtoOut> handleItemCommandeNotFoundException(ItemCommandeNotFoundException ex) {
+        LOG.info("ItemCommandeNotFoundException: {}", ex.getMessage());
+        return new ResponseEntity<>(new ExceptionDtoOut(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CommandeNotFoundException.class)
+    public ResponseEntity<ExceptionDtoOut> handleCommandeNotFoundException(CommandeNotFoundException ex) {
+        LOG.info("CommandeNotFoundException: {}", ex.getMessage());
+        return new ResponseEntity<>(new ExceptionDtoOut(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
 
     @ExceptionHandler(ProduitRevendeutException.class)
     public ResponseEntity<String> handleProduitException(ProduitRevendeutException ex) {

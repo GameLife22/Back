@@ -4,6 +4,8 @@ import fr.sqli.formation.gamelife.dto.in.CommandeDtoIn;
 import fr.sqli.formation.gamelife.dto.in.ItemCommandeDtoIn;
 import fr.sqli.formation.gamelife.dto.in.ProduitRevendeurDtoIn;
 import fr.sqli.formation.gamelife.dto.out.CommandeDtoOut;
+import fr.sqli.formation.gamelife.dto.out.ItemCommandeDtoOut;
+import fr.sqli.formation.gamelife.ex.ParameterException;
 import fr.sqli.formation.gamelife.ex.ProduitRevendeutException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
@@ -26,7 +28,7 @@ public interface CommandeService {
     double getPrixTotalCommande(int id) throws CommandeNotFoundException;
 
 
-    CommandeDtoOut modifierQuantite(int id, ItemCommandeDtoIn itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException;
+    ItemCommandeDtoOut modifierQuantite(int id, ItemCommandeDtoIn itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException, ParameterException, IllegalAccessException;
 
 
     CommandeDtoOut ajoutArticle(int id, ProduitRevendeurDtoIn produitRevendeurDto) throws ProduitRevendeutException, CommandeNotFoundException;

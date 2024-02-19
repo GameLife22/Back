@@ -6,16 +6,20 @@ import fr.sqli.formation.gamelife.dto.handler.CommandeDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.ItemCommandeDtoIn;
 import fr.sqli.formation.gamelife.dto.in.ProduitRevendeurDtoIn;
 import fr.sqli.formation.gamelife.dto.out.CommandeDtoOut;
+import fr.sqli.formation.gamelife.dto.out.ItemCommandeDtoOut;
 import fr.sqli.formation.gamelife.entity.*;
 import fr.sqli.formation.gamelife.enums.EtatCommande;
+import fr.sqli.formation.gamelife.ex.ParameterException;
 import fr.sqli.formation.gamelife.ex.ProduitRevendeutException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
 import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
 import fr.sqli.formation.gamelife.repository.*;
 import fr.sqli.formation.gamelife.service.commande.CommandeService;
+import fr.sqli.formation.gamelife.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -131,7 +135,6 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
 
-
     // Prix total du commande
     @Override
     public double getPrixTotalCommande(int id) throws CommandeNotFoundException {
@@ -166,42 +169,34 @@ public class CommandeServiceImpl implements CommandeService {
     // Ajouter un article dans une commande
     // TODO Verifier l'id , faire les controle d'integrité des donnees ,exception
     @Override
-    public CommandeDtoOut modifierQuantite(int id, ItemCommandeDtoIn itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException {
-        // Vérification de l'existence de la commande avec l'ID spécifié
-        CommandeEntity commandeEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+    public ItemCommandeDtoOut modifierQuantite(int id, ItemCommandeDtoIn itemCommandeDto)
+            throws CommandeNotFoundException, ItemCommandeNotFoundException, ParameterException, IllegalAccessException {
+        // Vérifier l'existence de la commande avec l'ID spécifié
+        CommandeEntity commandeEntity = commandeRepository.findByIdWithItemCommandes(id)
+                .orElseThrow(() -> new CommandeNotFoundException("La commande avec l'ID " + id + " n'a pas été trouvée."));
 
-        if (commandeEntity.getEtat() == EtatCommande.EXPEDIEE) {
-            throw new IllegalStateException("La commande est déjà expédiée et ne peut pas être modifiée.");
-        }
-
-        if (commandeEntity.getItemsCommande() == null) {
-            throw new IllegalStateException("La liste des éléments de commande est nulle pour la commande avec l'ID : " + id);
-        }
-
-        // La quantité ne peut pas être négative
-        List<ItemCommandeEntity> itemsCommande = commandeEntity.getItemsCommande();
-        boolean itemFound = false;
-
-        for (ItemCommandeEntity item : itemsCommande) {
+        // Trouver l'item de commande correspondant dans la commande
+        ItemCommandeEntity itemCommandeEntity = null;
+        for (ItemCommandeEntity item : commandeEntity.getItemsCommande()) {
             if (item.getId().equals(itemCommandeDto.getIdCommande())) {
-                if (itemCommandeDto.getQuantite() < 0) {
-                    throw new IllegalArgumentException("La quantité ne peut pas être négative.");
-                }
-                item.setQuantite(itemCommandeDto.getQuantite());
-                itemFound = true;
+                itemCommandeEntity = item;
                 break;
             }
         }
 
-        if (!itemFound) {
-            throw new ItemCommandeNotFoundException("ItemCommande avec ID " + itemCommandeDto.getIdCommande() + " non trouvée dans la commande.");
+        if (itemCommandeEntity == null) {
+            throw new ItemCommandeNotFoundException("L'item de commande avec l'ID " + itemCommandeDto.getIdCommande() + " n'a pas été trouvé dans la commande.");
         }
 
-        commandeEntity.setItemsCommande(itemsCommande);
+        // Vérifier si la quantité est valide
+        ValidationUtils.validateNonNegative(itemCommandeDto.getQuantite(), "La quantité ne peut pas être négative.");
+
+        // Mettre à jour la quantité de l'item de commande
+        itemCommandeEntity.setQuantite(itemCommandeDto.getQuantite());
         commandeRepository.save(commandeEntity);
 
-        return CommandeDtoHandler.EntityToDto(commandeEntity);
+        // Mapper l'entité mise à jour vers un DTO de sortie
+        return ItemCommandeDtoHandler.EntityToDto(itemCommandeEntity);
     }
 
     // Ajouter un article dans une commande
@@ -220,14 +215,10 @@ public class CommandeServiceImpl implements CommandeService {
         }
 
         // Vérifier si le stock disponible est suffisant pour ajouter l'article à la commande
-        int stockDisponible = produitRevendeurEntity.getStock();
         int quantiteDemandee = 1; // On ajoute un seul article pour le moment
-        if (stockDisponible < quantiteDemandee) {
+        if (produitRevendeurEntity.getStock() < quantiteDemandee) {
             throw new ProduitRevendeutException("Stock insuffisant pour ajouter l'article à la commande.");
         }
-
-        // Décrémenter le stock du produit revendeur
-        produitRevendeurEntity.setStock(stockDisponible - quantiteDemandee);
 
         // Créer et associer le nouvel article de commande
         ItemCommandeEntity itemCommandeEntity = new ItemCommandeEntity();
@@ -243,6 +234,9 @@ public class CommandeServiceImpl implements CommandeService {
         itemsCommande.add(itemCommandeEntity);
         commandeEntity.setItemsCommande(itemsCommande);
 
+        // Décrémenter le stock du produit revendeur
+        produitRevendeurEntity.setStock(produitRevendeurEntity.getStock() - quantiteDemandee);
+
         // Sauvegarder les modifications
         commandeRepository.save(commandeEntity);
         produitRevendeurRepository.save(produitRevendeurEntity);
@@ -250,7 +244,6 @@ public class CommandeServiceImpl implements CommandeService {
         // Convertir l'entité de commande en DTO et la retourner
         return CommandeDtoHandler.EntityToDto(commandeEntity);
     }
-
 
 
 }

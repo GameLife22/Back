@@ -5,7 +5,9 @@ import fr.sqli.formation.gamelife.dto.handler.CommandeDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.ItemCommandeDtoIn;
 import fr.sqli.formation.gamelife.dto.in.ProduitRevendeurDtoIn;
 import fr.sqli.formation.gamelife.dto.out.CommandeDtoOut;
-import fr.sqli.formation.gamelife.entity.CommandeEntity;
+import fr.sqli.formation.gamelife.dto.out.ExceptionDtoOut;
+import fr.sqli.formation.gamelife.dto.out.ItemCommandeDtoOut;
+import fr.sqli.formation.gamelife.ex.ParameterException;
 import fr.sqli.formation.gamelife.ex.ProduitRevendeutException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
 import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
@@ -73,25 +75,37 @@ public class CommandeControler {
     }
 
     // Modifier la quantité d'un item dans une commande
-    @PutMapping("/{id}/modif-quantite")
-    public ResponseEntity<CommandeDtoOut> modifierQuantite(@PathVariable int id, @RequestBody ItemCommandeDtoIn itemCommandeDto) throws CommandeNotFoundException, ItemCommandeNotFoundException {
-        CommandeDtoOut commandeDto = commandeService.modifierQuantite(id, itemCommandeDto);
 
-        return new ResponseEntity<>( commandeDto, HttpStatus.OK);
+    @PutMapping("/{id}/modif-quantite")
+    public ResponseEntity<?> modifierQuantite(@PathVariable("id") int id,
+                                              @RequestBody ItemCommandeDtoIn itemCommandeDto) {
+        try {
+            ItemCommandeDtoOut commandeDtoOut = commandeService.modifierQuantite(id, itemCommandeDto);
+            return ResponseEntity.ok(commandeDtoOut);
+        } catch (CommandeNotFoundException | ItemCommandeNotFoundException | IllegalAccessException e) {
+            // Gérer les exceptions spécifiques
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
+        } catch (ParameterException e) {
+            // Capturer les exceptions de paramètre et renvoyer une réponse BadRequest
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionDtoOut(e.getMessage()));
+        } catch (Exception e) {
+            // Capturer les autres exceptions et renvoyer une réponse BadRequest
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionDtoOut("Une erreur s'est produite lors du traitement de la demande."));
+        }
     }
 
+
     @PostMapping("/{id}/ajout-article")
-    public ResponseEntity<CommandeDtoOut> ajoutArticle(@PathVariable("id") int id, @RequestBody ProduitRevendeurDtoIn
-            produitRevendeurDto) {
+    public ResponseEntity<?> ajoutArticle(@PathVariable("id") int id, @RequestBody ProduitRevendeurDtoIn produitRevendeurDto) {
         try {
             CommandeDtoOut commandeDtoOut = commandeService.ajoutArticle(id, produitRevendeurDto);
-            return new ResponseEntity<>(commandeDtoOut, HttpStatus.OK);
+            return ResponseEntity.ok(commandeDtoOut);
         } catch (ProduitRevendeutException e) {
-            // Gérer l'exception ProduitRevendeutException
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
         } catch (CommandeNotFoundException e) {
-            // Gérer l'exception CommandeNotFoundException
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionDtoOut("Une erreur s'est produite lors de l'ajout de l'article à la commande."));
         }
     }
 
