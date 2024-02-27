@@ -99,9 +99,9 @@ public class SecurityConfig {
                         .antMatchers("/commande/{id}").permitAll()
                         .antMatchers("/commande/{id}/modif-quantite").permitAll()
                         .antMatchers("/commande/{id}/prix-total").permitAll()
-                        .antMatchers("/commande/{id}/ajout-article").permitAll()
+                        .antMatchers("/commande/{id}/ajout-produit").permitAll()
                         .antMatchers("/commande/{id}/valider-commande").permitAll()
-                        .antMatchers("/commande/{idPanier}/supp-article/{idProduit}").permitAll()
+                        .antMatchers("/commande/{idCommande}/supp-article/{idProduit}").permitAll()
                         .anyRequest().authenticated()
 
                 )

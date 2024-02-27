@@ -6,7 +6,9 @@ public enum EtatCommande {
     EN_PREPARATION,
     EXPEDIEE,
     LIVREE,
-    ANNULEE
+    ANNULEE,
+
+    NOUVELLE
 }
 
 

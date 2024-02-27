@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.ex;
 
+
 public class ProduitRevendeutException extends Exception {
 
     public ProduitRevendeutException() {

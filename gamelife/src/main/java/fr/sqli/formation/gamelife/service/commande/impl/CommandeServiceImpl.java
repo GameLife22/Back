@@ -9,6 +9,7 @@ import fr.sqli.formation.gamelife.dto.out.CommandeDtoOut;
 import fr.sqli.formation.gamelife.dto.out.ItemCommandeDtoOut;
 import fr.sqli.formation.gamelife.entity.*;
 import fr.sqli.formation.gamelife.enums.EtatCommande;
+import fr.sqli.formation.gamelife.ex.EtatCommandeInvalideException;
 import fr.sqli.formation.gamelife.ex.ParameterException;
 import fr.sqli.formation.gamelife.ex.ProduitRevendeutException;
 import fr.sqli.formation.gamelife.ex.UtilisateurNonExistantException;
@@ -17,13 +18,20 @@ import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
 import fr.sqli.formation.gamelife.repository.*;
 import fr.sqli.formation.gamelife.service.commande.CommandeService;
 import fr.sqli.formation.gamelife.utils.ValidationUtils;
+import fr.sqli.formation.gamelife.validator.CommandeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommandeServiceImpl implements CommandeService {
@@ -49,11 +57,14 @@ public class CommandeServiceImpl implements CommandeService {
     @Autowired
     private ProduitRevendeurRepository produitRevendeurRepository;
 
+    @Autowired
+    private  CommandeValidator commandeValidator;
 
     @Autowired
     public CommandeServiceImpl(CommandeDtoHandler commandeDtoHandler) {
         this.commandeDtoHandler = commandeDtoHandler;
     }
+
 
     /*
     // Recuperation de tous les paniers
@@ -87,7 +98,7 @@ public class CommandeServiceImpl implements CommandeService {
         return commandeDtoOut;
     }
 
-    // Création du commande
+        // Création du commande
     @Override
     public CommandeDtoIn createCommande(CommandeDtoIn commandeDto) throws UtilisateurNonExistantException {
         // Vérifier si l'utilisateur existe
@@ -95,6 +106,9 @@ public class CommandeServiceImpl implements CommandeService {
                 .orElseThrow(() -> new UtilisateurNonExistantException("User not found with id: " + commandeDto.getIdUtilisateur()));
 
         CommandeEntity commandeEntity = CommandeDtoHandler.DtoToEntity(commandeDto);
+
+        commandeEntity.setEtat(EtatCommande.NOUVELLE);
+
 
         commandeEntity.setIdUtilisateur(utilisateur);
 
@@ -104,6 +118,8 @@ public class CommandeServiceImpl implements CommandeService {
 
         return commandeDto;
     }
+
+
 
     @Override
     public CommandeDtoIn updateCommande(int id, CommandeDtoIn commandeDto) throws CommandeNotFoundException {
@@ -197,69 +213,127 @@ public class CommandeServiceImpl implements CommandeService {
         return ItemCommandeDtoHandler.EntityToDto(itemCommandeEntity);
     }
 
-    // Ajouter un article dans une commande
+
+
+    // Ajouter un produit dans une commande existante (id) sinon cree une nouvelle commande verifier si l'utilisateur existe
     @Override
-    public CommandeDtoOut ajoutArticle(int id, ProduitRevendeurDtoIn produitRevendeurDto) throws ProduitRevendeutException, CommandeNotFoundException {
-        // Récupérer la commande
-        CommandeEntity commandeEntity = commandeRepository.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+    public ItemCommandeDtoOut ajoutProduit(int idUtilisateur, ItemCommandeDtoIn itemCommandeDto) throws ProduitRevendeutException, ParameterException, CommandeNotFoundException, EtatCommandeInvalideException {
+        // Chercher la commande de l'utilisateur
+        CommandeEntity commandeEntity = commandeRepository.findById(idUtilisateur)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'identifiant : " + idUtilisateur));
 
-        ProduitRevendeurEntity produitRevendeurEntity = produitRevendeurRepository.findById(produitRevendeurDto.getIdProduit())
-                .orElseThrow(() -> new ProduitRevendeutException("Produit revendeur non trouvé avec l'ID : " + produitRevendeurDto.getIdProduit()));
-
-        // Vérifier la disponibilité du produit
-        if (produitRevendeurEntity.getStock() <= 0) {
-            throw new ProduitRevendeutException("Produit revendeur en rupture de stock.");
+        // Vérifier si la commande est dans un état permettant l'ajout de produit
+        if (commandeEntity.getEtat() == EtatCommande.EN_COURS_DE_TRAITEMENT) {
+            throw new EtatCommandeInvalideException("Impossible d'ajouter un produit à une commande en cours de traitement.");
         }
 
-        // Vérifier si le stock disponible est suffisant pour ajouter l'article à la commande
-        int quantiteDemandee = 1; // On ajoute un seul article pour le moment
-        if (produitRevendeurEntity.getStock() < quantiteDemandee) {
-            throw new ProduitRevendeutException("Stock insuffisant pour ajouter l'article à la commande.");
+        // Vérifier si le produit revendeur existe
+        Optional<ProduitRevendeurEntity> produitRevendeurOptional = produitRevendeurRepository.findById(itemCommandeDto.getIdProduitRevendeur());
+        if (produitRevendeurOptional.isEmpty()) {
+            throw new ProduitRevendeutException("Produit revendeur non trouvé avec l'identifiant : " + itemCommandeDto.getIdProduitRevendeur());
         }
 
-        // Créer et associer le nouvel article de commande
+        ProduitRevendeurEntity produitRevendeurEntity = produitRevendeurOptional.get();
+
+        // Vérifier si la quantité est valide
+        if (itemCommandeDto.getQuantite() <= 0) {
+            throw new ParameterException("La quantité doit être supérieure à zéro.");
+        }
+
+        // Vérifier si le stock est suffisant
+        if (produitRevendeurEntity.getStock() < itemCommandeDto.getQuantite()) {
+            throw new ProduitRevendeutException("Stock insuffisant pour le produit revendeur avec l'identifiant : " + produitRevendeurEntity.getId());
+        }
+
+
+
+        // Créer un nouvel item de commande
         ItemCommandeEntity itemCommandeEntity = new ItemCommandeEntity();
-        itemCommandeEntity.setIdProduitRevendeur(produitRevendeurEntity);
         itemCommandeEntity.setIdCommande(commandeEntity);
-        itemCommandeEntity.setQuantite(quantiteDemandee);
-
-        // Mettre à jour la commande avec le nouvel article
-        List<ItemCommandeEntity> itemsCommande = commandeEntity.getItemsCommande();
-        if (itemsCommande == null) {
-            itemsCommande = new ArrayList<>();
-        }
-        itemsCommande.add(itemCommandeEntity);
-        commandeEntity.setItemsCommande(itemsCommande);
+        itemCommandeEntity.setIdProduitRevendeur(produitRevendeurEntity);
+        itemCommandeEntity.setQuantite(itemCommandeDto.getQuantite());
 
         // Décrémenter le stock du produit revendeur
-        produitRevendeurEntity.setStock(produitRevendeurEntity.getStock() - quantiteDemandee);
+        produitRevendeurEntity.setStock(produitRevendeurEntity.getStock() - itemCommandeDto.getQuantite());
 
-        // Sauvegarder les modifications
+        // Enregistrer l'item de commande et mettre à jour le produit revendeur
+        itemCommandeEntity = itemCommandeRepository.save(itemCommandeEntity);
+        produitRevendeurEntity = produitRevendeurRepository.save(produitRevendeurEntity);
+
+        // Mettre à jour la liste des items de commande de la commande
+        commandeEntity.getItemsCommande().add(itemCommandeEntity);
         commandeRepository.save(commandeEntity);
-        produitRevendeurRepository.save(produitRevendeurEntity);
 
-        // Convertir l'entité de commande en DTO et la retourner
-        return CommandeDtoHandler.EntityToDto(commandeEntity);
+        // Convertir l'item de commande en DTO de sortie
+        return ItemCommandeDtoHandler.EntityToDto(itemCommandeEntity);
     }
 
 
-    // Valider une commande
+
+
+
+    // Valider une commande, changer son état en EN_COURS_DE_TRAITEMENT
     @Override
     public CommandeDtoOut validerCommande(int id) throws CommandeNotFoundException {
         CommandeEntity commandeEntity = commandeRepository.findById(id)
                 .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        // Vérifier si la commande est déjà validée
-        if (commandeEntity.getEtat() == EtatCommande.LIVREE) {
-            throw new IllegalStateException("La commande est déjà validée.");
-        }
-
-        // Mettre à jour l'état de la commande
-        commandeEntity.setEtat(EtatCommande.LIVREE);
+        // Changer l'état de la commande
+        commandeEntity.setEtat(EtatCommande.EN_COURS_DE_TRAITEMENT);
         commandeRepository.save(commandeEntity);
+
 
         return CommandeDtoHandler.EntityToDto(commandeEntity);
     }
 
+
+
+
+    // Supprimer un article dans une commande existante
+    @Override
+    public CommandeDtoIn supprimerProduit(int idCommande, int idProduit) throws CommandeNotFoundException, ItemCommandeNotFoundException, EtatCommandeInvalideException {
+        // Chercher la commande
+        CommandeEntity commandeEntity = commandeRepository.findById(idCommande)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + idCommande));
+
+        // Vérifier si la commande est dans un état permettant la suppression d'article
+        if (commandeEntity.getEtat() == EtatCommande.EN_COURS_DE_TRAITEMENT) {
+            throw new EtatCommandeInvalideException("Impossible de supprimer un article d'une commande en cours de traitement.");
+        }
+
+        // Chercher l'item de commande
+        ItemCommandeEntity itemCommandeEntity = null;
+        for (ItemCommandeEntity item : commandeEntity.getItemsCommande()) {
+            if (item.getIdProduitRevendeur().getId() == idProduit) {
+                itemCommandeEntity = item;
+                break;
+            }
+        }
+
+        if (itemCommandeEntity == null) {
+            throw new ItemCommandeNotFoundException("L'item de commande avec l'ID " + idProduit + " n'a pas été trouvé dans la commande.");
+        }
+
+        // Récupérer le produit revendeur
+        ProduitRevendeurEntity produitRevendeurEntity = itemCommandeEntity.getIdProduitRevendeur();
+
+        // Supprimer l'item de commande
+        commandeEntity.getItemsCommande().remove(itemCommandeEntity);
+        itemCommandeRepository.delete(itemCommandeEntity);
+
+        // Incrémenter le stock du produit revendeur
+        produitRevendeurEntity.setStock(produitRevendeurEntity.getStock() + itemCommandeEntity.getQuantite());
+        produitRevendeurRepository.save(produitRevendeurEntity);
+
+        // Mettre à jour la commande
+        commandeRepository.save(commandeEntity);
+
+        return commandeDto;
+    }
+
+
+
+
+
+    // dernier quote
 }

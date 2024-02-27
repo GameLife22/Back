@@ -224,6 +224,16 @@ public class UtilisateurEntity implements Serializable {
         return Objects.hash(id, nom, prenom, mdp, email, numRue, rue, ville, codePostal, role, numSiren, etatCompte, resetPasswordToken);
     }
 
+    public String getMoyenPaiement() {
+        if (commandes != null && !commandes.isEmpty()) {
+            // Suppose que l'utilisateur a une seule commande
+            CommandeEntity commande = commandes.get(0); // Récupère la première commande de la liste
+            return commande.getIdUtilisateur().getMoyenPaiement(); // Récupère le moyen de paiement à partir de la commande
+        } else {
+            return "Moyen de paiement non spécifié"; // Si l'utilisateur n'a pas de commande
+        }
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("UtilisateurEntity{");

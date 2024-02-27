@@ -87,5 +87,10 @@ public class ExceptionControlerAdvice {
         LOG.info("Produit introuvable: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(EtatCommandeInvalideException.class)
+    public ResponseEntity<ExceptionDtoOut> handleEtatCommandeInvalideException(EtatCommandeInvalideException ex) {
+        LOG.info("EtatCommandeInvalideException: {}", ex.getMessage());
+        return new ResponseEntity<>(new ExceptionDtoOut(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
 }
