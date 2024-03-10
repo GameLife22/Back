@@ -9,13 +9,13 @@ import java.util.Objects;
 public class ProduitDtoOut extends AbstractDtoOut {
     @Serial
     private static final long serialVersionUID = 1L;
-
     private String nom;
     private String description;
     private String categorie;
     private String plateforme;
-    private Boolean etat;
-    private List<ImageEntity> images;
+    private boolean etat;
+    private List<ImageDtoOut> images;
+    private List<Integer> idImages;
 
     public ProduitDtoOut() {
     }
@@ -52,20 +52,28 @@ public class ProduitDtoOut extends AbstractDtoOut {
         plateforme = pPlateforme;
     }
 
-    public Boolean getEtat() {
+    public boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean pEtat) {
+    public void setEtat(boolean pEtat) {
         etat = pEtat;
     }
 
-    public List<ImageEntity> getImages() {
+    public List<ImageDtoOut> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageEntity> pImages) {
+    public void setImages(List<ImageDtoOut> pImages) {
         images = pImages;
+    }
+
+    public List<Integer> getIdImages() {
+        return idImages;
+    }
+
+    public void setIdImages(List<Integer> pIdImages) {
+        idImages = pIdImages;
     }
 
     @Override
@@ -77,6 +85,7 @@ public class ProduitDtoOut extends AbstractDtoOut {
         sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
         sb.append(", images=").append(images);
+        sb.append(", idImages=").append(idImages);
         sb.append('}');
         return sb.toString();
     }

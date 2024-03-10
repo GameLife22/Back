@@ -3,13 +3,17 @@ package fr.sqli.formation.gamelife.dto.in;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sqli.formation.gamelife.dto.AbstractDto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serial;
 import java.util.Objects;
 
 abstract class AbstractDtoIn extends AbstractDto {
     @Serial
     private static final long serialVersionUID = 1L;
-
+    @NotNull
+    @Positive
     private Integer id;
 
     protected AbstractDtoIn() {

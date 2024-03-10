@@ -1,7 +1,5 @@
 package fr.sqli.formation.gamelife.enums;
 
-import fr.sqli.formation.gamelife.ex.ParameterException;
-
 public enum Plateforme {
     PC("pc"),
     PLAYSTATION5("playstation 5"),
@@ -66,7 +64,7 @@ public enum Plateforme {
         return libelle;
     }
 
-    public static String fromString(String pLibelle) throws ParameterException {
+    public static String fromString(String pLibelle) {
         if (Character.isDigit(pLibelle.charAt(0))) {
             pLibelle = "_" + pLibelle;
         }
@@ -76,6 +74,7 @@ public enum Plateforme {
                 return pLibelle;
             }
         }
-        throw new ParameterException("Plateforme invalide : " + pLibelle);
+
+        throw new EnumConstantNotPresentException(Plateforme.class, pLibelle);
     }
 }

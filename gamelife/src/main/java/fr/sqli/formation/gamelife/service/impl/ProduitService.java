@@ -1,83 +1,89 @@
 package fr.sqli.formation.gamelife.service.impl;
 
+import fr.sqli.formation.gamelife.dto.handler.ImageDtoHandler;
 import fr.sqli.formation.gamelife.dto.handler.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.ProduitDtoIn;
 import fr.sqli.formation.gamelife.dto.out.ProduitDtoOut;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
-import fr.sqli.formation.gamelife.ex.EntityExistException;
-import fr.sqli.formation.gamelife.ex.EntityNotFoundException;
-import fr.sqli.formation.gamelife.ex.ParameterException;
+import fr.sqli.formation.gamelife.repository.IImageDao;
 import fr.sqli.formation.gamelife.repository.IProduitDao;
 import fr.sqli.formation.gamelife.service.IProduitService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
+//todo: add log + javadoc
 @Service
-public class ProduitService extends AbstractService<ProduitEntity> implements IProduitService {
+public class ProduitService implements IProduitService {
     private static final Logger LOG = LoggerFactory.getLogger(ProduitService.class);
-
     private IProduitDao produitDao;
+    private IImageDao imageDao;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ProduitService(IProduitDao pProduitDao) {
-        produitDao = pProduitDao;
+    public ProduitService(IProduitDao pProduitDao, IImageDao imageDao, ModelMapper pModelMapper) {
+        this.produitDao = pProduitDao;
+        this.imageDao = imageDao;
+        this.modelMapper = pModelMapper;
     }
 
     @Override
-    public ProduitDtoOut getProduit(Integer pIdProduit) throws ParameterException, EntityNotFoundException {
-        return ProduitDtoHandler.dtoOutFromEntity(super.findEntity(pIdProduit));
+    public ProduitDtoOut getProduit(Integer pIdProduit) {
+        return ProduitDtoHandler.dtoOutFromEntity(this.produitDao.findById(pIdProduit)
+                .orElseThrow(() -> new EntityNotFoundException("getProduit -> le produit n'existe pas, l'identifiant: " + pIdProduit + " est incorrecte")));
     }
 
     @Override
     public List<ProduitDtoOut> getProduits() {
-        return ProduitDtoHandler.dtosOutFromEntity(super.findAllEntities());
+        return ProduitDtoHandler.dtoOutFromEntities(this.produitDao.findAll());
     }
 
     @Override
-    public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn) throws ParameterException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, EntityExistException {
-        var nomCategorie = pProduitDtoIn.getCategorie();
-        var nomPlateforme = pProduitDtoIn.getPlateforme();
-        var optionalProduitEntity = this.produitDao.findByNomAndCategorieAndPlateforme(pProduitDtoIn.getNom(), nomCategorie, nomPlateforme);
+    public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn) {
+        var nomProduit = pProduitDtoIn.getNom();
+        var libelleCategorie = pProduitDtoIn.getCategorie();
+        var libellePlateforme = pProduitDtoIn.getPlateforme();
+        var optionalProduitEntity = this.produitDao.findByNomAndCategorieAndPlateforme(nomProduit, libelleCategorie, libellePlateforme);
 
-        if (optionalProduitEntity.isEmpty()) {
-            var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
-            var produitDtoOut = ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
-            return produitDtoOut;
+        if (!optionalProduitEntity.isEmpty()) {
+            throw new EntityExistsException("addProduit -> le produit: " + nomProduit + " existe");
         }
 
-        throw new EntityExistException("addProduit - L'Entité existe");
+        var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
+
+        var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
+        this.imageDao.saveAll(imagesEntity);
+
+        produitEntity.setImages(imagesEntity);
+
+        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
     }
 
     @Override
-    public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn) throws ParameterException, EntityNotFoundException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, EntityExistException {
-        var nomCategorie = pProduitDtoIn.getCategorie();
-        var nomPlateforme = pProduitDtoIn.getPlateforme();
-        var optionalProduitEntity = this.produitDao.findByNomAndCategorieAndPlateforme(pProduitDtoIn.getNom(), nomCategorie, nomPlateforme);
+    public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn) {
+        var produitDtoOut = this.getProduit(pProduitDtoIn.getId());
 
-        if (optionalProduitEntity.isEmpty()) {
-            ProduitEntity produitEntity = super.findEntity(pProduitDtoIn.getId());
-            var produitDtoOut = ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
-            return produitDtoOut;
-        }
+        modelMapper.map(pProduitDtoIn, produitDtoOut);
 
-        throw new EntityExistException("addProduit - L'Entité existe");
+        var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
+
+        var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
+        this.imageDao.saveAll(imagesEntity);
+
+        produitEntity.setImages(imagesEntity);
+
+        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
     }
 
     @Override
-    public Boolean deleteProduit(Integer pIdProduit) throws ParameterException, EntityNotFoundException {
+    public void deleteProduit(Integer pIdProduit) {
         this.getProduit(pIdProduit);
         this.produitDao.deleteById(pIdProduit);
-        return true;
-    }
-
-    @Override
-    protected JpaRepository<ProduitEntity, Integer> getTargetedDao() {
-        return this.produitDao;
     }
 }

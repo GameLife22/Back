@@ -1,22 +1,34 @@
 package fr.sqli.formation.gamelife.dto.in;
 
-import fr.sqli.formation.gamelife.entity.ImageEntity;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.util.List;
 
+//todo: javadoc
 @Component
 public class ProduitDtoIn extends AbstractDtoIn {
     @Serial
-    private static final long serialVersionUID = 1L; // TODO: check
-
+    private static final long serialVersionUID = 1L;
+    // JSR-380
+    @NotEmpty
     private String nom;
+    @NotEmpty
     private String description;
+    @NotEmpty
     private String categorie;
+    @NotEmpty
     private String plateforme;
-    private Boolean etat;
-    private List<ImageEntity> images;
+    private boolean etat;
+    @Size(min=1)
+    @NotEmpty
+    private List<ImageDtoIn> images;
+    @Size(min=1)
+    @NotEmpty
+    private List<Integer> idImages;
 
     public ProduitDtoIn() {
     }
@@ -53,20 +65,28 @@ public class ProduitDtoIn extends AbstractDtoIn {
         plateforme = pPlateforme;
     }
 
-    public Boolean getEtat() {
+    public boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean pEtat) {
+    public void setEtat(boolean pEtat) {
         etat = pEtat;
     }
 
-    public List<ImageEntity> getImages() {
+    public List<ImageDtoIn> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageEntity> pImages) {
+    public void setImages(List<ImageDtoIn> pImages) {
         images = pImages;
+    }
+
+    public List<Integer> getIdImages() {
+        return idImages;
+    }
+
+    public void setIdImages(List<Integer> pIdImages) {
+        idImages = pIdImages;
     }
 
     @Override
@@ -78,6 +98,7 @@ public class ProduitDtoIn extends AbstractDtoIn {
         sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
         sb.append(", images=").append(images);
+        sb.append(", idImages=").append(idImages);
         sb.append('}');
         return sb.toString();
     }

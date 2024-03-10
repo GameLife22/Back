@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -12,28 +13,21 @@ import java.util.List;
 public class ProduitEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
-
+    private Integer id; //todo: UUID pour la sécurité
     @Column(name = "nom", nullable = false)
     private String nom;
-
     @Column(name = "description", nullable = false)
     @Type(type = "org.hibernate.type.TextType")
     private String description;
-
     @Column(name = "categorie", nullable = false, length = 50)
     private String categorie;
-
     @Column(name = "plateforme", nullable = false, length = 50)
     private String plateforme;
-
     @Column(name = "etat", nullable = false)
-    private Boolean etat = true;
-
+    private boolean etat;
     @OneToMany(mappedBy = "produit")
     private List<ImageEntity> images;
 
@@ -80,11 +74,11 @@ public class ProduitEntity implements Serializable {
         plateforme = pPlateforme;
     }
 
-    public Boolean getEtat() {
+    public boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean pEtat) {
+    public void setEtat(boolean pEtat) {
         etat = pEtat;
     }
 
@@ -105,7 +99,7 @@ public class ProduitEntity implements Serializable {
         sb.append(", categorie='").append(categorie).append('\'');
         sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
-        //sb.append(", images=").append(images);
+        sb.append(", images=").append(images);
         sb.append('}');
         return sb.toString();
     }

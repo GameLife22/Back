@@ -6,54 +6,61 @@ import fr.sqli.formation.gamelife.entity.ImageEntity;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import fr.sqli.formation.gamelife.enums.Categorie;
 import fr.sqli.formation.gamelife.enums.Plateforme;
-import fr.sqli.formation.gamelife.ex.ParameterException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public interface ProduitDtoHandler {
-    public static ProduitEntity toEntity(ProduitDtoIn pProduitDtoIn) throws ParameterException {
-        var result = new ProduitEntity();
+    public static ProduitEntity toEntity(ProduitDtoIn pProduitDtoIn) {
+        var produitEntity = new ProduitEntity();
 
-        result.setNom(pProduitDtoIn.getNom());
-        result.setDescription(pProduitDtoIn.getDescription());
-        result.setCategorie(Categorie.fromString(pProduitDtoIn.getCategorie()));
-        result.setPlateforme(Plateforme.fromString(pProduitDtoIn.getPlateforme()));
-        result.setEtat(pProduitDtoIn.getEtat());
-        result.setImages(pProduitDtoIn.getImages());
-
-        return result;
-    }
-
-    public static ProduitDtoOut dtoOutFromEntity(ProduitEntity pProduitEntity) throws ParameterException {
-        var result = new ProduitDtoOut();
-
-        result.setId(pProduitEntity.getId());
-        result.setNom(pProduitEntity.getNom());
-        result.setDescription(pProduitEntity.getDescription());
-        result.setCategorie(Categorie.fromString(pProduitEntity.getCategorie()));
-        result.setPlateforme(Plateforme.fromString(pProduitEntity.getPlateforme()));
-        result.setEtat(pProduitEntity.getEtat());
-        result.setImages(pProduitEntity.getImages());
-
-        return result;
-    }
-
-    public static List<ProduitDtoOut> dtosOutFromEntity(List<ProduitEntity> pProduitEntities) {
-        List<ProduitDtoOut> produits = new ArrayList<>();
-
-        if (pProduitEntities != null && !pProduitEntities.isEmpty()) {
-            pProduitEntities.forEach(produit -> {
-                try {
-                    produits.add(dtoOutFromEntity(produit));
-                } catch (ParameterException pE) {
-                    pE.getMessage(); // TODO: modifier
-                }
-            });
+        if(pProduitDtoIn.getId() != null) {
+            produitEntity.setId(pProduitDtoIn.getId());
         }
 
-        return produits;
+        produitEntity.setNom(pProduitDtoIn.getNom());
+        produitEntity.setDescription(pProduitDtoIn.getDescription());
+        produitEntity.setCategorie(Categorie.fromString(pProduitDtoIn.getCategorie()));
+        produitEntity.setPlateforme(Plateforme.fromString(pProduitDtoIn.getPlateforme()));
+        produitEntity.setEtat(pProduitDtoIn.getEtat());
+
+        if(pProduitDtoIn.getImages() != null) {
+            produitEntity.setImages(ImageDtoHandler.toEntities(pProduitDtoIn.getImages()));
+        }
+
+        if(pProduitDtoIn.getIdImages() != null) {
+            List<ImageEntity> imagesEntity = pProduitDtoIn.getIdImages().stream()
+                    .map(idImage -> new ImageEntity(idImage))
+                    .collect(Collectors.toList());
+            produitEntity.setImages(imagesEntity);
+        }
+
+        return produitEntity;
+    }
+
+    public static ProduitDtoOut dtoOutFromEntity(ProduitEntity pProduitEntity) {
+        var produitDtoOut = new ProduitDtoOut();
+        produitDtoOut.setId(pProduitEntity.getId());
+        produitDtoOut.setNom(pProduitEntity.getNom());
+        produitDtoOut.setDescription(pProduitEntity.getDescription());
+        produitDtoOut.setCategorie(pProduitEntity.getCategorie());
+        produitDtoOut.setPlateforme(pProduitEntity.getPlateforme());
+        produitDtoOut.setEtat(pProduitEntity.getEtat());
+        produitDtoOut.setImages(ImageDtoHandler.dtoOutFromEntities(pProduitEntity, pProduitEntity.getImages()));
+
+        List<Integer> idImages = pProduitEntity.getImages().stream()
+                .map(ImageEntity::getId)
+                .collect(Collectors.toList());
+
+        produitDtoOut.setIdImages(idImages);
+        return produitDtoOut;
+    }
+
+    public static List<ProduitDtoOut> dtoOutFromEntities(List<ProduitEntity> pProduitEntities) {
+        return pProduitEntities.stream()
+                .map(ProduitDtoHandler::dtoOutFromEntity)
+                .collect(Collectors.toList());
     }
 }

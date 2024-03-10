@@ -7,8 +7,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Objects;
 
 @Entity
 @Table(name = "glimage", schema = "gamelife")
@@ -20,20 +18,21 @@ public class ImageEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_produit", nullable = false)
     @JsonIgnore
     private ProduitEntity produit;
-
     @Column(name = "image", nullable = false)
     private String image;
-
     @Column(name = "titre", nullable = false)
     private String titre;
 
     public ImageEntity() {
+    }
+
+    public ImageEntity(Integer pIdImage) {
+        this.id = pIdImage;
     }
 
     public Integer getId() {
@@ -43,6 +42,7 @@ public class ImageEntity implements Serializable {
     public void setId(Integer pId) {
         id = pId;
     }
+
 
     public ProduitEntity getProduit() {
         return produit;
