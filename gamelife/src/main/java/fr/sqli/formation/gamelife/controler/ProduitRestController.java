@@ -28,8 +28,8 @@ public class ProduitRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProduitDtoOut> getProduit(@PathVariable int pIdProduit) {
-        var result = this.service.getProduit(pIdProduit);
+    public ResponseEntity<ProduitDtoOut> getProduit(@PathVariable int id) {
+        var result = this.service.getProduit(id);
         return ResponseEntity.ok(result);
     }
 
@@ -52,8 +52,8 @@ public class ProduitRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable int pIdProduit) {
-        service.deleteProduit(pIdProduit);
+    public ResponseEntity<Void> deleteProduit(@PathVariable int id) {
+        service.deleteProduit(id);
         return ResponseEntity.ok().build();
     }
 
