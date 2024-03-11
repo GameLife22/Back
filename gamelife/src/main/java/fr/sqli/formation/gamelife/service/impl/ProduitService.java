@@ -34,7 +34,7 @@ public class ProduitService implements IProduitService {
     }
 
     @Override
-    public ProduitDtoOut getProduit(Integer pIdProduit) {
+    public ProduitDtoOut getProduit(int pIdProduit) {
         return ProduitDtoHandler.dtoOutFromEntity(this.produitDao.findById(pIdProduit)
                 .orElseThrow(() -> new EntityNotFoundException("getProduit -> le produit n'existe pas, l'identifiant: " + pIdProduit + " est incorrecte")));
     }
@@ -82,7 +82,7 @@ public class ProduitService implements IProduitService {
     }
 
     @Override
-    public void deleteProduit(Integer pIdProduit) {
+    public void deleteProduit(int pIdProduit) {
         this.getProduit(pIdProduit);
         this.produitDao.deleteById(pIdProduit);
     }

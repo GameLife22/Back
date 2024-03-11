@@ -7,9 +7,9 @@ import java.util.List;
 
 //todo: javadoc
 public interface IProduitService {
-    public ProduitDtoOut getProduit(Integer pIdProduit);
+    public ProduitDtoOut getProduit(int pIdProduit);
     public List<ProduitDtoOut> getProduits();
     public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn);
     public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn);
-    public void deleteProduit(Integer pIdProduit);
+    public void deleteProduit(int pIdProduit);
 }
