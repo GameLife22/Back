@@ -12,8 +12,6 @@ import java.util.Objects;
 abstract class AbstractDtoIn extends AbstractDto {
     @Serial
     private static final long serialVersionUID = 1L;
-    @NotNull
-    @Positive
     private Integer id;
 
     protected AbstractDtoIn() {

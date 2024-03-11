@@ -24,10 +24,8 @@ public class ProduitDtoIn extends AbstractDtoIn {
     private String plateforme;
     private boolean etat;
     @Size(min=1)
-    @NotEmpty
     private List<ImageDtoIn> images;
     @Size(min=1)
-    @NotEmpty
     private List<Integer> idImages;
 
     public ProduitDtoIn() {

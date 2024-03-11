@@ -1,8 +1,7 @@
 package fr.sqli.formation.gamelife.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -18,8 +17,8 @@ public class ImageEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(optional = false)
+    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "id_produit", nullable = false)
     @JsonIgnore
     private ProduitEntity produit;

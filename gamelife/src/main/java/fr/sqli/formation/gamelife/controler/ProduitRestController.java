@@ -17,6 +17,7 @@ import java.util.List;
 // todo: pathvariable or resquestparam
 @RestController
 @RequestMapping("/produit")
+
 public class ProduitRestController {
     private static final Logger LOG = LoggerFactory.getLogger(ProduitRestController.class);
 

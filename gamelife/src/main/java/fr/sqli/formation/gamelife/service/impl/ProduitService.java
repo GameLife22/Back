@@ -56,13 +56,14 @@ public class ProduitService implements IProduitService {
         }
 
         var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
-
         var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
-        this.imageDao.saveAll(imagesEntity);
-
         produitEntity.setImages(imagesEntity);
 
-        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
+        var produitEntityFromDatabase = this.produitDao.saveAndFlush(produitEntity);
+
+        this.imageDao.saveAllAndFlush(imagesEntity);
+
+        return  ProduitDtoHandler.dtoOutFromEntity(produitEntityFromDatabase);
     }
 
     @Override
@@ -72,13 +73,14 @@ public class ProduitService implements IProduitService {
         modelMapper.map(pProduitDtoIn, produitDtoOut);
 
         var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
-
         var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
-        this.imageDao.saveAll(imagesEntity);
-
         produitEntity.setImages(imagesEntity);
 
-        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
+        var produitEntityFromDatabase = this.produitDao.saveAndFlush(produitEntity);
+
+        this.imageDao.saveAllAndFlush(imagesEntity);
+
+        return  ProduitDtoHandler.dtoOutFromEntity(produitEntityFromDatabase);
     }
 
     @Override

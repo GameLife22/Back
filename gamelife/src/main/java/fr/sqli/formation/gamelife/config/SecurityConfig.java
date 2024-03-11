@@ -86,7 +86,7 @@ public class SecurityConfig {
                         .antMatchers("/utilisateur/mdpoublie").permitAll()
                         .antMatchers("/utilisateur/mdpreset").permitAll()
                         .antMatchers("/utilisateur/getEmailByToken").permitAll()
-                        .antMatchers("/produit/{id}").permitAll()
+                        .antMatchers("/produit/{id}").permitAll() //todo: update role
                         .antMatchers("/produit/all").permitAll()
                         .antMatchers("/produit/add").permitAll()
                         .antMatchers("/produit/update").permitAll()
