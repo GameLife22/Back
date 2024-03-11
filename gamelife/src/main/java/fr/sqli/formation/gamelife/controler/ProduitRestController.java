@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 // TODO: add logs + swagger + status code + test controller
+// todo: pathvariable or resquestparam
 @RestController
 @RequestMapping("/produit")
 public class ProduitRestController {
@@ -26,8 +27,8 @@ public class ProduitRestController {
         service = pService;
     }
 
-    @GetMapping("/{idProduit}")
-    public ResponseEntity<ProduitDtoOut> getProduit(@PathVariable Integer pIdProduit) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ProduitDtoOut> getProduit(@PathVariable int pIdProduit) {
         var result = this.service.getProduit(pIdProduit);
         return ResponseEntity.ok(result);
     }
@@ -44,15 +45,17 @@ public class ProduitRestController {
         return ResponseEntity.ok(result);
     }
 
-    @PatchMapping("/update/{idProduit}")
-    public ResponseEntity<ProduitDtoOut> updateProduit(@Valid @PathVariable Integer pIdProduit, @RequestBody ProduitDtoIn pProduitDtoIn) {
+    @PatchMapping("/update")
+    public ResponseEntity<ProduitDtoOut> updateProduit(@Valid @RequestBody ProduitDtoIn pProduitDtoIn) {
         var result = this.service.updateProduit(pProduitDtoIn);
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/delete/{idProduit}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable Integer pIdProduit) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProduit(@PathVariable int pIdProduit) {
         service.deleteProduit(pIdProduit);
         return ResponseEntity.ok().build();
     }
+
+    //todo: add method to search the products
 }

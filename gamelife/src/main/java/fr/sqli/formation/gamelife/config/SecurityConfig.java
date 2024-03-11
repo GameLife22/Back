@@ -86,8 +86,12 @@ public class SecurityConfig {
                         .antMatchers("/utilisateur/mdpoublie").permitAll()
                         .antMatchers("/utilisateur/mdpreset").permitAll()
                         .antMatchers("/utilisateur/getEmailByToken").permitAll()
+                        .antMatchers("/produit/{id}").permitAll()
                         .antMatchers("/produit/all").permitAll()
-                        .antMatchers("/produit/search").permitAll()
+                        .antMatchers("/produit/add").permitAll()
+                        .antMatchers("/produit/update").permitAll()
+                        .antMatchers("/produit/delete/{id}").permitAll()
+                        .antMatchers("/produit/search").permitAll() //todo: context search
                         .antMatchers("/inscription/inscription").permitAll()
                         .antMatchers("/inscription/siret").permitAll()
                         .antMatchers("/inscription/activer").permitAll()
