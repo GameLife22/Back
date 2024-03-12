@@ -4,8 +4,6 @@ import fr.sqli.formation.gamelife.dto.handler.ImageDtoHandler;
 import fr.sqli.formation.gamelife.dto.handler.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.ProduitDtoIn;
 import fr.sqli.formation.gamelife.dto.out.ProduitDtoOut;
-import fr.sqli.formation.gamelife.entity.ProduitEntity;
-import fr.sqli.formation.gamelife.repository.IImageDao;
 import fr.sqli.formation.gamelife.repository.IProduitDao;
 import fr.sqli.formation.gamelife.service.IProduitService;
 import org.modelmapper.ModelMapper;
@@ -23,13 +21,11 @@ import java.util.List;
 public class ProduitService implements IProduitService {
     private static final Logger LOG = LoggerFactory.getLogger(ProduitService.class);
     private IProduitDao produitDao;
-    private IImageDao imageDao;
     private ModelMapper modelMapper;
 
     @Autowired
-    public ProduitService(IProduitDao pProduitDao, IImageDao imageDao, ModelMapper pModelMapper) {
+    public ProduitService(IProduitDao pProduitDao, ModelMapper pModelMapper) {
         this.produitDao = pProduitDao;
-        this.imageDao = imageDao;
         this.modelMapper = pModelMapper;
     }
 
@@ -59,11 +55,7 @@ public class ProduitService implements IProduitService {
         var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
         produitEntity.setImages(imagesEntity);
 
-        var produitEntityFromDatabase = this.produitDao.saveAndFlush(produitEntity);
-
-        this.imageDao.saveAllAndFlush(imagesEntity);
-
-        return  ProduitDtoHandler.dtoOutFromEntity(produitEntityFromDatabase);
+        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
     }
 
     @Override
@@ -76,11 +68,7 @@ public class ProduitService implements IProduitService {
         var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
         produitEntity.setImages(imagesEntity);
 
-        var produitEntityFromDatabase = this.produitDao.saveAndFlush(produitEntity);
-
-        this.imageDao.saveAllAndFlush(imagesEntity);
-
-        return  ProduitDtoHandler.dtoOutFromEntity(produitEntityFromDatabase);
+        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
     }
 
     @Override

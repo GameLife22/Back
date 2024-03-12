@@ -9,8 +9,6 @@ public class ImageDtoIn extends AbstractDtoIn {
     private String image;
     @NotEmpty
     private String titre;
-    @NotNull
-    @Positive
     private Integer idProduit;
 
     public ImageDtoIn() {

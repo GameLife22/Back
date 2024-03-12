@@ -25,7 +25,6 @@ public class ProduitDtoIn extends AbstractDtoIn {
     private boolean etat;
     @Size(min=1)
     private List<ImageDtoIn> images;
-    @Size(min=1)
     private List<Integer> idImages;
 
     public ProduitDtoIn() {

@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
@@ -30,7 +29,6 @@ public class ProduitEntity implements Serializable {
     @Column(name = "etat", nullable = false)
     private boolean etat;
     @OneToMany(mappedBy = "produit")
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     private List<ImageEntity> images;
 
     public ProduitEntity() {

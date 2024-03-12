@@ -18,7 +18,6 @@ public class ImageEntity implements Serializable {
     @Column(name = "id", nullable = false)
     private Integer id;
     @ManyToOne(optional = false)
-    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "id_produit", nullable = false)
     @JsonIgnore
     private ProduitEntity produit;

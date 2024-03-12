@@ -50,7 +50,6 @@ class ProduitServiceTest {
         images.add(image);
 
         produitDtoIn.setImages(images);
-        produitDtoIn.getImages().get(0).setIdProduit(1);
     }
 
     @Test
@@ -76,7 +75,7 @@ class ProduitServiceTest {
         Assertions.assertEquals(produitDtoIn.getCategorie(), produitDtoOut.getCategorie());
         Assertions.assertEquals(produitDtoIn.getPlateforme(), produitDtoOut.getPlateforme());
         Assertions.assertEquals(produitDtoIn.getEtat(), produitDtoOut.getEtat());
-        Assertions.assertEquals(produitDtoIn.getImages().get(0).getImage(), produitDtoOut.getImages().get(0).getImage());
+        Assertions.assertEquals(produitDtoIn.getImages(), produitDtoOut.getImages());
     }
 
     @ParameterizedTest
@@ -146,7 +145,7 @@ class ProduitServiceTest {
         Assertions.assertEquals(produitDtoIn.getCategorie(), produitDtoOut.getCategorie());
         Assertions.assertEquals(produitDtoIn.getPlateforme(), produitDtoOut.getPlateforme());
         Assertions.assertEquals(produitDtoIn.getEtat(), produitDtoOut.getEtat());
-        Assertions.assertEquals(produitDtoIn.getImages().get(0).getImage(), produitDtoOut.getImages().get(0).getImage());
+        Assertions.assertEquals(produitDtoIn.getImages(), produitDtoOut.getImages());
     }
 
     @ParameterizedTest
