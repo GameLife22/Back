@@ -16,7 +16,7 @@ services:
       - ${DB_DOCKER_PORT}:${DB_LOCAL_PORT}
     volumes:
       - type: bind
-        source: ./db/gamelifev0.4.0.sql
+        source: ./db/gamelifev0.5.0.sql
         target: /docker-entrypoint-initdb.d/insert.sql
         read_only: true
 #      - type: volume
