@@ -1,4 +1,3 @@
-
 package fr.sqli.formation.gamelife.controler;
 
 import fr.sqli.formation.gamelife.dto.in.ProduitDtoIn;
@@ -12,12 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 // TODO: add logs + swagger + status code + test controller
-// todo: pathvariable or resquestparam
 @RestController
 @RequestMapping("/produit")
-
 public class ProduitRestController {
     private static final Logger LOG = LoggerFactory.getLogger(ProduitRestController.class);
 
@@ -29,7 +27,7 @@ public class ProduitRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProduitDtoOut> getProduit(@PathVariable int id) {
+    public ResponseEntity<ProduitDtoOut> getProduit(@PathVariable UUID id) {
         var result = this.service.getProduit(id);
         return ResponseEntity.ok(result);
     }
@@ -52,8 +50,10 @@ public class ProduitRestController {
         return ResponseEntity.ok(result);
     }
 
+    //todo: disable produit
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable int id) {
+    public ResponseEntity<Void> deleteProduit(@PathVariable UUID id) {
         service.deleteProduit(id);
         return ResponseEntity.ok().build();
     }

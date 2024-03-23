@@ -1,36 +1,37 @@
 package fr.sqli.formation.gamelife.dto.in;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sqli.formation.gamelife.dto.AbstractDto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.util.Objects;
+import java.util.UUID;
 
 abstract class AbstractDtoIn extends AbstractDto {
     @Serial
     private static final long serialVersionUID = 1L;
-    private Integer id;
+
+    private UUID id;
 
     protected AbstractDtoIn() {
         super();
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer pId) {
+    public void setId(UUID pId) {
         id = pId;
     }
 
     @Override
-    public boolean equals(Object pO) {
-        if (this == pO) return true;
-        if (pO == null || getClass() != pO.getClass()) return false;
-        AbstractDtoIn that = (AbstractDtoIn) pO;
+    public boolean equals(Object pObject) {
+        if (this == pObject) return true;
+        if (pObject == null || getClass() != pObject.getClass()) return false;
+        AbstractDtoIn that = (AbstractDtoIn) pObject;
         return Objects.equals(id, that.id);
     }
 
@@ -41,9 +42,9 @@ abstract class AbstractDtoIn extends AbstractDto {
 
     @Override
     public String toString() {
-        var sb = new StringBuilder();
-        sb.append(this.getClass().getSimpleName());
-        sb.append(" {}");
+        final StringBuffer sb = new StringBuffer("AbstractDtoIn{");
+        sb.append("id=").append(id);
+        sb.append('}');
         return sb.toString();
     }
 }

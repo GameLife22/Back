@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UtilisateurRepository extends JpaRepository<UtilisateurEntity,Integer> {
+public interface UtilisateurRepository extends JpaRepository<UtilisateurEntity, UUID> {
 
     // @Query("FROM UtilisateurEntity as c WHERE c.email=:email")
     // public UtilisateurEntity trouverEmail(@Param("email") String email);
     public Optional<UtilisateurEntity> findByEmail(String email);
-    public Optional<UtilisateurEntity> findById(Integer id);
+    public Optional<UtilisateurEntity> findById(UUID pUUID);
     public UtilisateurEntity findByResetPasswordToken(String token);
     public List<UtilisateurEntity> findAll();
 

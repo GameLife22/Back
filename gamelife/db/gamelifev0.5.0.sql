@@ -9,9 +9,11 @@ DROP TABLE IF EXISTS gamelife.glimage CASCADE;
 DROP TABLE IF EXISTS gamelife.glitem_commande CASCADE;
 DROP TABLE IF EXISTS gamelife.glproduit_revendeur CASCADE;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE gamelife.glutilisateur
 (
-    uuid                  UUID PRIMARY KEY,
+    uuid                  UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     nom                   VARCHAR(50)          NOT NULL,
     prenom                VARCHAR(50)          NOT NULL,
     mdp                   VARCHAR(80)          NOT NULL,
@@ -28,8 +30,8 @@ CREATE TABLE gamelife.glutilisateur
 
 CREATE TABLE gamelife.glcommande
 (
-    uuid                  UUID PRIMARY KEY,
-    id_utilisateur        UUID         NOT NULL,
+    uuid                  UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id_utilisateur        UUID DEFAULT uuid_generate_v4()         NOT NULL,
     etat                  VARCHAR(80)  NOT NULL,
     num_rue_livraison     INT          NOT NULL,
     rue_livraison         VARCHAR(255) NOT NULL,
@@ -41,23 +43,23 @@ CREATE TABLE gamelife.glcommande
 
 CREATE TABLE gamelife.glcategorie
 (
-    uuid UUID PRIMARY KEY,
-    nom         VARCHAR(25) NOT NULL UNIQUE
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    libelle         VARCHAR(25) NOT NULL UNIQUE
 );
 
 CREATE TABLE gamelife.glplateforme
 (
-    uuid UUID PRIMARY KEY,
-    nom         VARCHAR(25) NOT NULL UNIQUE
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    libelle         VARCHAR(25) NOT NULL UNIQUE
 );
 
 CREATE TABLE gamelife.glproduit
 (
-    uuid          UUID PRIMARY KEY,
+    uuid          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     nom           VARCHAR(255) NOT NULL UNIQUE,
     description   TEXT         NOT NULL,
-    id_categorie  UUID         NOT NULL,
-    id_plateforme UUID         NOT NULL,
+    id_categorie  UUID DEFAULT uuid_generate_v4()         NOT NULL,
+    id_plateforme UUID DEFAULT uuid_generate_v4()         NOT NULL,
     etat          BOOLEAN      DEFAULT TRUE,
     FOREIGN KEY (id_categorie) REFERENCES gamelife.glcategorie (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_plateforme) REFERENCES gamelife.glplateforme (uuid) ON DELETE CASCADE ON UPDATE CASCADE
@@ -65,8 +67,8 @@ CREATE TABLE gamelife.glproduit
 
 CREATE TABLE gamelife.glimage
 (
-    uuid UUID PRIMARY KEY,
-    id_produit UUID         NOT NULL,
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id_produit UUID DEFAULT uuid_generate_v4()         NOT NULL,
     url        TEXT         NOT NULL,
     filename   VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (uuid) ON DELETE CASCADE ON UPDATE CASCADE
@@ -74,21 +76,21 @@ CREATE TABLE gamelife.glimage
 
 CREATE TABLE gamelife.glproduit_revendeur
 (
-    uuid UUID PRIMARY KEY,
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     stock          INT            NOT NULL,
     prix           DECIMAL(10, 0) NOT NULL,
     etat           VARCHAR(25)    NOT NULL,
-    id_produit     UUID           NOT NULL,
-    id_utilisateur UUID           NOT NULL,
+    id_produit     UUID DEFAULT uuid_generate_v4()           NOT NULL,
+    id_utilisateur UUID DEFAULT uuid_generate_v4()           NOT NULL,
     FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (uuid) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE gamelife.glitem_commande
 (
-    uuid UUID PRIMARY KEY,
-    id_commande           UUID NOT NULL,
-    id_produit_revendeur  UUID NOT NULL,
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id_commande           UUID DEFAULT uuid_generate_v4() NOT NULL,
+    id_produit_revendeur  UUID DEFAULT uuid_generate_v4() NOT NULL,
     quantite              INT NOT NULL,
     FOREIGN KEY (id_commande) REFERENCES gamelife.glcommande (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_produit_revendeur) REFERENCES gamelife.glproduit_revendeur (uuid) ON DELETE CASCADE ON UPDATE CASCADE

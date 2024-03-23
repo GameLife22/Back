@@ -1,9 +1,6 @@
 package fr.sqli.formation.gamelife.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.UUID;
@@ -12,6 +9,7 @@ import java.util.UUID;
 @Table(name = "glplateforme", schema = "gamelife")
 public class PlateformeEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uuid", nullable = false)
     private UUID id;
 

@@ -70,11 +70,4 @@ public class ExceptionControlerAdvice {
         LOG.info("Commande introuvable: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-
-    @ExceptionHandler(ProduitRevendeutException.class)
-    public ResponseEntity<String> handleProduitException(ProduitRevendeutException ex) {
-        LOG.info("Produit introuvable: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
 }

@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
 // TODO : rename file
 @RestController
 @RequestMapping("/gestioncompte")
@@ -29,7 +32,7 @@ public class GestionCompteControler {
 
 
     @PostMapping("/etat")
-    public ResponseEntity<Integer> gestionEtat(@RequestBody GestionEtatDto monbody) throws Exception{
+    public ResponseEntity<UUID> gestionEtat(@RequestBody GestionEtatDto monbody) throws Exception{
         LOG.info("GestionEtatControler : IN {}", monbody);
         UtilisateurEntity res;
         res = service.modificationEtat(monbody);
@@ -39,7 +42,7 @@ public class GestionCompteControler {
 
 
     @PostMapping("/mdp")
-    public ResponseEntity<Integer> gestionMdp(@RequestBody GestionMdpDto monbody) throws Exception{
+    public ResponseEntity<UUID> gestionMdp(@RequestBody GestionMdpDto monbody) throws Exception{
         LOG.info("GestionMdpControler : IN {}", monbody);
         UtilisateurEntity res;
         res = service.modificationMdp(monbody);

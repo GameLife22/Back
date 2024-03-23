@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class GestionCompteService {
@@ -94,7 +95,7 @@ public class GestionCompteService {
         }
     }
 
-    public boolean estRevendeur(int id) throws Exception {
+    public boolean estRevendeur(UUID id) throws Exception {
         var user = uDao.findById(id);
         if (!user.isPresent()) {
             throw new UtilisateurExistantException("utilisateur inexistant");
@@ -106,7 +107,7 @@ public class GestionCompteService {
         return false;
     }
 
-    public UserDtoOut getUser(int id) throws Exception {
+    public UserDtoOut getUser(UUID id) throws Exception {
         var user = uDao.findById(id);
         if (!user.isPresent()) {
             throw new UtilisateurExistantException("utilisateur inexistant");

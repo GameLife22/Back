@@ -1,17 +1,19 @@
 package fr.sqli.formation.gamelife.dto.gestionCompte;
 
+import java.util.UUID;
+
 public class GestionMdpDto {
 
     public GestionMdpDto() {
     }
 
-    public GestionMdpDto(Integer id, String new_mdp, String old_mdp) {
+    public GestionMdpDto(UUID id, String new_mdp, String old_mdp) {
         this.id = id;
         this.new_mdp = new_mdp;
         this.old_mdp = old_mdp;
     }
 
-    private Integer id;
+    private UUID id;
 
     private String new_mdp;
 
@@ -29,12 +31,12 @@ public class GestionMdpDto {
         this.old_mdp = old_mdp;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(UUID pId) {
+        id = pId;
     }
 
     public String getNew_mdp() {

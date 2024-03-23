@@ -11,18 +11,19 @@ import java.util.UUID;
 @Table(name = "glitem_commande", schema = "gamelife")
 public class ItemCommandeEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uuid", nullable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_commande", nullable = false)
-    private CommandeEntity idCommande;
+    private CommandeEntity commande;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_produit_revendeur", nullable = false)
-    private ProduitRevendeurEntity idProduitRevendeur;
+    private ProduitRevendeurEntity produitRevendeur;
 
     @Column(name = "quantite", nullable = false)
     private Integer quantite;
@@ -35,36 +36,36 @@ public class ItemCommandeEntity {
         this.id = id;
     }
 
-    public CommandeEntity getIdCommande() {
-        return idCommande;
+    public CommandeEntity getCommande() {
+        return commande;
     }
 
-    public void setIdCommande(CommandeEntity idCommande) {
-        this.idCommande = idCommande;
+    public void setCommande(CommandeEntity pCommande) {
+        commande = pCommande;
     }
 
-    public ProduitRevendeurEntity getIdProduitRevendeur() {
-        return idProduitRevendeur;
+    public ProduitRevendeurEntity getProduitRevendeur() {
+        return produitRevendeur;
     }
 
-    public void setIdProduitRevendeur(ProduitRevendeurEntity idProduitRevendeur) {
-        this.idProduitRevendeur = idProduitRevendeur;
+    public void setProduitRevendeur(ProduitRevendeurEntity pProduitRevendeur) {
+        produitRevendeur = pProduitRevendeur;
     }
 
     public Integer getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Integer quantite) {
-        this.quantite = quantite;
+    public void setQuantite(Integer pQuantite) {
+        quantite = pQuantite;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ItemCommandeEntity{");
         sb.append("id=").append(id);
-        sb.append(", idCommande=").append(idCommande);
-        sb.append(", idProduitRevendeur=").append(idProduitRevendeur);
+        sb.append(", commande=").append(commande);
+        sb.append(", produitRevendeur=").append(produitRevendeur);
         sb.append(", quantite=").append(quantite);
         sb.append('}');
         return sb.toString();

@@ -1,11 +1,13 @@
 package fr.sqli.formation.gamelife.dto.gestionCompte;
 
+import java.util.UUID;
+
 public class GestionCompteDto {
 
     public GestionCompteDto() {
     }
 
-    public GestionCompteDto(Integer id, String nom, String prenom, String email, Integer num_rue, String rue, String ville, Integer codePostal, String numSiren) {
+    public GestionCompteDto(UUID id, String nom, String prenom, String email, Integer num_rue, String rue, String ville, Integer codePostal, String numSiren) {
         this.id = id;
         this.email = email;
         this.nom = nom;
@@ -17,7 +19,7 @@ public class GestionCompteDto {
         this.ville = ville;
     }
 
-    private  Integer id;
+    private UUID id;
     private String email;
 
     private String nom;
@@ -34,12 +36,12 @@ public class GestionCompteDto {
 
     private String ville;
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(UUID pId) {
+        id = pId;
     }
 
     public Integer getCodePostal() {

@@ -3,7 +3,7 @@ package fr.sqli.formation.gamelife.dto.in;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.util.List;
@@ -13,9 +13,10 @@ import java.util.List;
 public class ProduitDtoIn extends AbstractDtoIn {
     @Serial
     private static final long serialVersionUID = 1L;
-    // JSR-380
+
     @NotEmpty
     private String nom;
+
     @NotEmpty
     private String description;
     @NotEmpty
@@ -24,8 +25,8 @@ public class ProduitDtoIn extends AbstractDtoIn {
     private String plateforme;
     private boolean etat;
     @Size(min=1)
+    @NotNull
     private List<ImageDtoIn> images;
-    private List<Integer> idImages;
 
     public ProduitDtoIn() {
     }
@@ -78,14 +79,6 @@ public class ProduitDtoIn extends AbstractDtoIn {
         images = pImages;
     }
 
-    public List<Integer> getIdImages() {
-        return idImages;
-    }
-
-    public void setIdImages(List<Integer> pIdImages) {
-        idImages = pIdImages;
-    }
-
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ProduitDtoIn{");
@@ -95,7 +88,6 @@ public class ProduitDtoIn extends AbstractDtoIn {
         sb.append(", plateforme='").append(plateforme).append('\'');
         sb.append(", etat=").append(etat);
         sb.append(", images=").append(images);
-        sb.append(", idImages=").append(idImages);
         sb.append('}');
         return sb.toString();
     }

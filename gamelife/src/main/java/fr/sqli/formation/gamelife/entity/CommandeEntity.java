@@ -13,6 +13,7 @@ import java.util.UUID;
 @Table(name = "glcommande", schema = "gamelife")
 public class CommandeEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uuid", nullable = false)
     private UUID id;
 
@@ -20,7 +21,7 @@ public class CommandeEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_utilisateur", nullable = false)
-    private UtilisateurEntity idUtilisateur;
+    private UtilisateurEntity utilisateur;
 
     @Size(max = 80)
     @NotNull
@@ -57,67 +58,67 @@ public class CommandeEntity {
         this.id = id;
     }
 
-    public UtilisateurEntity getIdUtilisateur() {
-        return idUtilisateur;
+    public UtilisateurEntity getUtilisateur() {
+        return utilisateur;
     }
 
-    public void setIdUtilisateur(UtilisateurEntity idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
+    public void setUtilisateur(UtilisateurEntity pUtilisateur) {
+        utilisateur = pUtilisateur;
     }
 
     public String getEtat() {
         return etat;
     }
 
-    public void setEtat(String etat) {
-        this.etat = etat;
+    public void setEtat(String pEtat) {
+        etat = pEtat;
     }
 
     public Integer getNumRueLivraison() {
         return numRueLivraison;
     }
 
-    public void setNumRueLivraison(Integer numRueLivraison) {
-        this.numRueLivraison = numRueLivraison;
+    public void setNumRueLivraison(Integer pNumRueLivraison) {
+        numRueLivraison = pNumRueLivraison;
     }
 
     public String getRueLivraison() {
         return rueLivraison;
     }
 
-    public void setRueLivraison(String rueLivraison) {
-        this.rueLivraison = rueLivraison;
+    public void setRueLivraison(String pRueLivraison) {
+        rueLivraison = pRueLivraison;
     }
 
     public String getVilleLivraison() {
         return villeLivraison;
     }
 
-    public void setVilleLivraison(String villeLivraison) {
-        this.villeLivraison = villeLivraison;
+    public void setVilleLivraison(String pVilleLivraison) {
+        villeLivraison = pVilleLivraison;
     }
 
     public Integer getCodePostalLivraison() {
         return codePostalLivraison;
     }
 
-    public void setCodePostalLivraison(Integer codePostalLivraison) {
-        this.codePostalLivraison = codePostalLivraison;
+    public void setCodePostalLivraison(Integer pCodePostalLivraison) {
+        codePostalLivraison = pCodePostalLivraison;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDate(LocalDate pDate) {
+        date = pDate;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("CommandeEntity{");
         sb.append("id=").append(id);
-        sb.append(", idUtilisateur=").append(idUtilisateur);
+        sb.append(", utilisateur=").append(utilisateur);
         sb.append(", etat='").append(etat).append('\'');
         sb.append(", numRueLivraison=").append(numRueLivraison);
         sb.append(", rueLivraison='").append(rueLivraison).append('\'');

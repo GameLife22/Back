@@ -1,14 +1,16 @@
 package fr.sqli.formation.gamelife.dto.gestionCompte;
 
+import java.util.UUID;
+
 public class GestionEtatDto {
 
-    private Integer id;
+    private UUID id;
     private Boolean new_etat;
 
     public GestionEtatDto() {
     }
 
-    public GestionEtatDto(Integer id, Boolean new_etat) {
+    public GestionEtatDto(UUID id, Boolean new_etat) {
         this.new_etat = new_etat;
         this.id = id;
     }
@@ -17,11 +19,11 @@ public class GestionEtatDto {
         return new_etat;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(UUID pId) {
+        id = pId;
     }
 }

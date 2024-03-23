@@ -1,13 +1,15 @@
 package fr.sqli.formation.gamelife.dto;
 
-public class IdDto {
-    private int id;
+import java.util.UUID;
 
-    public int getId() {
+public class IdDto {
+    private UUID id;
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(UUID pId) {
+        id = pId;
     }
 }

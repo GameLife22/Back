@@ -13,6 +13,7 @@ import java.util.UUID;
 @Table(name = "glproduit", schema = "gamelife")
 public class ProduitEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uuid", nullable = false)
     private UUID id;
 
@@ -30,13 +31,13 @@ public class ProduitEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_categorie", nullable = false)
-    private CategorieEntity idCategorie;
+    private CategorieEntity categorie;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_plateforme", nullable = false)
-    private PlateformeEntity idPlateforme;
+    private PlateformeEntity plateforme;
 
     @Column(name = "etat")
     private Boolean etat;
@@ -45,48 +46,48 @@ public class ProduitEntity {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId(UUID pId) {
+        id = pId;
     }
 
     public String getNom() {
         return nom;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setNom(String pNom) {
+        nom = pNom;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String pDescription) {
+        description = pDescription;
     }
 
-    public CategorieEntity getIdCategorie() {
-        return idCategorie;
+    public CategorieEntity getCategorie() {
+        return categorie;
     }
 
-    public void setIdCategorie(CategorieEntity idCategorie) {
-        this.idCategorie = idCategorie;
+    public void setCategorie(CategorieEntity pCategorie) {
+        categorie = pCategorie;
     }
 
-    public PlateformeEntity getIdPlateforme() {
-        return idPlateforme;
+    public PlateformeEntity getPlateforme() {
+        return plateforme;
     }
 
-    public void setIdPlateforme(PlateformeEntity idPlateforme) {
-        this.idPlateforme = idPlateforme;
+    public void setPlateforme(PlateformeEntity pPlateforme) {
+        plateforme = pPlateforme;
     }
 
     public Boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean etat) {
-        this.etat = etat;
+    public void setEtat(Boolean pEtat) {
+        etat = pEtat;
     }
 
     @Override
@@ -95,8 +96,8 @@ public class ProduitEntity {
         sb.append("id=").append(id);
         sb.append(", nom='").append(nom).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", idCategorie=").append(idCategorie);
-        sb.append(", idPlateforme=").append(idPlateforme);
+        sb.append(", categorie=").append(categorie);
+        sb.append(", plateforme=").append(plateforme);
         sb.append(", etat=").append(etat);
         sb.append('}');
         return sb.toString();

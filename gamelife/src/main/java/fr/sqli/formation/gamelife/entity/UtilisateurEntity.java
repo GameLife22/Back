@@ -1,15 +1,13 @@
 package fr.sqli.formation.gamelife.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "glutilisateur", schema = "gamelife")
 public class UtilisateurEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uuid", nullable = false)
     private UUID id;
 
@@ -151,6 +149,23 @@ public class UtilisateurEntity {
 
     public void setResetPasswordToken(String resetPasswordToken) {
         this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String num_Siren, Integer code_postal) throws Exception{
+        if(!(nom != null && !nom.trim().isEmpty() &&
+                prenom != null && !prenom.trim().isEmpty() &&
+                email != null && !email.trim().isEmpty() &&
+                email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") &&
+                pwd != null && !pwd.trim().isEmpty() &&
+                pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
+                num_rue != null && num_rue >= 0 &&
+                rue != null && !rue.trim().isEmpty() &&
+                //todo: add numSiren
+                ville != null && !ville.trim().isEmpty()) &&
+                code_postal != null && code_postal > 0){
+            throw new IllegalArgumentException("Champs invalides");
+
+        }
     }
 
     @Override

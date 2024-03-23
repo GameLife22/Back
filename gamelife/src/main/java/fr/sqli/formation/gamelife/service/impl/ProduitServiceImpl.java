@@ -1,9 +1,9 @@
 package fr.sqli.formation.gamelife.service.impl;
 
-import fr.sqli.formation.gamelife.dto.handler.ImageDtoHandler;
-import fr.sqli.formation.gamelife.dto.handler.ProduitDtoHandler;
+import fr.sqli.formation.gamelife.dto.handler.IProduitDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.ProduitDtoIn;
 import fr.sqli.formation.gamelife.dto.out.ProduitDtoOut;
+import fr.sqli.formation.gamelife.repository.IImageDao;
 import fr.sqli.formation.gamelife.repository.IProduitDao;
 import fr.sqli.formation.gamelife.service.IProduitService;
 import org.modelmapper.ModelMapper;
@@ -15,29 +15,35 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.UUID;
 
 //todo: add log + javadoc
 @Service
-public class ProduitService implements IProduitService {
-    private static final Logger LOG = LoggerFactory.getLogger(ProduitService.class);
+public class ProduitServiceImpl implements IProduitService {
+    private static final Logger LOG = LoggerFactory.getLogger(ProduitServiceImpl.class);
+
     private IProduitDao produitDao;
+
+    private IImageDao imageDao;
+
     private ModelMapper modelMapper;
 
     @Autowired
-    public ProduitService(IProduitDao pProduitDao, ModelMapper pModelMapper) {
+    public ProduitServiceImpl(IProduitDao pProduitDao, IImageDao pIImageDao, ModelMapper pModelMapper) {
         this.produitDao = pProduitDao;
+        this.imageDao = pIImageDao;
         this.modelMapper = pModelMapper;
     }
 
     @Override
-    public ProduitDtoOut getProduit(int pIdProduit) {
-        return ProduitDtoHandler.dtoOutFromEntity(this.produitDao.findById(pIdProduit)
+    public ProduitDtoOut getProduit(UUID pIdProduit) {
+        return IProduitDtoHandler.dtoOutFromEntity(this.produitDao.findById(pIdProduit)
                 .orElseThrow(() -> new EntityNotFoundException("getProduit -> le produit n'existe pas, l'identifiant: " + pIdProduit + " est incorrecte")));
     }
 
     @Override
     public List<ProduitDtoOut> getProduits() {
-        return ProduitDtoHandler.dtoOutFromEntities(this.produitDao.findAll());
+        return IProduitDtoHandler.dtoOutFromEntities(this.produitDao.findAll());
     }
 
     @Override
@@ -51,28 +57,22 @@ public class ProduitService implements IProduitService {
             throw new EntityExistsException("addProduit -> le produit: " + nomProduit + " existe");
         }
 
-        var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
-        var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
-        produitEntity.setImages(imagesEntity);
+        var produitEntity = IProduitDtoHandler.toEntity(pProduitDtoIn);
+        produitEntity = this.produitDao.save(produitEntity);
 
-        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
+        return  IProduitDtoHandler.dtoOutFromEntity(produitEntity);
     }
 
     @Override
     public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn) {
         var produitDtoOut = this.getProduit(pProduitDtoIn.getId());
-
-        modelMapper.map(pProduitDtoIn, produitDtoOut);
-
-        var produitEntity = ProduitDtoHandler.toEntity(pProduitDtoIn);
-        var imagesEntity = ImageDtoHandler.toEntities(pProduitDtoIn.getImages());
-        produitEntity.setImages(imagesEntity);
-
-        return  ProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
+        this.modelMapper.map(pProduitDtoIn, produitDtoOut);
+        var produitEntity = IProduitDtoHandler.toEntity(pProduitDtoIn);
+        return  IProduitDtoHandler.dtoOutFromEntity(this.produitDao.save(produitEntity));
     }
 
     @Override
-    public void deleteProduit(int pIdProduit) {
+    public void deleteProduit(UUID pIdProduit) {
         this.getProduit(pIdProduit);
         this.produitDao.deleteById(pIdProduit);
     }

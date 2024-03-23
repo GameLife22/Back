@@ -13,6 +13,7 @@ import java.util.UUID;
 @Table(name = "glimage", schema = "gamelife")
 public class ImageEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "uuid", nullable = false)
     private UUID id;
 
@@ -20,7 +21,7 @@ public class ImageEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_produit", nullable = false)
-    private ProduitEntity idProduit;
+    private ProduitEntity produit;
 
     @NotNull
     @Column(name = "url", nullable = false)
@@ -40,12 +41,12 @@ public class ImageEntity {
         this.id = id;
     }
 
-    public ProduitEntity getIdProduit() {
-        return idProduit;
+    public ProduitEntity getProduit() {
+        return produit;
     }
 
-    public void setIdProduit(ProduitEntity idProduit) {
-        this.idProduit = idProduit;
+    public void setIdProduit(ProduitEntity pProduitEntity) {
+        this.produit = pProduitEntity;
     }
 
     public String getUrl() {
@@ -68,7 +69,7 @@ public class ImageEntity {
     public String toString() {
         final StringBuffer sb = new StringBuffer("ImageEntity{");
         sb.append("id=").append(id);
-        sb.append(", idProduit=").append(idProduit);
+        sb.append(", produit=").append(produit);
         sb.append(", url='").append(url).append('\'');
         sb.append(", filename='").append(filename).append('\'');
         sb.append('}');
