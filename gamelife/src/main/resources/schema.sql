@@ -41,13 +41,13 @@ CREATE TABLE gamelife.glcommande
 
 CREATE TABLE gamelife.glcategorie
 (
-    uuid UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    uuid            UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     libelle         VARCHAR(25) NOT NULL UNIQUE
 );
 
 CREATE TABLE gamelife.glplateforme
 (
-    uuid UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    uuid            UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     libelle         VARCHAR(25) NOT NULL UNIQUE
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE gamelife.glproduit
 
 CREATE TABLE gamelife.glimage
 (
-    uuid UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    uuid       UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     id_produit UUID DEFAULT RANDOM_UUID()          NOT NULL,
     url        TEXT         NOT NULL,
     filename   VARCHAR(255) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE gamelife.glimage
 
 CREATE TABLE gamelife.glproduit_revendeur
 (
-    uuid UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    uuid           UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     stock          INT            NOT NULL,
     prix           DECIMAL(10, 0) NOT NULL,
     etat           VARCHAR(25)    NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE gamelife.glproduit_revendeur
 
 CREATE TABLE gamelife.glitem_commande
 (
-    uuid UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    uuid                  UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     id_commande           UUID DEFAULT RANDOM_UUID()  NOT NULL,
     id_produit_revendeur  UUID DEFAULT RANDOM_UUID()  NOT NULL,
     quantite              INT NOT NULL,

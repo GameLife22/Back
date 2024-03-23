@@ -2,9 +2,6 @@ package fr.sqli.formation.gamelife.dto.in;
 
 import fr.sqli.formation.gamelife.dto.AbstractDto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.util.Objects;
 import java.util.UUID;
