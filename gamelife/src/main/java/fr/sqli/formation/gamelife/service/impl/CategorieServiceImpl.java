@@ -2,8 +2,6 @@ package fr.sqli.formation.gamelife.service.impl;
 
 import fr.sqli.formation.gamelife.dto.handler.ICategorieDtoHandler;
 import fr.sqli.formation.gamelife.dto.in.CategorieDtoIn;
-import fr.sqli.formation.gamelife.dto.in.CategorieDtoIn;
-import fr.sqli.formation.gamelife.dto.out.CategorieDtoOut;
 import fr.sqli.formation.gamelife.dto.out.CategorieDtoOut;
 import fr.sqli.formation.gamelife.repository.ICategorieDao;
 import fr.sqli.formation.gamelife.service.ICategorieService;
@@ -34,9 +32,9 @@ public class CategorieServiceImpl implements ICategorieService {
     }
 
     @Override
-    public CategorieDtoOut getCategorie(UUID pIdCategorie) {
-        return ICategorieDtoHandler.dtoOutFromEntity(this.categorieDao.findById(pIdCategorie)
-                .orElseThrow(() -> new EntityNotFoundException("getCategorie: l'identifiant " + pIdCategorie + " est incorrecte")));
+    public CategorieDtoOut getCategorie(UUID pCategorieId) {
+        return ICategorieDtoHandler.dtoOutFromEntity(this.categorieDao.findById(pCategorieId)
+                .orElseThrow(() -> new EntityNotFoundException("getCategorie: l'identifiant " + pCategorieId + " est incorrecte")));
     }
 
     @Override
@@ -60,19 +58,16 @@ public class CategorieServiceImpl implements ICategorieService {
     }
 
     @Override
-    public CategorieDtoOut updateCategorie(CategorieDtoIn pCategorieDtoIn) {
-        var plateformeEntity = this.categorieDao.findById(pCategorieDtoIn.getId())
-                .orElseThrow(() -> new EntityNotFoundException("updateCategorie: la plateforme " + pCategorieDtoIn.getLibelle() + " n'existe pas"));
+    public CategorieDtoOut updateCategorie(UUID pCategorieId, CategorieDtoIn pCategorieDtoIn) {
+        var plateformeEntity = this.categorieDao.findById(pCategorieId)
+                .orElseThrow(() -> new EntityNotFoundException("updateCategorie: l'identifiant " + pCategorieId + " est incorrecte"));
 
         this.modelMapper.map(pCategorieDtoIn, plateformeEntity);
         return ICategorieDtoHandler.dtoOutFromEntity(this.categorieDao.save(plateformeEntity));
     }
 
     @Override
-    public void deleteCategorie(UUID pIdCategorie) {
-        this.categorieDao.findById(pIdCategorie)
-                .orElseThrow(() -> new EntityNotFoundException("deleteCategorie: l'identifiant " + pIdCategorie + " est incorrecte"));
-
-        this.categorieDao.deleteById(pIdCategorie);
+    public void deleteCategorie(UUID pCategorieId) {
+        this.categorieDao.deleteById(pCategorieId);
     }
 }

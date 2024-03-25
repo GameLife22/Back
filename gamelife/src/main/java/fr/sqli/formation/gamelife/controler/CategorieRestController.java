@@ -14,9 +14,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: add logs + swagger + status code si dto est null + test controller + api archi
+// TODO: add logs + swagger +  dto est null + test controller + hasRole
 @RestController
-@RequestMapping("/categorie")
+@RequestMapping("/api")
 public class CategorieRestController extends AbstractRestController {
     private static final Logger LOG = LoggerFactory.getLogger(CategorieRestController.class);
 
@@ -27,33 +27,56 @@ public class CategorieRestController extends AbstractRestController {
         service = pService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategorieDtoOut> getProduit(@PathVariable UUID id) {
-        var result = this.service.getCategorie(id);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    @GetMapping("/categories/{categorieId}")
+    public ResponseEntity<CategorieDtoOut> getProduit(@PathVariable("categorieId") UUID pCategorieId) {
+        try {
+            var result = this.service.getCategorie(pCategorieId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/categories")
     public ResponseEntity<List<CategorieDtoOut>> getProduits() {
-        var result = this.service.getCategories();
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            var result = this.service.getCategories();
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PostMapping("/add")
+    @PostMapping("/categories")
     public ResponseEntity<CategorieDtoOut> addProduit(@Valid @RequestBody CategorieDtoIn pCategorieDtoIn) {
-        var result = this.service.addCategorie(pCategorieDtoIn);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        try {
+            var result = this.service.addCategorie(pCategorieDtoIn);
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<CategorieDtoOut> updateProduit(@Valid @RequestBody CategorieDtoIn pCategorieDtoIn) {
-        var result = this.service.updateCategorie(pCategorieDtoIn);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    @PatchMapping("/categories/{categorieId}")
+    public ResponseEntity<CategorieDtoOut> updateProduit(@Valid @PathVariable("categorieId") UUID pCategorieId, @RequestBody CategorieDtoIn pCategorieDtoIn) {
+        try {
+            var result = this.service.updateCategorie(pCategorieId, pCategorieDtoIn);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable UUID id) {
-        service.deleteCategorie(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/categories/{categorieId}")
+    public ResponseEntity<Void> deleteProduit(@PathVariable("categorieId") UUID pCategorieId) {
+        try {
+            service.deleteCategorie(pCategorieId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ICategorieService {
-    public CategorieDtoOut getCategorie(UUID pIdCategorie);
+    public CategorieDtoOut getCategorie(UUID pCategorieId);
     public List<CategorieDtoOut> getCategories();
     public CategorieDtoOut addCategorie(CategorieDtoIn pCategorieDtoIn);
-    public CategorieDtoOut updateCategorie(CategorieDtoIn pCategorieDtoIn);
-    public void deleteCategorie(UUID pIdCategorie);
+    public CategorieDtoOut updateCategorie(UUID pCategorieId, CategorieDtoIn pCategorieDtoIn);
+    public void deleteCategorie(UUID pCategorieId);
 }

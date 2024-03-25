@@ -29,14 +29,22 @@ public class PlateformeRestController extends AbstractRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlateformeDtoOut> getProduit(@PathVariable UUID id) {
-        var result = this.service.getPlateforme(id);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            var result = this.service.getPlateforme(id);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception pException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<PlateformeDtoOut>> getProduits() {
-        var result = this.service.getPlateformes();
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            var result = this.service.getPlateformes();
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/add")
