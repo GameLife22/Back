@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: add logs + swagger + status code si dto est null + test controller
+// TODO: add logs + swagger + status code si dto est null + test controller + api archi
 @RestController
 @RequestMapping("/plateforme")
 public class PlateformeRestController extends AbstractRestController {
