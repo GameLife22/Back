@@ -14,29 +14,23 @@ import java.util.UUID;
 public class ProduitRevendeurEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @NotNull
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
-    @NotNull
     @Column(name = "prix", nullable = false, precision = 10)
     private BigDecimal prix;
 
-    @Size(max = 25)
-    @NotNull
     @Column(name = "etat", nullable = false, length = 25)
     private String etat;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_produit", nullable = false)
     private ProduitEntity produit;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_utilisateur", nullable = false)

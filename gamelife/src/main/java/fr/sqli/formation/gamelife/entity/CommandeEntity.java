@@ -14,39 +14,29 @@ import java.util.UUID;
 public class CommandeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_utilisateur", nullable = false)
     private UtilisateurEntity utilisateur;
 
-    @Size(max = 80)
-    @NotNull
     @Column(name = "etat", nullable = false, length = 80)
     private String etat;
 
-    @NotNull
     @Column(name = "num_rue_livraison", nullable = false)
     private Integer numRueLivraison;
 
-    @Size(max = 255)
-    @NotNull
     @Column(name = "rue_livraison", nullable = false)
     private String rueLivraison;
 
-    @Size(max = 80)
-    @NotNull
     @Column(name = "ville_livraison", nullable = false, length = 80)
     private String villeLivraison;
 
-    @NotNull
     @Column(name = "code_postal_livraison", nullable = false)
     private Integer codePostalLivraison;
 
-    @NotNull
     @Column(name = "date", nullable = false)
     private LocalDate date;
 

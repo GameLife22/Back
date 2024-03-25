@@ -5,8 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,30 +13,28 @@ import java.util.UUID;
 public class ProduitEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Size(max = 255)
-    @NotNull
     @Column(name = "nom", nullable = false)
     private String nom;
 
-    @NotNull
     @Column(name = "description", nullable = false)
     @Type(type = "org.hibernate.type.TextType")
     private String description;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_categorie", nullable = false)
     private CategorieEntity categorie;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_plateforme", nullable = false)
     private PlateformeEntity plateforme;
+
+    @OneToMany(mappedBy = "produit")
+    private List<ImageEntity> images;
 
     @Column(name = "etat")
     private Boolean etat;
@@ -82,6 +79,14 @@ public class ProduitEntity {
         plateforme = pPlateforme;
     }
 
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> pImages) {
+        images = pImages;
+    }
+
     public Boolean getEtat() {
         return etat;
     }
@@ -98,6 +103,7 @@ public class ProduitEntity {
         sb.append(", description='").append(description).append('\'');
         sb.append(", categorie=").append(categorie);
         sb.append(", plateforme=").append(plateforme);
+        sb.append(", images=").append(images);
         sb.append(", etat=").append(etat);
         sb.append('}');
         return sb.toString();

@@ -38,7 +38,7 @@ class GestionCompteServiceTest {
 
     // Methode modificationCompte
 
-    //todo: test with uuid
+    //todo: test with id
     @Test
     void testModificationCompte01() throws Exception {
         GestionCompteDto dto = new GestionCompteDto(uuidUtilisateur, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);

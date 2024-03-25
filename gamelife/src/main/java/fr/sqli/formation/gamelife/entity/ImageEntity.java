@@ -1,12 +1,8 @@
 package fr.sqli.formation.gamelife.entity;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @Entity
@@ -14,55 +10,50 @@ import java.util.UUID;
 public class ImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_produit", nullable = false)
+    @JsonIgnore
     private ProduitEntity produit;
 
-    @NotNull
-    @Column(name = "url", nullable = false)
-    @Type(type = "org.hibernate.type.TextType")
-    private String url;
+    @Column(name = "image", nullable = false)
+    private String image;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "filename", nullable = false)
-    private String filename;
+    @Column(name = "titre", nullable = false)
+    private String titre;
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId(UUID pId) {
+        id = pId;
     }
 
     public ProduitEntity getProduit() {
         return produit;
     }
 
-    public void setIdProduit(ProduitEntity pProduitEntity) {
-        this.produit = pProduitEntity;
+    public void setProduit(ProduitEntity pProduit) {
+        produit = pProduit;
     }
 
-    public String getUrl() {
-        return url;
+    public String getImage() {
+        return image;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImage(String pImage) {
+        image = pImage;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getTitre() {
+        return titre;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setTitre(String pTitre) {
+        titre = pTitre;
     }
 
     @Override
@@ -70,8 +61,8 @@ public class ImageEntity {
         final StringBuffer sb = new StringBuffer("ImageEntity{");
         sb.append("id=").append(id);
         sb.append(", produit=").append(produit);
-        sb.append(", url='").append(url).append('\'');
-        sb.append(", filename='").append(filename).append('\'');
+        sb.append(", image='").append(image).append('\'');
+        sb.append(", titre='").append(titre).append('\'');
         sb.append('}');
         return sb.toString();
     }
