@@ -44,13 +44,15 @@ CREATE TABLE gamelife.glcommande
 CREATE TABLE gamelife.glcategorie
 (
     uuid            UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    libelle         VARCHAR(25) NOT NULL UNIQUE
+    libelle         VARCHAR(25) NOT NULL UNIQUE,
+    etat            BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE gamelife.glplateforme
 (
     uuid            UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    libelle         VARCHAR(25) NOT NULL UNIQUE
+    libelle         VARCHAR(25) NOT NULL UNIQUE,
+    etat            BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE gamelife.glproduit
