@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS gamelife.glproduit_revendeur CASCADE;
 
 CREATE TABLE gamelife.glutilisateur
 (
-    uuid                  UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id                    UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     nom                   VARCHAR(50)          NOT NULL,
     prenom                VARCHAR(50)          NOT NULL,
     mdp                   VARCHAR(80)          NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE gamelife.glutilisateur
 
 CREATE TABLE gamelife.glcommande
 (
-    uuid                  UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id                    UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     id_utilisateur        UUID DEFAULT RANDOM_UUID()          NOT NULL,
     etat                  VARCHAR(80)  NOT NULL,
     num_rue_livraison     INT          NOT NULL,
@@ -36,62 +36,62 @@ CREATE TABLE gamelife.glcommande
     ville_livraison       VARCHAR(80)  NOT NULL,
     code_postal_livraison INT          NOT NULL,
     date                  DATE         NOT NULL,
-    FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE gamelife.glcategorie
 (
-    uuid            UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id              UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     libelle         VARCHAR(25) NOT NULL UNIQUE,
     etat            BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE gamelife.glplateforme
 (
-    uuid            UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id            UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     libelle         VARCHAR(25) NOT NULL UNIQUE,
     etat            BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE gamelife.glproduit
 (
-    uuid          UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id            UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     nom           VARCHAR(255) NOT NULL UNIQUE,
     description   TEXT         NOT NULL,
-    id_categorie  UUID DEFAULT RANDOM_UUID()          NOT NULL,
-    id_plateforme UUID DEFAULT RANDOM_UUID()          NOT NULL,
+    id_categorie  UUID DEFAULT RANDOM_UUID() NOT NULL,
+    id_plateforme UUID DEFAULT RANDOM_UUID() NOT NULL,
+    id_image      UUID DEFAULT RANDOM_UUID() NOT NULL,
     etat          BOOLEAN      DEFAULT TRUE,
-    FOREIGN KEY (id_categorie) REFERENCES gamelife.glcategorie (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_plateforme) REFERENCES gamelife.glplateforme (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_categorie) REFERENCES gamelife.glcategorie (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_plateforme) REFERENCES gamelife.glplateforme (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_image) REFERENCES gamelife.glplateforme (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE gamelife.glimage
 (
-    uuid       UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
-    id_produit UUID DEFAULT RANDOM_UUID()          NOT NULL,
-    url        TEXT         NOT NULL,
-    filename   VARCHAR(255) NOT NULL,
-    FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+    id          UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    image       TEXT NOT NULL,
+    titre       TEXT NOT NULL,
 );
 
 CREATE TABLE gamelife.glproduit_revendeur
 (
-    uuid           UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id             UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     stock          INT            NOT NULL,
     prix           DECIMAL(10, 0) NOT NULL,
     etat           VARCHAR(25)    NOT NULL,
     id_produit     UUID DEFAULT RANDOM_UUID()            NOT NULL,
     id_utilisateur UUID DEFAULT RANDOM_UUID()            NOT NULL,
-    FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_produit) REFERENCES gamelife.glproduit (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_utilisateur) REFERENCES gamelife.glutilisateur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE gamelife.glitem_commande
 (
-    uuid                  UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
+    id                    UUID DEFAULT RANDOM_UUID()  PRIMARY KEY,
     id_commande           UUID DEFAULT RANDOM_UUID()  NOT NULL,
     id_produit_revendeur  UUID DEFAULT RANDOM_UUID()  NOT NULL,
     quantite              INT NOT NULL,
-    FOREIGN KEY (id_commande) REFERENCES gamelife.glcommande (uuid) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_produit_revendeur) REFERENCES gamelife.glproduit_revendeur (uuid) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_commande) REFERENCES gamelife.glcommande (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_produit_revendeur) REFERENCES gamelife.glproduit_revendeur (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
