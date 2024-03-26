@@ -13,7 +13,7 @@ public class ProduitDto {
 
 	private String categorie;
 
-	private String texteDescriptif;
+	private String description;
 
 	private String detail;
 
@@ -41,12 +41,12 @@ public class ProduitDto {
 		this.categorie = categorie;
 	}
 
-	public String getTexteDescriptif() {
-		return texteDescriptif;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setTexteDescriptif(String texteDescriptif) {
-		this.texteDescriptif = texteDescriptif;
+	public void setDescription(String texteDescriptif) {
+		this.description = texteDescriptif;
 	}
 
 	public String getDetail() {

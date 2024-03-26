@@ -27,7 +27,8 @@ public class InscriptionService {
     private static final Logger LOG = LogManager.getLogger();
 
     public UtilisateurEntity inscription(InscriptionDto dto) throws Exception{
-            UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getNum_siret(), dto.getCode_postal());
+        LOG.info("Inscription - {}", dto.getEmail());
+        UtilisateurEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getNum_siret(), dto.getCode_postal());
             var newUser = uDao.findByEmail(dto.getEmail());
             String token = RandomString.make(30);
             if(newUser.isEmpty()){
@@ -40,7 +41,7 @@ public class InscriptionService {
                 u.setMdp(encoder.encode(u.getMdp()));
                 u.setEtatCompte(false);
                 u.setResetPasswordToken(token);
-                return uDao.save(u);
+                return uDao.saveAndFlush(u);
             }else {
                 if(!newUser.get().getEtatCompte()){
                     newUser.get().setEtatCompte(false);
@@ -60,7 +61,7 @@ public class InscriptionService {
                     }
 
                     newUser.get().setNumSiren(dto.getNum_siret());
-                    return uDao.save(newUser.get());
+                    return uDao.saveAndFlush(newUser.get());
                 }else{
                     throw new UtilisateurExistantException("Utilisateur deja enregistre");
                 }
