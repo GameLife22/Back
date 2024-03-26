@@ -8,6 +8,7 @@ public class ProduitDtoHandler {
 		var resu = new ProduitDto();
 		resu.setCategorie(entity.getCategorie());
 		resu.setNom(entity.getNom());
+		resu.setDescription(entity.getDescription());
 		resu.setImages(entity.getImages());
 		resu.setPlateforme(entity.getPlateforme());
 		resu.setId(entity.getId());

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import fr.sqli.formation.gamelife.dto.ProduitDto;
@@ -53,6 +54,7 @@ public class ProduitControler {
 	 * @author: Fabien
 	 */
 	@GetMapping("{id}")
+	@PreAuthorize("permitAll()")
 	public ResponseEntity<ProduitDto> getProductById(@PathVariable String id) {
 		var jeuVideo = this.produitService.getProductById(id);
 

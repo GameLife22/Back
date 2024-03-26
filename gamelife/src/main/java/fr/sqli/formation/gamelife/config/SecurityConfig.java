@@ -82,10 +82,11 @@ public class SecurityConfig {
                     header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
                 }).authorizeHttpRequests(auth -> auth
                         .antMatchers("/utilisateur/auth").permitAll()
-                        .antMatchers("/utilisateur/id").permitAll()
+                        .antMatchers("/utilisateur/*").permitAll()
                         .antMatchers("/utilisateur/mdpoublie").permitAll()
                         .antMatchers("/utilisateur/mdpreset").permitAll()
                         .antMatchers("/utilisateur/getEmailByToken").permitAll()
+                        .antMatchers("/produit/*").permitAll()
                         .antMatchers("/produit/all").permitAll()
                         .antMatchers("/produit/search").permitAll()
                         .antMatchers("/inscription/inscription").permitAll()
