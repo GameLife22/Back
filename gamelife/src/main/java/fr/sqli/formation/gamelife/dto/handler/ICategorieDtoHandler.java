@@ -10,19 +10,22 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class ICategorieDtoHandler {
+public interface ICategorieDtoHandler {
     public static CategorieEntity toEntity(CategorieDtoIn pCategorieDtoIn) {
-        var plateformeEntity = new CategorieEntity();
-        plateformeEntity.setId(UUID.randomUUID());
-        plateformeEntity.setLibelle(pCategorieDtoIn.getLibelle());
-        return plateformeEntity;
+        var categorieEntity = new CategorieEntity();
+        categorieEntity.setLibelle(pCategorieDtoIn.getLibelle());
+        return categorieEntity;
+    }
+    public static CategorieEntity entityFromDtoIn(CategorieDtoIn pCategorieDtoIn, CategorieEntity pCategorieEntity) {
+        pCategorieEntity.setLibelle(pCategorieDtoIn.getLibelle());
+        return pCategorieEntity;
     }
 
     public static CategorieDtoOut dtoOutFromEntity(CategorieEntity pCategorieEntity) {
-        var plateformeDtoOut = new CategorieDtoOut();
-        plateformeDtoOut.setId(pCategorieEntity.getId());
-        plateformeDtoOut.setLibelle(pCategorieEntity.getLibelle());
-        return plateformeDtoOut;
+        var categorieDtoOut = new CategorieDtoOut();
+        categorieDtoOut.setId(pCategorieEntity.getId());
+        categorieDtoOut.setLibelle(pCategorieEntity.getLibelle());
+        return categorieDtoOut;
     }
 
     public static List<CategorieDtoOut> dtoOutFromEntities(List<CategorieEntity> pCategorieEntities) {

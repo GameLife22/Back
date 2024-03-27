@@ -4,6 +4,7 @@ import java.io.Serial;
 import java.util.List;
 
 public class ProduitDtoOut extends AbstractDtoOut {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -11,9 +12,9 @@ public class ProduitDtoOut extends AbstractDtoOut {
 
     private String description;
 
-    private String categorie;
+    private CategorieDtoOut categorie;
 
-    private String plateforme;
+    private PlateformeDtoOut plateforme;
 
     private boolean etat;
 
@@ -38,19 +39,19 @@ public class ProduitDtoOut extends AbstractDtoOut {
         description = pDescription;
     }
 
-    public String getCategorie() {
+    public CategorieDtoOut getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(String pCategorie) {
+    public void setCategorie(CategorieDtoOut pCategorie) {
         categorie = pCategorie;
     }
 
-    public String getPlateforme() {
+    public PlateformeDtoOut getPlateforme() {
         return plateforme;
     }
 
-    public void setPlateforme(String pPlateforme) {
+    public void setPlateforme(PlateformeDtoOut pPlateforme) {
         plateforme = pPlateforme;
     }
 
@@ -75,8 +76,8 @@ public class ProduitDtoOut extends AbstractDtoOut {
         final StringBuffer sb = new StringBuffer("ProduitDtoOut{");
         sb.append("nom='").append(nom).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", categorie='").append(categorie).append('\'');
-        sb.append(", plateforme='").append(plateforme).append('\'');
+        sb.append(", categorie=").append(categorie);
+        sb.append(", plateforme=").append(plateforme);
         sb.append(", etat=").append(etat);
         sb.append(", images=").append(images);
         sb.append('}');

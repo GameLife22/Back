@@ -3,6 +3,7 @@ package fr.sqli.formation.gamelife.dto.out;
 import java.io.Serial;
 
 public class CategorieDtoOut extends AbstractDtoOut {
+
     @Serial
     private static final long serialVersionUID = 1L;
 

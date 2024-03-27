@@ -7,5 +7,4 @@ import java.util.Optional;
 
 @Repository
 public interface IProduitDao extends IJpaDao<ProduitEntity> {
-    public Optional<ProduitEntity> findByNomAndCategorieAndPlateforme(String pNom, String pCategorie, String pPlateforme);
 }

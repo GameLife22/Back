@@ -26,10 +26,10 @@ class GestionCompteServiceTest {
     @Autowired
     BCryptPasswordEncoder encoder;
 
-    UUID uuidUtilisateur;
+    UUID idUtilisateur;
     @BeforeEach
     public void beforeEach(){
-        uuidUtilisateur = UUID.randomUUID();
+        idUtilisateur = UUID.randomUUID();
     }
 
     // La différence entre un test unitaire et un test d'intégration est que le test unitaire est autonome, il ne fait appel à aucune BDD
@@ -41,13 +41,13 @@ class GestionCompteServiceTest {
     //todo: test with id
     @Test
     void testModificationCompte01() throws Exception {
-        GestionCompteDto dto = new GestionCompteDto(uuidUtilisateur, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
+        GestionCompteDto dto = new GestionCompteDto(idUtilisateur, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
         UtilisateurEntity test = service.modificationCompte(dto);
         Assertions.assertEquals("Ballancourt",test.getVille());
     }
     @Test
     void testModificationCompte02() throws Exception {
-        GestionCompteDto dto = new GestionCompteDto(uuidUtilisateur, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
+        GestionCompteDto dto = new GestionCompteDto(idUtilisateur, "dubois","henry","acheteur2@gamelife.fr",13,"rue de la papeterie", "Ballancourt",91610,null);
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationCompte(dto));
     }
 
@@ -55,20 +55,20 @@ class GestionCompteServiceTest {
     // Methode modificationMdp
     @Test
     void testModificationMdp01() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(uuidUtilisateur,"Paz6!!1333", "Paz6!!3");
+        GestionMdpDto dto = new GestionMdpDto(idUtilisateur,"Paz6!!1333", "Paz6!!3");
         UtilisateurEntity test = service.modificationMdp(dto);
         System.out.println(encoder.matches("Paz6!!3", test.getMdp()));
         Assertions.assertTrue(encoder.matches("Paz6!!1333", test.getMdp()));
     }
     @Test
     void testModificationMdp02() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(uuidUtilisateur,"Paz6!!1333", "Paz6!!3");
+        GestionMdpDto dto = new GestionMdpDto(idUtilisateur,"Paz6!!1333", "Paz6!!3");
         UtilisateurEntity test = service.modificationMdp(dto);
         Assertions.assertFalse(encoder.matches("Paz6!!3", test.getMdp()));
     }
     @Test
     void testModificationMdp03() throws Exception {
-        GestionMdpDto dto = new GestionMdpDto(uuidUtilisateur,"021aze155", "021aze155");
+        GestionMdpDto dto = new GestionMdpDto(idUtilisateur,"021aze155", "021aze155");
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationMdp(dto));
     }
 
@@ -76,13 +76,13 @@ class GestionCompteServiceTest {
 
 @Test
     void testModificationEtat01() throws Exception {
-    GestionEtatDto dto = new GestionEtatDto(uuidUtilisateur,true);
+    GestionEtatDto dto = new GestionEtatDto(idUtilisateur,true);
     UtilisateurEntity test = service.modificationEtat(dto);
     Assertions.assertTrue(test.getEtatCompte().booleanValue());
     }
     @Test
     void testModificationEtat02() throws Exception {
-        GestionEtatDto dto = new GestionEtatDto(uuidUtilisateur,true);
+        GestionEtatDto dto = new GestionEtatDto(idUtilisateur,true);
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.modificationEtat(dto));
     }
 
@@ -90,16 +90,16 @@ class GestionCompteServiceTest {
 
     @Test
     void testEstRevendeur01() throws Exception{
-        Assertions.assertTrue(service.estRevendeur(uuidUtilisateur));
+        Assertions.assertTrue(service.estRevendeur(idUtilisateur));
     }
 
     @Test
     void testEstRevendeur02() throws Exception{
-        Assertions.assertFalse(service.estRevendeur(uuidUtilisateur));
+        Assertions.assertFalse(service.estRevendeur(idUtilisateur));
     }
 
     @Test
     void testEstRevendeur03() throws Exception{
-        Assertions.assertThrows(UtilisateurExistantException.class, ()-> service.estRevendeur(uuidUtilisateur));
+        Assertions.assertThrows(UtilisateurExistantException.class, ()-> service.estRevendeur(idUtilisateur));
     }
 }

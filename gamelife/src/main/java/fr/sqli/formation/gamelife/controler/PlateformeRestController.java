@@ -8,15 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: add logs + swagger + status code si dto est null + test controller + api archi
+// TODO: add logs + swagger
 @RestController
-@RequestMapping("/plateforme")
+@RequestMapping("/api")
 public class PlateformeRestController extends AbstractRestController {
     private static final Logger LOG = LoggerFactory.getLogger(PlateformeRestController.class);
 
@@ -27,41 +28,61 @@ public class PlateformeRestController extends AbstractRestController {
         service = pService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PlateformeDtoOut> getProduit(@PathVariable UUID id) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
+    @GetMapping("/plateformes/{plateformeId}")
+    public ResponseEntity<PlateformeDtoOut> getPlateforme(@PathVariable UUID pPlateformeDtoInId) {
         try {
-            var result = this.service.getPlateforme(id);
+            var result = this.service.getPlateforme(pPlateformeDtoInId);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception pException) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<PlateformeDtoOut>> getProduits() {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
+    @GetMapping("/plateformes")
+    public ResponseEntity<List<PlateformeDtoOut>> getPlateformes() {
         try {
             var result = this.service.getPlateformes();
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch(Exception pException) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<PlateformeDtoOut> addProduit(@Valid @RequestBody PlateformeDtoIn pPlateformeDtoIn) {
-        var result = this.service.addPlateforme(pPlateformeDtoIn);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
+    @PostMapping("/plateformes")
+    public ResponseEntity<PlateformeDtoOut> addPlateforme(@Valid @RequestBody PlateformeDtoIn pPlateformeDtoIn) {
+        try {
+            var result = this.service.addPlateforme(pPlateformeDtoIn);
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
+        } catch (Exception pException) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<PlateformeDtoOut> updateProduit(@Valid @RequestBody PlateformeDtoIn pPlateformeDtoIn) {
-        var result = this.service.updatePlateforme(pPlateformeDtoIn);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
+    @PatchMapping("/plateformes")
+    public ResponseEntity<PlateformeDtoOut> updatePlateforme(@Valid @PathVariable("plateformeId") UUID pPlateformeDtoInId, @RequestBody PlateformeDtoIn pPlateformeDtoIn) {
+        try {
+            var result = this.service.updatePlateforme(pPlateformeDtoInId, pPlateformeDtoIn);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch(Exception pException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable UUID id) {
-        service.deletePlateforme(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
+    @DeleteMapping("/plateformes/{plateformeId}")
+    public ResponseEntity<Void> deletePlateforme(@PathVariable("plateformeId") UUID pPlateformeDtoInId) {
+        try {
+            this.service.deletePlateforme(pPlateformeDtoInId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception pException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

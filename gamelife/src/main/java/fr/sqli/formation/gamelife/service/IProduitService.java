@@ -8,10 +8,10 @@ import java.util.UUID;
 
 //todo: javadoc
 public interface IProduitService {
-    public ProduitDtoOut getProduit(UUID pIdProduit);
+    public ProduitDtoOut getProduit(UUID pProduitDtoInId);
     public List<ProduitDtoOut> getProduits();
     public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn);
-    public ProduitDtoOut updateProduit(ProduitDtoIn pProduitDtoIn);
-    //todo: disable produit
-    public void deleteProduit(UUID pIdProduit);
+    public ProduitDtoOut updateProduit(UUID pProduitDtoInId, ProduitDtoIn pProduitDtoIn);
+    public ProduitDtoOut disableProduit(UUID pProduitDtoInId);
+    public void deleteProduit(UUID pProduitDtoInId);
 }

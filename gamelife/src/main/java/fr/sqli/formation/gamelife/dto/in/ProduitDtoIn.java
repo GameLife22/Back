@@ -11,6 +11,7 @@ import java.util.List;
 //todo: javadoc
 @Component
 public class ProduitDtoIn extends AbstractDtoIn {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -19,11 +20,15 @@ public class ProduitDtoIn extends AbstractDtoIn {
 
     @NotEmpty
     private String description;
+
     @NotEmpty
-    private String categorie;
+    private CategorieDtoIn categorie;
+
     @NotEmpty
-    private String plateforme;
+    private PlateformeDtoIn plateforme;
+
     private boolean etat;
+
     @Size(min=1)
     @NotNull
     private List<ImageDtoIn> images;
@@ -47,19 +52,19 @@ public class ProduitDtoIn extends AbstractDtoIn {
         description = pDescription;
     }
 
-    public String getCategorie() {
+    public CategorieDtoIn getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(String pCategorie) {
+    public void setCategorie(CategorieDtoIn pCategorie) {
         categorie = pCategorie;
     }
 
-    public String getPlateforme() {
+    public PlateformeDtoIn getPlateforme() {
         return plateforme;
     }
 
-    public void setPlateforme(String pPlateforme) {
+    public void setPlateforme(PlateformeDtoIn pPlateforme) {
         plateforme = pPlateforme;
     }
 
@@ -84,8 +89,8 @@ public class ProduitDtoIn extends AbstractDtoIn {
         final StringBuffer sb = new StringBuffer("ProduitDtoIn{");
         sb.append("nom='").append(nom).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", categorie='").append(categorie).append('\'');
-        sb.append(", plateforme='").append(plateforme).append('\'');
+        sb.append(", categorie=").append(categorie);
+        sb.append(", plateforme=").append(plateforme);
         sb.append(", etat=").append(etat);
         sb.append(", images=").append(images);
         sb.append('}');

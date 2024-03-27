@@ -52,6 +52,9 @@ public class SecurityConfig {
     private final RsaKeyProperties rsaKeys;
     private final AuthDetailsService authDetailsService;
 
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ROLE_MODERATEUR = "ROLE_MODERATEUR";
+
     public SecurityConfig(RsaKeyProperties rsaKeys, AuthDetailsService authDetailsService) {
         this.rsaKeys = rsaKeys;
         this.authDetailsService = authDetailsService;
@@ -86,27 +89,15 @@ public class SecurityConfig {
                         .antMatchers("/utilisateur/mdpoublie").permitAll()
                         .antMatchers("/utilisateur/mdpreset").permitAll()
                         .antMatchers("/utilisateur/getEmailByToken").permitAll()
-                        .antMatchers("/produit/{id}").permitAll() //todo: update role
-                        .antMatchers("/produit/all").permitAll()
-                        .antMatchers("/produit/add").permitAll()
-                        .antMatchers("/produit/update").permitAll()
-                        .antMatchers("/produit/delete/{id}").permitAll()
-                        .antMatchers("/produit/search").permitAll() //todo: context search
+                        .antMatchers("/api/produits/").hasAnyRole(ROLE_ADMIN, ROLE_MODERATEUR)
+                        .antMatchers("/api/produits/{produitId}").hasAnyRole(ROLE_ADMIN, ROLE_MODERATEUR)
+                        .antMatchers("/api/produits/disable/{produitId}").hasAnyRole(ROLE_ADMIN, ROLE_MODERATEUR)
                         .antMatchers("/inscription/inscription").permitAll()
                         .antMatchers("/inscription/siret").permitAll()
                         .antMatchers("/inscription/activer").permitAll()
                         .antMatchers("/inscription/validation").permitAll()
                         .antMatchers("/h2-console").permitAll()
-                        .antMatchers("/commande/all").permitAll()
-                        .antMatchers("/commande/creer").permitAll()
-                        .antMatchers("/commande/{id}").permitAll()
-                        .antMatchers("/commande/{id}/modif-quantite").permitAll()
-                        .antMatchers("/commande/{id}/prix-total").permitAll()
-                        .antMatchers("/commande/{id}/ajout-article").permitAll()
-                        .antMatchers("/commande/{id}/valider-commande").permitAll()
-                        .antMatchers("/commande/{idPanier}/supp-article/{idProduit}").permitAll()
                         .anyRequest().authenticated()
-
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

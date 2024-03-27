@@ -5,6 +5,7 @@ import javax.validation.constraints.Size;
 import java.io.Serial;
 
 public class PlateformeDtoIn extends AbstractDtoIn {
+
     @Serial
     private static final long serialVersionUID = 1L;
 

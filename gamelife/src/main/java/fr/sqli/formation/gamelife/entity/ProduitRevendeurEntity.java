@@ -28,12 +28,12 @@ public class ProduitRevendeurEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_produit", nullable = false)
+    @JoinColumn(name = "produit_id", nullable = false)
     private ProduitEntity produit;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_utilisateur", nullable = false)
+    @JoinColumn(name = "utilisateur_id", nullable = false)
     private UtilisateurEntity utilisateur;
 
     public UUID getId() {

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class PlateformeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
     @Column(name = "libelle", nullable = false, length = 25)

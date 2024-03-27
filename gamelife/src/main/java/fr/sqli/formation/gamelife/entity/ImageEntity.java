@@ -14,7 +14,7 @@ public class ImageEntity {
     private UUID id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_produit", nullable = false)
+    @JoinColumn(name = "produit_id", nullable = false)
     @JsonIgnore
     private ProduitEntity produit;
 

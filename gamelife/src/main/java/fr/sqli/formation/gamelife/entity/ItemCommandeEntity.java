@@ -17,12 +17,12 @@ public class ItemCommandeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_commande", nullable = false)
+    @JoinColumn(name = "commande_id", nullable = false)
     private CommandeEntity commande;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_produit_revendeur", nullable = false)
+    @JoinColumn(name = "produit_revendeur_id", nullable = false)
     private ProduitRevendeurEntity produitRevendeur;
 
     @Column(name = "quantite", nullable = false)

@@ -10,6 +10,6 @@ public interface IPlateformeService {
     public PlateformeDtoOut getPlateforme(UUID pIdPlateforme);
     public List<PlateformeDtoOut> getPlateformes();
     public PlateformeDtoOut addPlateforme(PlateformeDtoIn pPlateformeDtoIn);
-    public PlateformeDtoOut updatePlateforme(PlateformeDtoIn pPlateformeDtoIn);
+    public PlateformeDtoOut updatePlateforme(UUID pPlateformeDtoInId, PlateformeDtoIn pPlateformeDtoIn);
     public void deletePlateforme(UUID pIdPlateforme);
 }

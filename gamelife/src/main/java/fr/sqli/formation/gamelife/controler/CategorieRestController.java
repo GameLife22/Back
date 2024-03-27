@@ -8,13 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: add logs + swagger +  dto est null + test controller + hasRole
+// TODO: add logs + swagger
 @RestController
 @RequestMapping("/api")
 public class CategorieRestController extends AbstractRestController {
@@ -27,8 +28,9 @@ public class CategorieRestController extends AbstractRestController {
         service = pService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @GetMapping("/categories/{categorieId}")
-    public ResponseEntity<CategorieDtoOut> getProduit(@PathVariable("categorieId") UUID pCategorieId) {
+    public ResponseEntity<CategorieDtoOut> getCategorie(@PathVariable("categorieId") UUID pCategorieId) {
         try {
             var result = this.service.getCategorie(pCategorieId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -37,8 +39,9 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @GetMapping("/categories")
-    public ResponseEntity<List<CategorieDtoOut>> getProduits() {
+    public ResponseEntity<List<CategorieDtoOut>> getCategories() {
         try {
             var result = this.service.getCategories();
             if (result.isEmpty()) {
@@ -50,8 +53,9 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @PostMapping("/categories")
-    public ResponseEntity<CategorieDtoOut> addProduit(@Valid @RequestBody CategorieDtoIn pCategorieDtoIn) {
+    public ResponseEntity<CategorieDtoOut> addCategorie(@Valid @RequestBody CategorieDtoIn pCategorieDtoIn) {
         try {
             var result = this.service.addCategorie(pCategorieDtoIn);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -60,8 +64,9 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @PatchMapping("/categories/{categorieId}")
-    public ResponseEntity<CategorieDtoOut> updateProduit(@Valid @PathVariable("categorieId") UUID pCategorieId, @RequestBody CategorieDtoIn pCategorieDtoIn) {
+    public ResponseEntity<CategorieDtoOut> updateCategorie(@Valid @PathVariable("categorieId") UUID pCategorieId, @RequestBody CategorieDtoIn pCategorieDtoIn) {
         try {
             var result = this.service.updateCategorie(pCategorieId, pCategorieDtoIn);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -70,13 +75,14 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @DeleteMapping("/categories/{categorieId}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable("categorieId") UUID pCategorieId) {
+    public ResponseEntity<Void> deleteCategorie(@PathVariable("categorieId") UUID pCategorieId) {
         try {
-            service.deleteCategorie(pCategorieId);
+            this.service.deleteCategorie(pCategorieId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch(Exception pException) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -19,7 +19,7 @@ public class CommandeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_utilisateur", nullable = false)
+    @JoinColumn(name = "utilisateur_id", nullable = false)
     private UtilisateurEntity utilisateur;
 
     @Column(name = "etat", nullable = false, length = 80)

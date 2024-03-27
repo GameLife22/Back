@@ -21,7 +21,7 @@ abstract class AbstractDtoIn extends AbstractDto {
     }
 
     public void setId(UUID pId) {
-        id = pId;
+        this.id = pId;
     }
 
     @Override

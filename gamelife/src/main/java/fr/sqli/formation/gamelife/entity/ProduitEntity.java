@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.entity;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
@@ -25,19 +26,20 @@ public class ProduitEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_categorie", nullable = false)
+    @JoinColumn(name = "categorie_id", nullable = false)
     private CategorieEntity categorie;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_plateforme", nullable = false)
+    @JoinColumn(name = "plateforme_id", nullable = false)
     private PlateformeEntity plateforme;
 
     @OneToMany(mappedBy = "produit")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL) //todo: change
     private List<ImageEntity> images;
 
-    @Column(name = "etat")
-    private Boolean etat;
+    @Column(name = "etat_produit")
+    private boolean etat;
 
     public UUID getId() {
         return id;
@@ -87,11 +89,11 @@ public class ProduitEntity {
         images = pImages;
     }
 
-    public Boolean getEtat() {
+    public boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean pEtat) {
+    public void setEtat(boolean pEtat) {
         etat = pEtat;
     }
 

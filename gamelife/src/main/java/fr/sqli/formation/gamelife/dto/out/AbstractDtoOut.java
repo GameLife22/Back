@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 abstract class AbstractDtoOut extends AbstractDto {
+
     @Serial
     private static final long serialVersionUID = 1L;
 

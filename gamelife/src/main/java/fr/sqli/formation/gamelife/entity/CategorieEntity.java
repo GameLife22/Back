@@ -14,9 +14,6 @@ public class CategorieEntity {
     @Column(name = "libelle", nullable = false, length = 25)
     private String libelle;
 
-    @Column(name = "etat", nullable = false)
-    private boolean etat;
-
     public UUID getId() {
         return id;
     }
@@ -33,20 +30,11 @@ public class CategorieEntity {
         libelle = pLibelle;
     }
 
-    public boolean getEtat() {
-        return etat;
-    }
-
-    public void setEtat(boolean pEtat) {
-        etat = pEtat;
-    }
-
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("CategorieEntity{");
         sb.append("id=").append(id);
         sb.append(", libelle='").append(libelle).append('\'');
-        sb.append(", etat=").append(etat);
         sb.append('}');
         return sb.toString();
     }
