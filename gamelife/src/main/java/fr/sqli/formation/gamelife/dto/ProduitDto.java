@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.dto;
 
 import fr.sqli.formation.gamelife.entity.ImageEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -21,14 +22,14 @@ public class ProduitDto {
 
 	private String plateforme;
 
-	private int prix;
+	private BigDecimal prix;
 
 	private List<ImageEntity> images;
 
-	public ProduitDto(int id, String categorie, String texteDescriptif, String detail, String nom, String plateforme, BigDecimal prix, List<ImageEntity> images) {
+	public ProduitDto(int id, String categorie, String description, String detail, String nom, String plateforme, BigDecimal prix, List<ImageEntity> images) {
 		this.id = id;
 		this.categorie = categorie;
-		this.texteDescriptif = texteDescriptif;
+		this.description = description;
 		this.detail = detail;
 		this.nom = nom;
 		this.plateforme = plateforme;
@@ -60,8 +61,8 @@ public class ProduitDto {
 		return description;
 	}
 
-	public void setDescription(String texteDescriptif) {
-		this.description = texteDescriptif;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getDetail() {
@@ -88,11 +89,11 @@ public class ProduitDto {
 		this.plateforme = plateforme;
 	}
 
-	public int getPrix() {
+	public BigDecimal getPrix() {
 		return this.prix;
 	}
 
-	public void setPrix(int prix) {
+	public void setPrix(BigDecimal prix) {
 		this.prix = prix;
 	}
 

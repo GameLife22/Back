@@ -14,9 +14,9 @@ VALUES ('dubois', 'henry', '$2y$10$KZTksWKizskKPwZLaW6FWejCcEF1AdsYzVM8jxmHsot3J
 -- Insertion dans la table glcommande
 -- -----------------------------------------------------
 INSERT INTO gamelife.glcommande (id_utilisateur, etat, num_rue_livraison, rue_livraison, ville_livraison, code_postal_livraison, date)
-VALUES ('2', '1', '3', 'rue dupont', 'lille', '59000', '2022-11-07');
+VALUES ('2', 'NOUVELLE', '3', 'rue dupont', 'lille', '59000', '2022-11-07');
 INSERT INTO gamelife.glcommande (id_utilisateur, etat, num_rue_livraison, rue_livraison, ville_livraison, code_postal_livraison, date)
-VALUES ('2', '2', '3', 'rue dupont', 'lille', '59000','2022-11-08');
+VALUES ('2', 'NOUVELLE', '3', 'rue dupont', 'lille', '59000','2022-11-08');
 
 -- -----------------------------------------------------
 -- Insertion dans la table glimage
