@@ -4,6 +4,8 @@ package fr.sqli.formation.gamelife.controler;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.sqli.formation.gamelife.dto.ProduitDto;
+import fr.sqli.formation.gamelife.dto.ProduitDtoHandler;
 import fr.sqli.formation.gamelife.entity.ProduitEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,8 +35,7 @@ public class ProduitControler {
 	 */
 
 
-/*
-	//@PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
+
 	@GetMapping("/all")
 	public ResponseEntity<List<ProduitDto>> getAllProduit() {
 
@@ -55,9 +56,8 @@ public class ProduitControler {
 	 * @author: Fabien
 	 */
 
-	/*
+
 	@GetMapping("{id}")
-	@PreAuthorize("permitAll()")
 	public ResponseEntity<ProduitDto> getProductById(@PathVariable String id) {
 		var jeuVideo = this.produitService.getProductById(id);
 
@@ -78,9 +78,8 @@ public class ProduitControler {
 	 * @throws Exception
 	 * @author Fabien
 	 */
-	/*
-	@GetMapping("/search")
 
+	@GetMapping("/search")
 	public ResponseEntity<List<ProduitDto>> getProductsByName(@RequestParam String nom) {
 		var listJeuxVideos = this.produitService.getProductsByName(nom);
 
@@ -97,7 +96,4 @@ public class ProduitControler {
 
 		return ResponseEntity.ok(jeuxVideos);
 	}
-	}
-
-	 	*/
 }
