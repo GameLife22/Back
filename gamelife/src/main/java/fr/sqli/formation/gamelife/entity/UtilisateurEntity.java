@@ -47,6 +47,24 @@ public class UtilisateurEntity {
     @Column(name = "reset_password_token", length = 30)
     private String resetPasswordToken;
 
+    public UtilisateurEntity() {
+    }
+
+    public UtilisateurEntity(String pNom, String pPrenom, String pMdp, String pEmail, Integer pNumRue, String pRue, String pVille, Integer pCodePostal, String pRole, String pNumSiren, Boolean pEtatCompte, String pResetPasswordToken) {
+        nom = pNom;
+        prenom = pPrenom;
+        mdp = pMdp;
+        email = pEmail;
+        numRue = pNumRue;
+        rue = pRue;
+        ville = pVille;
+        codePostal = pCodePostal;
+        role = pRole;
+        numSiren = pNumSiren;
+        etatCompte = pEtatCompte;
+        resetPasswordToken = pResetPasswordToken;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -160,7 +178,6 @@ public class UtilisateurEntity {
                 pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
                 num_rue != null && num_rue >= 0 &&
                 rue != null && !rue.trim().isEmpty() &&
-                //todo: add numSiren
                 ville != null && !ville.trim().isEmpty()) &&
                 code_postal != null && code_postal > 0){
             throw new IllegalArgumentException("Champs invalides");

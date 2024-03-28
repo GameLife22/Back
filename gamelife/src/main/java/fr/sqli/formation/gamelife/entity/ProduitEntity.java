@@ -34,8 +34,8 @@ public class ProduitEntity {
     @JoinColumn(name = "plateforme_id", nullable = false)
     private PlateformeEntity plateforme;
 
-    @OneToMany(mappedBy = "produit")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL) //todo: change
+    @OneToMany(mappedBy = "produit", orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<ImageEntity> images;
 
     @Column(name = "etat_produit")

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//todo: add log + javadoc
 @Service
 public class ProduitServiceImpl implements IProduitService {
     private static final Logger LOG = LoggerFactory.getLogger(ProduitServiceImpl.class);
@@ -33,7 +32,6 @@ public class ProduitServiceImpl implements IProduitService {
     private IPlateformeDao plateformeDao;
 
     private IImageDao imageDao;
-
 
     @Autowired
     public ProduitServiceImpl(IProduitDao pProduitDao, ICategorieDao pCategorieDao, IPlateformeDao pPlateformeDao, IImageDao pIImageDao) {
@@ -54,7 +52,6 @@ public class ProduitServiceImpl implements IProduitService {
         return IProduitDtoHandler.dtoOutFromEntities(this.produitDao.findAll());
     }
 
-    //todo: create a procedure to delete duplications
     @Override
     public ProduitDtoOut addProduit(ProduitDtoIn pProduitDtoIn) {
         var categorieDtoInLibelle = pProduitDtoIn.getCategorie().getLibelle();
@@ -92,17 +89,18 @@ public class ProduitServiceImpl implements IProduitService {
         var imagesEntity = new ArrayList<ImageEntity>();
 
         for (ImageDtoIn imageDtoIn: pProduitDtoIn.getImages()) {
+            var imageEntity = new ImageEntity();
+
             try {
-                var optionalImageEntity = this.imageDao.findById(imageDtoIn.getId());
-                optionalImageEntity.get().setImage(imageDtoIn.getImage());
-                optionalImageEntity.get().setTitre(imageDtoIn.getTitre());
-                imagesEntity.add(optionalImageEntity.get());
-            } catch (InvalidDataAccessApiUsageException | IllegalArgumentException pException) {
-                var imageEntity = new ImageEntity();
+                imageEntity = this.imageDao.findById(imageDtoIn.getId()).get();
                 imageEntity.setImage(imageDtoIn.getImage());
                 imageEntity.setTitre(imageDtoIn.getTitre());
-                imagesEntity.add(imageEntity);
+            } catch (InvalidDataAccessApiUsageException | IllegalArgumentException pException) {
+                imageEntity.setImage(imageDtoIn.getImage());
+                imageEntity.setTitre(imageDtoIn.getTitre());
             }
+
+            imagesEntity.add(imageEntity);
         }
 
         var newProduitEntity = IProduitDtoHandler.entityFromDtoIn(pProduitDtoIn, produitEntity);

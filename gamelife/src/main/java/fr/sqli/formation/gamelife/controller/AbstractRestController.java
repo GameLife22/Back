@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.controler;
+package fr.sqli.formation.gamelife.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

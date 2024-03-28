@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
-//todo: add javadoc + log
 @Service
 public class PlateformeServiceImpl implements IPlateformeService {
     private static final Logger LOG = LoggerFactory.getLogger(ProduitServiceImpl.class);

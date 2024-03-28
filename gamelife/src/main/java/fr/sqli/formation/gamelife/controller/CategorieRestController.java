@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.controler;
+package fr.sqli.formation.gamelife.controller;
 
 import fr.sqli.formation.gamelife.dto.in.CategorieDtoIn;
 import fr.sqli.formation.gamelife.dto.out.CategorieDtoOut;
@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: add logs + swagger
 @RestController
 @RequestMapping("/api")
 public class CategorieRestController extends AbstractRestController {
@@ -28,7 +27,6 @@ public class CategorieRestController extends AbstractRestController {
         service = pService;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @GetMapping("/categories/{categorieId}")
     public ResponseEntity<CategorieDtoOut> getCategorie(@PathVariable("categorieId") UUID pCategorieId) {
         try {
@@ -39,7 +37,6 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @GetMapping("/categories")
     public ResponseEntity<List<CategorieDtoOut>> getCategories() {
         try {
@@ -53,7 +50,6 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @PostMapping("/categories")
     public ResponseEntity<CategorieDtoOut> addCategorie(@Valid @RequestBody CategorieDtoIn pCategorieDtoIn) {
         try {
@@ -64,7 +60,6 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @PatchMapping("/categories/{categorieId}")
     public ResponseEntity<CategorieDtoOut> updateCategorie(@Valid @PathVariable("categorieId") UUID pCategorieId, @RequestBody CategorieDtoIn pCategorieDtoIn) {
         try {
@@ -75,7 +70,6 @@ public class CategorieRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @DeleteMapping("/categories/{categorieId}")
     public ResponseEntity<Void> deleteCategorie(@PathVariable("categorieId") UUID pCategorieId) {
         try {

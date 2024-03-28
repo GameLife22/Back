@@ -6,7 +6,6 @@ import fr.sqli.formation.gamelife.dto.out.ProduitDtoOut;
 import java.util.List;
 import java.util.UUID;
 
-//todo: javadoc
 public interface IProduitService {
     public ProduitDtoOut getProduit(UUID pProduitDtoInId);
     public List<ProduitDtoOut> getProduits();

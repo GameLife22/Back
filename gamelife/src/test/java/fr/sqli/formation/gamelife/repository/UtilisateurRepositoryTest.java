@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootTest
 @Rollback()
@@ -23,22 +24,21 @@ class UtilisateurRepositoryTest {
 
     @Test
     void testInsert01(){
-        Optional<UtilisateurEntity> entiteFound = this.dao.findByEmail("admin1@gamelife.fr");
+        Optional<UtilisateurEntity> entiteFound = this.dao.findByEmail("admin@gamelife.fr");
         String unNom = entiteFound.get().getNom();
-        Assertions.assertEquals("admin1", unNom);
+        Assertions.assertEquals("admin", unNom);
     }
     @Test
     void trouverEmailTest(){
-        var utilisateurInserted = this.dao.findByEmail("admin1@gamelife.fr");
+        var utilisateurInserted = this.dao.findByEmail("admin@gamelife.fr");
         Assertions.assertNotNull(utilisateurInserted);
-        Assertions.assertEquals("admin1@gamelife.fr",utilisateurInserted.get().getEmail());
+        Assertions.assertEquals("admin@gamelife.fr",utilisateurInserted.get().getEmail());
     }
 
     @Test
     void testSelect01(){
-        //todo: replace
-        //Optional<UtilisateurEntity> opUtilisateurFound = this.dao.findById(1);
-        //Assertions.assertTrue(opUtilisateurFound.isPresent());
-        //Assertions.assertEquals("admin1@gamelife.fr",opUtilisateurFound.get().getEmail());
+        Optional<UtilisateurEntity> opUtilisateurFound = this.dao.findById(UUID.fromString("ede28d8b-9170-4e8e-83b3-3c2c16c39ae8"));
+        Assertions.assertTrue(opUtilisateurFound.isPresent());
+        Assertions.assertEquals("admin@gamelife.fr",opUtilisateurFound.get().getEmail());
     }
 }

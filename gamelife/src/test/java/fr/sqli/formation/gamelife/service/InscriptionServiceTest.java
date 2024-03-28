@@ -26,25 +26,22 @@ class InscriptionServiceTest {
     @Test
     void testInscription01() throws Exception {
         LOG.debug("TEST : Cas normal");
-        //todo: replace
-        //InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com",true,"Teeest1999@","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
-        //UtilisateurEntity u =service.inscription(dto);
-        //Assertions.assertNotNull(u);
-        //Assertions.assertEquals(u.getNom(),"Astora");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity( "nouveau acheteur", "nouveau acheteur", "$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi", "nouveauacheteur@test.fr", 2, "rue du marechal", "nantes", 44000, "ROLE_ACHETEUR", null, true, null));
+        UtilisateurEntity u =service.inscription(dto);
+        Assertions.assertNotNull(u);
+        Assertions.assertEquals(u.getNom(),"nouveau acheteur");
     }
     @Test
     void testInscription02() throws Exception {
         LOG.debug("TEST : Cas utilisateur existant");
-        //todo: replace
-        //InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("admin1@gamelife.fr",true,"Paz6!!133","admin1",3,null,"admin1","ROLE_ADMIN","rue de capucine","paris",75000,null));
-        //Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("acheteur", "acheteur", "$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi", "acheteur@test.fr", 2, "rue du marechal", "nantes", 44000, "ROLE_ACHETEUR", null, true, null));
+        Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
     }
     @Test
     void testInscription03() throws Exception {
         LOG.debug("TEST : Cas champs vide");
-        //todo: replace
-        //InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com",true,"","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
-        //Assertions.assertThrows(IllegalArgumentException.class,()-> service.inscription(dto)); //todo: invalid
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("acheteur", "acheteur", "", "acheteur@test.fr", 2, "rue du marechal", "nantes", 44000, "ROLE_ACHETEUR", null, true, null));
+        Assertions.assertThrows(IllegalArgumentException.class,()-> service.inscription(dto));
     }
 
 }

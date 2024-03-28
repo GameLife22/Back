@@ -1,4 +1,4 @@
-package fr.sqli.formation.gamelife.controler;
+package fr.sqli.formation.gamelife.controller;
 
 import fr.sqli.formation.gamelife.dto.in.PlateformeDtoIn;
 import fr.sqli.formation.gamelife.dto.out.PlateformeDtoOut;
@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: add logs + swagger
 @RestController
 @RequestMapping("/api")
 public class PlateformeRestController extends AbstractRestController {
@@ -28,7 +27,6 @@ public class PlateformeRestController extends AbstractRestController {
         service = pService;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @GetMapping("/plateformes/{plateformeId}")
     public ResponseEntity<PlateformeDtoOut> getPlateforme(@PathVariable UUID pPlateformeDtoInId) {
         try {
@@ -39,7 +37,6 @@ public class PlateformeRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @GetMapping("/plateformes")
     public ResponseEntity<List<PlateformeDtoOut>> getPlateformes() {
         try {
@@ -53,7 +50,6 @@ public class PlateformeRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @PostMapping("/plateformes")
     public ResponseEntity<PlateformeDtoOut> addPlateforme(@Valid @RequestBody PlateformeDtoIn pPlateformeDtoIn) {
         try {
@@ -64,7 +60,6 @@ public class PlateformeRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @PatchMapping("/plateformes")
     public ResponseEntity<PlateformeDtoOut> updatePlateforme(@Valid @PathVariable("plateformeId") UUID pPlateformeDtoInId, @RequestBody PlateformeDtoIn pPlateformeDtoIn) {
         try {
@@ -75,7 +70,6 @@ public class PlateformeRestController extends AbstractRestController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATEUR')")
     @DeleteMapping("/plateformes/{plateformeId}")
     public ResponseEntity<Void> deletePlateforme(@PathVariable("plateformeId") UUID pPlateformeDtoInId) {
         try {
