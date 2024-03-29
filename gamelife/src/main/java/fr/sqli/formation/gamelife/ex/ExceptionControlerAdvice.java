@@ -1,5 +1,8 @@
 package fr.sqli.formation.gamelife.ex;
 
+import fr.sqli.formation.gamelife.dto.out.ExceptionDtoOut;
+import fr.sqli.formation.gamelife.ex.commande.CommandeNotFoundException;
+import fr.sqli.formation.gamelife.ex.commande.ItemCommandeNotFoundException;
 import org.apache.catalina.connector.ClientAbortException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,4 +67,30 @@ public class ExceptionControlerAdvice {
         ResponseEntity<Exception> resu = new ResponseEntity<Exception>(ex, HttpStatus.BAD_REQUEST);
         return resu;
     }
+
+    @ExceptionHandler(ItemCommandeNotFoundException.class)
+    public ResponseEntity<ExceptionDtoOut> handleItemCommandeNotFoundException(ItemCommandeNotFoundException ex) {
+        LOG.info("ItemCommandeNotFoundException: {}", ex.getMessage());
+        return new ResponseEntity<>(new ExceptionDtoOut(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CommandeNotFoundException.class)
+    public ResponseEntity<ExceptionDtoOut> handleCommandeNotFoundException(CommandeNotFoundException ex) {
+        LOG.info("CommandeNotFoundException: {}", ex.getMessage());
+        return new ResponseEntity<>(new ExceptionDtoOut(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
+
+    @ExceptionHandler(ProduitRevendeutException.class)
+    public ResponseEntity<String> handleProduitException(ProduitRevendeutException ex) {
+        LOG.info("Produit introuvable: {}", ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(EtatCommandeInvalideException.class)
+    public ResponseEntity<ExceptionDtoOut> handleEtatCommandeInvalideException(EtatCommandeInvalideException ex) {
+        LOG.info("EtatCommandeInvalideException: {}", ex.getMessage());
+        return new ResponseEntity<>(new ExceptionDtoOut(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }

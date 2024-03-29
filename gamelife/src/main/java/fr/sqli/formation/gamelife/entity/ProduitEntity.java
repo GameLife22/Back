@@ -16,7 +16,7 @@ public class ProduitEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_produit", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "nom", nullable = false)
@@ -98,10 +98,10 @@ public class ProduitEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProduitEntity that = (ProduitEntity) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ProduitEntity that = (ProduitEntity) obj;
         return Objects.equals(id, that.id) && Objects.equals(nom, that.nom) && Objects.equals(description, that.description) && Objects.equals(categorie, that.categorie) && Objects.equals(plateforme, that.plateforme) && Objects.equals(etat, that.etat);
     }
 
