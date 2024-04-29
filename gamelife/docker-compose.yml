@@ -3,38 +3,29 @@ version: "3.8"
 services:
   database:
     container_name: database
-    hostname: database
     image: postgres:16.1
     restart: always
-    env_file: ./.env
     environment:
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_USER_PASSWORD
-      - POSTGRES_DB=$DB_DATABASE
-
+      - "POSTGRES_USER=admingamelife"
+      - "POSTGRES_PASSWORD=postgresqlAdmin17"
+      - "POSTGRES_DB=gamelife"
     ports:
-      - ${DB_DOCKER_PORT}:${DB_LOCAL_PORT}
+      - "5432:5432"
     volumes:
-      - type: bind
-        source: ./db/gamelifev0.4.0.sql
-        target: /docker-entrypoint-initdb.d/insert.sql
-        read_only: true
-      - postgres-data:/var/lib/postgresql/data
-
+      - ./db/gamelife.sql:/docker-entrypoint-initdb.d/gamelife.sql
 
   back:
-    env_file: ./.env
     depends_on:
       - database
     build:
-     context: ../gamelife
+      context: ../gamelife
     environment:
-      - SPRING_APPLICATION_JSON={"spring.datasource.url":"jdbc:postgresql://database:$DB_DOCKER_PORT/$DB_DATABASE?useSSL=false&serverTimezone=Europe/Paris&allowPublicKeyRetrieval=true","spring.datasource.username":"$DB_USER","spring.datasource.password":"$DB_USER_PASSWORD"}
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/gamelife?ssl=false&sslmode=disable&TimeZone=Europe/Paris"
+      - "SPRING_DATASOURCE_USERNAME=admingamelife"
+      - "SPRING_DATASOURCE_PASSWORD=postgresqlAdmin17"
     restart: always
     ports:
       - 8080:8080
-    links:
-      - database
     volumes:
       - ../.m2:/root/.m2
     stdin_open: true
@@ -47,6 +38,3 @@ services:
       - 4200:80
     depends_on:
       - back
-
-volumes:
-  postgres-data:

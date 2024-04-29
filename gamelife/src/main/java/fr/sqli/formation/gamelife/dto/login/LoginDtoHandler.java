@@ -1,12 +1,13 @@
 package fr.sqli.formation.gamelife.dto.login;
 
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 
 public class LoginDtoHandler {
 
-    public static LoginDtoOut fromEntity(UtilisateurEntity entity) {
+    public static LoginDtoOut fromEntity(UtilisateurEntite entity) {
         var u = new LoginDtoOut();
-        u.setId(entity.getId());
+        //todo: replace
+        //u.setId(entity.getId());
         u.setEmail(entity.getEmail());
         u.setNom(entity.getNom());
         u.setEtat(entity.getEtatCompte());
@@ -19,9 +20,9 @@ public class LoginDtoHandler {
         return u;
     }
 
-    public static UtilisateurEntity toEntity(LoginDtoIn dto) {
+    public static UtilisateurEntite toEntity(LoginDtoIn dto) {
 
-        var u = new UtilisateurEntity();
+        var u = new UtilisateurEntite();
         u.setEmail(dto.getLogin());
         u.setMdp(dto.getPwd());
         return u;

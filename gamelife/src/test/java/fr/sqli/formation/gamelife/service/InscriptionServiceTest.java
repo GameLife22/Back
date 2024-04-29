@@ -2,12 +2,13 @@ package fr.sqli.formation.gamelife.service;
 
 import fr.sqli.formation.gamelife.dto.inscription.InscriptionDto;
 import fr.sqli.formation.gamelife.dto.inscription.InscriptionDtoHandler;
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
-import fr.sqli.formation.gamelife.ex.UtilisateurExistantException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
+import fr.sqli.formation.gamelife.exception.utilisateur.UtilisateurExistantException;
+import fr.sqli.formation.gamelife.service.utilisateur.InscriptionService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -21,26 +22,26 @@ import org.springframework.transaction.annotation.Transactional;
 class InscriptionServiceTest {
     @Autowired
     InscriptionService service;
-    private static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(InscriptionServiceTest.class);
 
     @Test
     void testInscription01() throws Exception {
-        LOG.debug("TEST : Cas normal");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com",true,"Teeest1999@","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
-        UtilisateurEntity u =service.inscription(dto);
+        LOGGER.debug("TEST : Cas normal");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntite( "nouveau acheteur", "nouveau acheteur", "$2a$12$1AYx5quZIiiuevfs9Hk1MelQDA/z9ktpIsVfk471xJTNwou7MgBL.", "nouveauacheteur@gamelife.fr", 2, "rue du marechal", "nantes", 44000, "ROLE_ACHETEUR", null, true, null));
+        UtilisateurEntite u =service.inscription(dto);
         Assertions.assertNotNull(u);
-        Assertions.assertEquals(u.getNom(),"Astora");
+        Assertions.assertEquals(u.getNom(),"nouveau acheteur");
     }
     @Test
     void testInscription02() throws Exception {
-        LOG.debug("TEST : Cas utilisateur existant");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("admin1@gamelife.fr",true,"Paz6!!133","admin1",3,null,"admin1","ROLE_ADMIN","rue de capucine","paris",75000,null));
+        LOGGER.debug("TEST : Cas utilisateur existant");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntite("acheteur", "acheteur", "$2a$12$1AYx5quZIiiuevfs9Hk1MelQDA/z9ktpIsVfk471xJTNwou7MgBL.", "acheteur@gamelife.fr", 2, "rue du marechal", "nantes", 44000, "ROLE_ACHETEUR", null, true, null));
         Assertions.assertThrows(UtilisateurExistantException.class,()-> service.inscription(dto));
     }
     @Test
     void testInscription03() throws Exception {
-        LOG.debug("TEST : Cas champs vide");
-        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntity("SolaireAstora@gmail.com",true,"","Astora",1,null,"Solaire","ROLE_ACHETEUR","dragon","Landrake",95150,null));
+        LOGGER.debug("TEST : Cas champs vide");
+        InscriptionDto dto = InscriptionDtoHandler.fromEntity(new UtilisateurEntite("acheteur", "acheteur", "", "acheteur@gamelife.fr", 2, "rue du marechal", "nantes", 44000, "ROLE_ACHETEUR", null, true, null));
         Assertions.assertThrows(IllegalArgumentException.class,()-> service.inscription(dto));
     }
 

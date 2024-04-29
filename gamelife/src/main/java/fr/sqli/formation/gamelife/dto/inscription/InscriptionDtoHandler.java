@@ -1,11 +1,11 @@
 package fr.sqli.formation.gamelife.dto.inscription;
 
 
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 
 public class InscriptionDtoHandler {
 
-	public static InscriptionDto fromEntity(UtilisateurEntity entity) {
+	public static InscriptionDto fromEntity(UtilisateurEntite entity) {
 		var u = new InscriptionDto();
 		u.setPrenom(entity.getPrenom());
 		u.setNom(entity.getNom());
@@ -19,9 +19,9 @@ public class InscriptionDtoHandler {
 		return u;
 	}
 
-	public static UtilisateurEntity fromDto(InscriptionDto dto) {
+	public static UtilisateurEntite fromDto(InscriptionDto dto) {
 
-		var u = new UtilisateurEntity();
+		var u = new UtilisateurEntite();
 		u.setPrenom(dto.getPrenom());
 		u.setNom(dto.getNom());
 		u.setMdp(dto.getMdp());

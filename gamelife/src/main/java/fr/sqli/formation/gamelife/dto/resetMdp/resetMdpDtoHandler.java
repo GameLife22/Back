@@ -1,13 +1,13 @@
 package fr.sqli.formation.gamelife.dto.resetMdp;
 
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 
 public class resetMdpDtoHandler {
 
 
-    public static UtilisateurEntity toEntity(resetMdpDtoIn dto) {
+    public static UtilisateurEntite toEntity(resetMdpDtoIn dto) {
 
-        var u = new UtilisateurEntity();
+        var u = new UtilisateurEntite();
         u.setMdp(dto.getPwd());
         return u;
     }
