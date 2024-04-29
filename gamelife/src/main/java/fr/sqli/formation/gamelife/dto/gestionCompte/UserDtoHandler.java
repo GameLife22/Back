@@ -1,9 +1,9 @@
 package fr.sqli.formation.gamelife.dto.gestionCompte;
 
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 
 public class UserDtoHandler {
-    public static UserDtoOut fromEntity(UtilisateurEntity entity) {
+    public static UserDtoOut fromEntity(UtilisateurEntite entity) {
         var u = new UserDtoOut();
         u.setPrenom(entity.getPrenom());
         u.setNom(entity.getNom());
@@ -16,9 +16,9 @@ public class UserDtoHandler {
         return u;
     }
 
-    public static UtilisateurEntity fromDto(UserDtoOut dto) {
+    public static UtilisateurEntite fromDto(UserDtoOut dto) {
 
-        var u = new UtilisateurEntity();
+        var u = new UtilisateurEntite();
         u.setPrenom(dto.getPrenom());
         u.setNom(dto.getNom());
         u.setEmail(dto.getEmail());

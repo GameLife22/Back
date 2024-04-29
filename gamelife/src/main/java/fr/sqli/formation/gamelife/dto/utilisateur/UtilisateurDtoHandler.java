@@ -1,9 +1,11 @@
 package fr.sqli.formation.gamelife.dto.utilisateur;
 
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
+
+import java.util.UUID;
 
 public class UtilisateurDtoHandler {
-    public static UtilisateurDto fromEntity(UtilisateurEntity entity) {
+    public static UtilisateurDto fromEntity(UtilisateurEntite entity) {
         var u = new UtilisateurDto();
         u.setId(entity.getId());
         u.setNom(entity.getNom());
@@ -11,18 +13,18 @@ public class UtilisateurDtoHandler {
         return u;
     }
 
-    public static UtilisateurEntity fromDto(UtilisateurDto dto) {
+    public static UtilisateurEntite fromDto(UtilisateurDto dto) {
 
-        var u = new UtilisateurEntity();
+        var u = new UtilisateurEntite();
         u.setId(dto.getId());
         u.setNom(dto.getNom());
         u.setPrenom(dto.getPrenom());
         return u;
     }
 
-    public static UtilisateurEntity fromId(Integer userId) {
-        UtilisateurEntity utilisateurEntity = new UtilisateurEntity();
-        utilisateurEntity.setId(userId);
-        return utilisateurEntity;
+    public static UtilisateurEntite fromId(UUID userId) {
+        UtilisateurEntite utilisateurEntite = new UtilisateurEntite();
+        utilisateurEntite.setId(userId);
+        return utilisateurEntite;
     }
 }

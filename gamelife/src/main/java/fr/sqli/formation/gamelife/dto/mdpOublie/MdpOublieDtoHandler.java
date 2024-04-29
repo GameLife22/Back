@@ -1,18 +1,18 @@
 package fr.sqli.formation.gamelife.dto.mdpOublie;
 
-import fr.sqli.formation.gamelife.entity.UtilisateurEntity;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 
 public class MdpOublieDtoHandler {
 
 
-    public static UtilisateurEntity toEntity(MdpOublieDtoIn dto) {
+    public static UtilisateurEntite toEntity(MdpOublieDtoIn dto) {
 
-        var u = new UtilisateurEntity();
+        var u = new UtilisateurEntite();
         u.setEmail(dto.getLogin());
         return u;
     }
 
-    public static EmailDtoOut fromEntity(UtilisateurEntity entity) {
+    public static EmailDtoOut fromEntity(UtilisateurEntite entity) {
         var u = new EmailDtoOut();
         u.setLogin(entity.getEmail());
         return u;
