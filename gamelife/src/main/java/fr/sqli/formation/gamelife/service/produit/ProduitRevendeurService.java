@@ -27,7 +27,7 @@ public class ProduitRevendeurService implements IProduitRevendeurService {
     @Override
     public List<ProduitRevendeurReponse> recupererProduitRevendeursParProduit(UUID pProduitId) {
         LOGGER.info("Tentative de récupération de la liste des revendeurs vendant un produit avec l'identifiant : {}", pProduitId);
-        List<ProduitRevendeurReponse> produitRevendeur = IProduitRevendeurConvertisseur.convertirEnProduitRevendeursReponse(this.produitRevendeurDao.findByProduitId(pProduitId)
+        List<ProduitRevendeurReponse> produitRevendeur = IProduitRevendeurConvertisseur.convertirEnProduitRevendeursReponse(this.produitRevendeurDao.findProduitByProduitId(pProduitId)
                 .orElseThrow(() -> new EntityNotFoundException("Aucun liste des revendeurs vendant un produit trouvé avec l'identifiant fourni : " + pProduitId)));
         LOGGER.info("Liste des revendeurs vendant un produit récupéré avec succès : {}", produitRevendeur);
         return produitRevendeur;

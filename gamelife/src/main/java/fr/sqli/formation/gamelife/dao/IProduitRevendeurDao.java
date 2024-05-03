@@ -12,5 +12,5 @@ import java.util.UUID;
 @Repository
 public interface IProduitRevendeurDao extends JpaRepository<ProduitRevendeurEntite, UUID> {
     //Optional<ProduitRevendeurEntity> findByIdProduitAndIdUtilisateur(UUID produitId, UUID pUtilisateurId);
-    Optional<List<ProduitRevendeurEntite>> findByProduitId(UUID pProduitId);
+    Optional<List<ProduitRevendeurEntite>> findProduitByProduitId(UUID pProduitId);
 }
