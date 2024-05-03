@@ -2,6 +2,8 @@ package fr.sqli.formation.gamelife.controleur;
 
 import fr.sqli.formation.gamelife.dto.produit.ProduitRequete;
 import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
+import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurReponse;
+import fr.sqli.formation.gamelife.service.produit.IProduitRevendeurService;
 import fr.sqli.formation.gamelife.service.produit.IProduitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +22,12 @@ public class ProduitControleur {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProduitControleur.class);
 
     private final IProduitService service;
+    private final IProduitRevendeurService produitRevendeurService;
 
     @Autowired
-    public ProduitControleur(IProduitService pService) {
+    public ProduitControleur(IProduitService pService, IProduitRevendeurService pIProduitRevendeurService) {
         service = pService;
+        produitRevendeurService = pIProduitRevendeurService;
     }
 
     @GetMapping("/produits/{produitId}")
@@ -84,5 +88,12 @@ public class ProduitControleur {
             this.LOGGER.error("");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //todo: à supprimer quand yassine aura terminé sa feature
+    @GetMapping("/produitrevendeur/{pProduitRevendeurId}")
+    public ResponseEntity<ProduitRevendeurReponse> recupererProduitRevendeur(@PathVariable UUID pProduitRevendeurId) {
+        this.produitRevendeurService.recupererProduitRevendeur(pProduitRevendeurId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
