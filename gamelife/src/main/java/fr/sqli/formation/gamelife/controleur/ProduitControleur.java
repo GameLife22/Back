@@ -91,9 +91,9 @@ public class ProduitControleur {
     }
 
     //todo: à supprimer quand yassine aura terminé sa feature
-    @GetMapping("/produitrevendeur/{pProduitRevendeurId}")
-    public ResponseEntity<ProduitRevendeurReponse> recupererProduitRevendeur(@PathVariable UUID pProduitRevendeurId) {
-        this.produitRevendeurService.recupererProduitRevendeur(pProduitRevendeurId);
+    @GetMapping("/produitrevendeurs/{pProduitId}")
+    public ResponseEntity<List<ProduitRevendeurReponse>> recupererProduitRevendeurs(@PathVariable UUID pProduitId) {
+        this.produitRevendeurService.recupererProduitRevendeur(pProduitId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

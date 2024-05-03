@@ -109,7 +109,7 @@ public class SecuriteConfiguration {
                         .antMatchers("/commande/{id}/ajout-produit").permitAll()
                         .antMatchers("/commande/{id}/valider-commande").permitAll()
                         .antMatchers("/commande/{idCommande}/supp-article/{idProduit}").permitAll()
-                        .antMatchers("/produitrevendeur/{pProduitRevendeurId}").permitAll() //todo: à supprimer après que yassine à terminé sa feature
+                        .antMatchers("/produitrevendeurs/{pProduitId}").permitAll() //todo: à supprimer après que yassine à terminé sa feature
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,11 +25,11 @@ public class ProduitRevendeurService implements IProduitRevendeurService {
     }
 
     @Override
-    public ProduitRevendeurReponse recupererProduitRevendeur(UUID pProduitRevendeurId) {
-        LOGGER.info("Tentative de récupération d'un produit revendeur avec l'identifiant : {}", pProduitRevendeurId);
-        ProduitRevendeurReponse produitRevendeur = IProduitRevendeurConvertisseur.convertirEnCategorieReponse(this.produitRevendeurDao.findById(pProduitRevendeurId)
-                .orElseThrow(() -> new EntityNotFoundException("Aucun produit revendeur trouvé avec l'identifiant fourni : " + pProduitRevendeurId)));
-        LOGGER.info("Produit revendeur récupéré avec succès : {}", produitRevendeur);
+    public List<ProduitRevendeurReponse> recupererProduitRevendeursParProduit(UUID pProduitId) {
+        LOGGER.info("Tentative de récupération de la liste des revendeurs vendant un produit avec l'identifiant : {}", pProduitId);
+        List<ProduitRevendeurReponse> produitRevendeur = IProduitRevendeurConvertisseur.convertirEnProduitRevendeursReponse(this.produitRevendeurDao.findByProduitId(pProduitId)
+                .orElseThrow(() -> new EntityNotFoundException("Aucun liste des revendeurs vendant un produit trouvé avec l'identifiant fourni : " + pProduitId)));
+        LOGGER.info("Liste des revendeurs vendant un produit récupéré avec succès : {}", produitRevendeur);
         return produitRevendeur;
     }
 }
