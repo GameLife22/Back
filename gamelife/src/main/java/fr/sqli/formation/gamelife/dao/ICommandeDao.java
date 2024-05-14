@@ -1,8 +1,5 @@
 package fr.sqli.formation.gamelife.dao;
-import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurRequete;
-import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
 import fr.sqli.formation.gamelife.entite.CommandeEntite;
-import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

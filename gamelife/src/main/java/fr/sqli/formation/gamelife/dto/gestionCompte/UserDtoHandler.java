@@ -5,6 +5,7 @@ import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 public class UserDtoHandler {
     public static UserDtoOut fromEntity(UtilisateurEntite entity) {
         var u = new UserDtoOut();
+        u.setId(entity.getId());
         u.setPrenom(entity.getPrenom());
         u.setNom(entity.getNom());
         u.setEmail(entity.getEmail());

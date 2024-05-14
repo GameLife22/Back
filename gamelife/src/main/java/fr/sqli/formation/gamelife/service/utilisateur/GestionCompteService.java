@@ -107,7 +107,7 @@ public class GestionCompteService {
         return false;
     }
 
-    public UserDtoOut getUser(UUID id) throws Exception {
+    public UtilisateurEntite getUser(UUID id) throws Exception {
         var user = uDao.findById(id);
         if (!user.isPresent()) {
             throw new UtilisateurExistantException("utilisateur inexistant");
@@ -115,7 +115,7 @@ public class GestionCompteService {
         UtilisateurEntite u = user.get();
         UserDtoOut dto = UserDtoHandler.fromEntity(u);
 
-        return dto;
+        return u;
     }
     public List<UtilisateurEntite> getUsers() {
         List<UtilisateurEntite> users = new ArrayList<>();

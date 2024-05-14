@@ -58,10 +58,10 @@ public class GestionCompteControleur {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/getuser")
-    public ResponseEntity<UserDtoOut> getUser(@RequestBody GestionCompteDto monbody) throws Exception{
+    @GetMapping("/getuser")
+    public ResponseEntity<UtilisateurEntite> getUser(@RequestBody GestionCompteDto monbody) throws Exception{
         LOGGER.info("GestionCompteControler : IN {}", monbody);
-        UserDtoOut res;
+        UtilisateurEntite res;
         res = service.getUser(monbody.getId());
         LOGGER.info("GestionCompteControler : OUT {}", res);
         return new ResponseEntity<>(res, HttpStatus.OK);

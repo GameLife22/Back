@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.controleur;
 
 import fr.sqli.formation.gamelife.dto.produit.ProduitRequete;
 import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
+import fr.sqli.formation.gamelife.entite.ProduitEntite;
 import fr.sqli.formation.gamelife.service.produit.IProduitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class ProduitControleur {
     }
 
     @GetMapping("/produits/{produitId}")
-    public ResponseEntity<ProduitReponse> recupererProduit(@PathVariable("produitId") UUID pProduitId) {
+    public ResponseEntity<ProduitEntite> recupererProduit(@PathVariable("produitId") UUID pProduitId) {
         try {
             var result = this.service.recupererProduit(pProduitId);
             return new ResponseEntity<>(result, HttpStatus.OK);

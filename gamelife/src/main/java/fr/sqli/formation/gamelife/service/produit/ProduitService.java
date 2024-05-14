@@ -14,6 +14,7 @@ import fr.sqli.formation.gamelife.dao.ICategorieDao;
 import fr.sqli.formation.gamelife.dao.IImageDao;
 import fr.sqli.formation.gamelife.dao.IPlateformeDao;
 import fr.sqli.formation.gamelife.dao.IProduitDao;
+import fr.sqli.formation.gamelife.entite.ProduitEntite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,9 @@ public class ProduitService implements IProduitService {
     }
 
     @Override
-    public ProduitReponse recupererProduit(UUID pProduitDtoInId) {
-        return IProduitConvertisseur.dtoOutFromEntity(this.produitDao.findById(pProduitDtoInId)
-                .orElseThrow(() -> new EntityNotFoundException("recupererProduit: l'identifiant du produit " + pProduitDtoInId + " est incorrecte")));
+    public ProduitEntite recupererProduit(UUID pProduitDtoInId) {
+        return this.produitDao.findById(pProduitDtoInId)
+                .orElseThrow(() -> new EntityNotFoundException("recupererProduit: l'identifiant du produit " + pProduitDtoInId + " est incorrecte"));
     }
 
     @Override
@@ -85,7 +86,6 @@ public class ProduitService implements IProduitService {
         produitEntity.setImages(imagesEntity);
         produitEntity.setCategories(categoriesEntity);
         produitEntity.setPlateformes(plateformesEntity);
-
         return IProduitConvertisseur.dtoOutFromEntity(this.produitDao.save(produitEntity));
     }
 

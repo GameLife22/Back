@@ -37,7 +37,8 @@ INSERT INTO gamelife.glutilisateur (id, nom, prenom, mdp, email, num_rue, rue, v
 VALUES ('c81f4beb-d17d-4b68-8a10-195745ddb894', 'acheteur', 'acheteur', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'acheteur@gamelife.fr', 2, 'rue du marechal', 'nantes', 44000, 'ROLE_ACHETEUR', null, true, null);
 INSERT INTO gamelife.glutilisateur (id, nom, prenom, mdp, email, num_rue, rue, ville, code_postal, role, num_siren, etat_compte, reset_password_token)
 VALUES ('906d837f-c451-4aa1-9bc1-e92038e93f1d', 'revendeur', 'revendeur', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'revendeur@gamelife.fr', 3, 'rue dupont', 'lille', 59000, 'ROLE_REVENDEUR', '325987418', true, null);
-
+INSERT INTO gamelife.glutilisateur (id, nom, prenom, mdp, email, num_rue, rue, ville, code_postal, role, num_siren, etat_compte, reset_password_token)
+VALUES ('2d08a609-38d0-4da1-8d30-4eea40105626', 'revendeur2', 'revendeur2', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'revendeur2@gamelife.fr', 3, 'rue dupont', 'lille', 59000, 'ROLE_REVENDEUR', '325987419', true, null);
 -- Produits Revendeurs
 INSERT INTO gamelife.glproduit_revendeur (id, stock, prix, etat, produit_id, utilisateur_id)
 VALUES ('63ef0498-3148-4e57-a4f6-4c17a9ed9352', 10, 49.99, true, '6a4a4185-cdb4-418e-9249-a160e384d877', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');
