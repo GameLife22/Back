@@ -28,6 +28,8 @@ public class AuthentificationDetailsService implements UserDetailsService {
           SecuriteUtilisateur user = IUtilisateurDao.findByEmail(username)
                 .map(SecuriteUtilisateur::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
-          return new SecuriteUtilisateur(user.getUsername(),user.getPassword() , user.getAuthorities());
+          SecuriteUtilisateur UserDetails = new SecuriteUtilisateur(user.getUsername(),user.getPassword() , user.getAuthorities());
+          LOGGER.info("UserDetails : {}", UserDetails);
+          return UserDetails;
     }
 }

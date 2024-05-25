@@ -1,8 +1,8 @@
 package fr.sqli.formation.gamelife.service.produitRevendeur;
 
-import fr.sqli.formation.gamelife.dao.IProduitDao;
+import com.sun.xml.bind.v2.TODO;
+import fr.sqli.formation.gamelife.convertisseur.IProduitConvertisseur;
 import fr.sqli.formation.gamelife.dao.IProduitRevendeurDao;
-import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurReponse;
 import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurRequete;
 import fr.sqli.formation.gamelife.entite.ProduitEntite;
 import fr.sqli.formation.gamelife.entite.ProduitRevendeurEntite;
@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,16 +31,26 @@ public class ProduitRevendeurService {
     private ProduitService produitService;
     @Autowired
     private GestionCompteService gestionCompteService;
-    private ProduitRevendeurEntite produitRevendeurEntite;
 
 
     public ProduitRevendeurEntite ajouterProduitRevendeur(ProduitRevendeurRequete pProduitRevendeurRequete) throws Exception {
         ProduitRevendeurEntite produitRevendeurEntite = new ProduitRevendeurEntite();
-        //<TODO> : check if the stock is not negative, prix is not negative and etat is not null
-        produitRevendeurEntite.setStock(pProduitRevendeurRequete.getStock());
-        produitRevendeurEntite.setPrix(pProduitRevendeurRequete.getPrix());
-        produitRevendeurEntite.setEtat(pProduitRevendeurRequete.getEtat());
-        produitRevendeurEntite.setProduit(produitService.recupererProduit(pProduitRevendeurRequete.getIdProduit()));
+        if(pProduitRevendeurRequete.getStock() <= 0 ){
+            throw new Exception("Stock incorrect");
+        }else {
+            produitRevendeurEntite.setStock(pProduitRevendeurRequete.getStock());
+        }
+        if(pProduitRevendeurRequete.getPrix().compareTo(BigDecimal.ZERO) <= 0 ){
+            throw new Exception("Prix incorrect");
+        }else {
+            produitRevendeurEntite.setPrix(pProduitRevendeurRequete.getPrix());
+        }
+        if(pProduitRevendeurRequete.getEtat() == null){
+            throw new Exception("Etat incorrect");
+        } else{
+                produitRevendeurEntite.setEtat(pProduitRevendeurRequete.getEtat());
+        }
+        produitRevendeurEntite.setProduit(IProduitConvertisseur.entityFromDtoOut(produitService.recupererProduit(pProduitRevendeurRequete.getIdProduit())));
         produitRevendeurEntite.setUtilisateur(gestionCompteService.getUser(pProduitRevendeurRequete.getIdUtilisateur()));
 
         return produitRevendeurDao.save(produitRevendeurEntite);
@@ -56,8 +67,6 @@ public class ProduitRevendeurService {
         //<TODO> : check if the stock is not negative, prix is not negative and etat is not null
         produitRevendeurEntite.setStock(pProduitRequete.getStock());
         produitRevendeurEntite.setPrix(pProduitRequete.getPrix());
-        produitRevendeurEntite.setEtat(pProduitRequete.getEtat());
-        produitRevendeurEntite.setProduit(produitService.recupererProduit(pProduitRequete.getIdProduit()));
 
         produitRevendeurDao.save(produitRevendeurEntite);
 
@@ -65,18 +74,47 @@ public class ProduitRevendeurService {
     }
 
     public void supprimerProduitRevendeur(UUID produitRevendeurID) {
+        produitRevendeurDao.deleteById(produitRevendeurID);
     }
 
-    public ProduitRevendeurEntite recupererProduitRevendeur() throws Exception{
-        UUID id = UUID.fromString("63ef0498-3148-4e57-a4f6-4c17a9ed9352");
-        Optional<ProduitRevendeurEntite> produitRevendeurEntite = produitRevendeurDao.findById(id);
+
+    public ProduitRevendeurEntite recupererProduitRevendeur(UUID produitRevendeurID) {
+        Optional<ProduitRevendeurEntite> produitRevendeurEntite = produitRevendeurDao.findById(produitRevendeurID);
         if (produitRevendeurEntite.isPresent()) {
             return produitRevendeurEntite.get();
         }
         else {
             LOGGER.error("Produit revendeur non trouvé");
-            throw new Exception("Produit revendeur non trouvé");
-       }
+            return null;
+        }
+    }
+
+    public List<ProduitRevendeurEntite> recupererProduitsRevendeurUtilisateur(UUID utilisateurID) throws Exception {
+        List<ProduitRevendeurEntite> produitRevendeurEntite = produitRevendeurDao.findAllByUtilisateur(utilisateurID);
+        if (produitRevendeurEntite != null) {
+            return produitRevendeurEntite;
+        }
+        else {
+            LOGGER.error("Produit revendeur non trouvé");
+            return null;
+        }
+    }
+    public List<ProduitEntite> getAllProduitByRevendeur(UUID revendeurId) throws Exception {
+
+        //TODO Trouver une solution pour récupérer les produits d'un revendeur avec convertisseur
+        // Retrieve all products
+        List<ProduitEntite> allProducts =produitService.recupererProduits();
+
+        // Retrieve all products that the reseller already has
+        List<ProduitEntite> revendeurProducts = recupererProduitsRevendeurUtilisateur(revendeurId)
+                .stream()
+                .map(ProduitRevendeurEntite::getProduit)
+                .toList();
+
+        // Subtract the list of products that the reseller already has from the list of all products
+        allProducts.removeAll(revendeurProducts);
+
+        return allProducts;
     }
 
     public List<ProduitRevendeurEntite> recupererProduitsRevendeur() {

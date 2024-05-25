@@ -1,7 +1,7 @@
 import requests
 from deep_translator import GoogleTranslator
 
-CLE_API_RAWG = "4a0804a55b19456491e6678c762aa217"
+CLE_API_RAWG = "fc6fc9da02854e66b8d2d0115d28c680"
 EMAIL = "admin@gamelife.fr"
 MOT_DE_PASSE = "Test123?!"
 URL_AUTH = "http://localhost:8080/utilisateur/auth"

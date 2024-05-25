@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,7 +29,7 @@ public class ProduitControleur {
     }
 
     @GetMapping("/produits/{produitId}")
-    public ResponseEntity<ProduitEntite> recupererProduit(@PathVariable("produitId") UUID pProduitId) {
+    public ResponseEntity<ProduitReponse> recupererProduit(@PathVariable("produitId") UUID pProduitId) {
         try {
             var result = this.service.recupererProduit(pProduitId);
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -37,9 +38,9 @@ public class ProduitControleur {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/produits")
-    public ResponseEntity<List<ProduitReponse>> recupererProduits() {
+    public ResponseEntity<List<ProduitEntite>> recupererProduits() {
         try {
             var result = this.service.recupererProduits();
             if(result.isEmpty()) {

@@ -38,4 +38,18 @@ public interface IImageConvertisseur {
                 .map(IImageConvertisseur::dtoOutFromEntity)
                 .collect(Collectors.toList());
     }
+
+    public static ImageEntite entityFromDtoOut(ImageReponse pImageReponse) {
+        var imageEntity = new ImageEntite();
+        imageEntity.setId(pImageReponse.getId());
+        imageEntity.setImage(pImageReponse.getImage());
+        imageEntity.setTitre(pImageReponse.getTitre());
+        return imageEntity;
+    }
+    public static List<ImageEntite> entitiesFromDtoOut(List<ImageReponse> pImageReponses) {
+        return pImageReponses.stream()
+                .map(IImageConvertisseur::entityFromDtoOut)
+                .collect(Collectors.toList());
+    }
+
 }

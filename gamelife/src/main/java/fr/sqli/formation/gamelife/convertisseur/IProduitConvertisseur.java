@@ -26,6 +26,7 @@ public interface IProduitConvertisseur {
         return pProduitEntite;
     }
 
+
     public static ProduitReponse dtoOutFromEntity(ProduitEntite pProduitEntite) {
         var produitDtoOut = new ProduitReponse();
         produitDtoOut.setId(pProduitEntite.getId());
@@ -42,4 +43,22 @@ public interface IProduitConvertisseur {
                 .map(IProduitConvertisseur::dtoOutFromEntity)
                 .collect(Collectors.toList());
     }
+
+    public static ProduitEntite entityFromDtoOut(ProduitReponse pProduitReponse) {
+        var produitEntity = new ProduitEntite();
+        produitEntity.setId(pProduitReponse.getId());
+        produitEntity.setNom(pProduitReponse.getNom());
+        produitEntity.setDescription(pProduitReponse.getDescription());
+        produitEntity.setCategories(ICategorieConvertisseur.convertSetToSet(pProduitReponse.recupererCategories()));
+        produitEntity.setPlateformes(IPlateformeConvertisseur.entitiesFromDtoOut(pProduitReponse.getPlateformes()));
+        produitEntity.setImages(IImageConvertisseur.entitiesFromDtoOut(pProduitReponse.getImages()));
+        return produitEntity;
+    }
+
+    public static List<ProduitEntite> entitiesFromDtoOut(List<ProduitReponse> pProduitReponses) {
+        return pProduitReponses.stream()
+                .map(IProduitConvertisseur::entityFromDtoOut)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IProduitService {
-    public ProduitEntite recupererProduit(UUID pProduitDtoInId);
-    public List<ProduitReponse> recupererProduits();
+    public ProduitReponse recupererProduit(UUID pProduitDtoInId);
+    public List<ProduitEntite> recupererProduits();
     public ProduitReponse creerProduit(ProduitRequete pProduitRequete);
     public ProduitReponse modifierProduit(UUID pProduitDtoInId, ProduitRequete pProduitRequete);
     public void supprimerProduit(UUID pProduitDtoInId);

@@ -39,4 +39,19 @@ public interface IPlateformeConvertisseur {
                 .map(IPlateformeConvertisseur::dtoOutFromEntity)
                 .collect(Collectors.toSet());
     }
+
+    public static PlateformeEntite entityFromDtoOut(PlateformeReponse pPlateformeReponse) {
+        var plateformeEntity = new PlateformeEntite();
+        plateformeEntity.setId(pPlateformeReponse.getId());
+        plateformeEntity.setLibelle(pPlateformeReponse.getLibelle());
+        return plateformeEntity;
+    }
+
+    public static Set<PlateformeEntite> entitiesFromDtoOut(Set<PlateformeReponse> pPlateformeReponses) {
+        return pPlateformeReponses.stream()
+                .map(IPlateformeConvertisseur::entityFromDtoOut)
+                .collect(Collectors.toSet());
+    }
+
+
 }

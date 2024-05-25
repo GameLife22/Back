@@ -46,14 +46,14 @@ public class ProduitService implements IProduitService {
     }
 
     @Override
-    public ProduitEntite recupererProduit(UUID pProduitDtoInId) {
-        return this.produitDao.findById(pProduitDtoInId)
-                .orElseThrow(() -> new EntityNotFoundException("recupererProduit: l'identifiant du produit " + pProduitDtoInId + " est incorrecte"));
+    public ProduitReponse recupererProduit(UUID pProduitDtoInId) {
+        return IProduitConvertisseur.dtoOutFromEntity(this.produitDao.findById(pProduitDtoInId)
+                .orElseThrow(() -> new EntityNotFoundException("recupererProduit: l'identifiant du produit " + pProduitDtoInId + " est incorrecte")));
     }
 
     @Override
-    public List<ProduitReponse> recupererProduits() {
-        return IProduitConvertisseur.dtoOutFromEntities(this.produitDao.findAll());
+    public List<ProduitEntite> recupererProduits() {
+        return (this.produitDao.findAll());
     }
 
     @Override

@@ -58,7 +58,7 @@ public class GestionCompteControleur {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/getuser")
+    @PostMapping("/getuser")
     public ResponseEntity<UtilisateurEntite> getUser(@RequestBody GestionCompteDto monbody) throws Exception{
         LOGGER.info("GestionCompteControler : IN {}", monbody);
         UtilisateurEntite res;

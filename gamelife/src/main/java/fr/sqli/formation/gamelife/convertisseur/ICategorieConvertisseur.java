@@ -5,6 +5,7 @@ import fr.sqli.formation.gamelife.dto.categorie.CategorieReponse;
 import fr.sqli.formation.gamelife.entite.CategorieEntite;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,4 +32,18 @@ public interface ICategorieConvertisseur {
                 .map(ICategorieConvertisseur::convertirEnCategorieReponse)
                 .collect(Collectors.toSet());
     }
+    public static CategorieEntite entityFromDtoOut(CategorieReponse pCategorieReponse) {
+        var categorieEntity = new CategorieEntite();
+        categorieEntity.setId(pCategorieReponse.pCategorieId());
+        categorieEntity.setLibelle(pCategorieReponse.pLibelle());
+        return categorieEntity;
+    }
+
+    public static Set<CategorieEntite> convertSetToSet(Set<CategorieReponse> categorieReponseSet) {
+        return categorieReponseSet.stream()
+                .map(ICategorieConvertisseur::entityFromDtoOut)
+                .collect(Collectors.toSet());
+    }
+
+
 }

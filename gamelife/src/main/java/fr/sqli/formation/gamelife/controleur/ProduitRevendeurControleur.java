@@ -1,7 +1,7 @@
 package fr.sqli.formation.gamelife.controleur;
 
-import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
 import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurRequete;
+import fr.sqli.formation.gamelife.entite.ProduitEntite;
 import fr.sqli.formation.gamelife.entite.ProduitRevendeurEntite;
 import fr.sqli.formation.gamelife.service.produitRevendeur.ProduitRevendeurService;
 import org.slf4j.Logger;
@@ -26,26 +26,39 @@ public class ProduitRevendeurControleur {
         service = pPRService;
     }
 
-    @GetMapping("/produits_revendeur")
-    public ResponseEntity<List<ProduitRevendeurEntite>> recupererProduitsRevendeur() {
+    @GetMapping("/produits_revendeur/{id}")
+    public ResponseEntity<List<ProduitEntite>> recupererProduitsRevendeur(@PathVariable("id") UUID id) {
         try {
-            var result = this.service.recupererProduitsRevendeur();
+            var result = this.service.getAllProduitByRevendeur(id);
             if(result.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch(Exception pException) {
-            this.LOGGER.error("Probleme recupererProduitsRevendeur");
+            LOGGER.error("Probleme recupererProduitsRevendeur");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/produit_revendeur")
-    public ResponseEntity<ProduitRevendeurEntite> recupererProduitsRevendeurEtat(String etat) {
+    @GetMapping("/produit_revendeur/{id}")
+    public ResponseEntity<ProduitRevendeurEntite> recupererProduitsRevendeurId(@PathVariable("id") UUID id ){
         try {
-            var result = this.service.recupererProduitRevendeur();
+            var result = this.service.recupererProduitRevendeur(id);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch(Exception pException) {
-            this.LOGGER.error("Probleme recupererProduitRevendeurEtat");
+            LOGGER.error("Probleme recupererProduitRevendeurEtat");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/produit_revendeur/utilisateur/{id}")
+    public ResponseEntity<List<ProduitRevendeurEntite>> recupererProduitsRevendeurRevendeur(@PathVariable("id") UUID id) {
+        try {
+            var result = this.service.recupererProduitsRevendeurUtilisateur(id);
+            if(result.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch(Exception pException) {
+            LOGGER.error("Probleme recupererProduitsRevendeurRevendeur");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -55,17 +68,27 @@ public class ProduitRevendeurControleur {
             var result = this.service.ajouterProduitRevendeur(pProduitRevendeurRequete);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch(Exception pException) {
-            this.LOGGER.error("Probleme ajouterProduitRevendeur");
+            LOGGER.error("Probleme ajouterProduitRevendeur");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("/produit_revendeur/{id}")
-    public ResponseEntity<ProduitRevendeurEntite> modifierProduitRevendeur(@PathVariable("id") UUID id, ProduitRevendeurRequete pProduitRequete) {
+    public ResponseEntity<ProduitRevendeurEntite> modifierProduitRevendeur(@PathVariable("id") UUID id,@RequestBody ProduitRevendeurRequete pProduitRequete) {
         try {
             var result = this.service.modifierProduitRevendeur(id, pProduitRequete);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch(Exception pException) {
-            this.LOGGER.error("Probleme modifierProduitRevendeur");
+            LOGGER.error("Probleme modifierProduitRevendeur");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("/produit_revendeur/{id}")
+    public ResponseEntity<Void> supprimerProduitRevendeur(@PathVariable("id") UUID id) {
+        try {
+            this.service.supprimerProduitRevendeur(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(Exception pException) {
+            LOGGER.error("Probleme supprimerProduitRevendeur");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
