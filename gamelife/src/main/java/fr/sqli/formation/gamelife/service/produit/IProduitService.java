@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface IProduitService {
     public ProduitReponse recupererProduit(UUID pProduitDtoInId);
-    public List<ProduitEntite> recupererProduits();
+    public List<ProduitReponse> recupererProduits();
     public ProduitReponse creerProduit(ProduitRequete pProduitRequete);
     public ProduitReponse modifierProduit(UUID pProduitDtoInId, ProduitRequete pProduitRequete);
     public void supprimerProduit(UUID pProduitDtoInId);

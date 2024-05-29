@@ -52,8 +52,8 @@ public class ProduitService implements IProduitService {
     }
 
     @Override
-    public List<ProduitEntite> recupererProduits() {
-        return (this.produitDao.findAll());
+    public List<ProduitReponse> recupererProduits() {
+        return IProduitConvertisseur.dtoOutFromEntities(this.produitDao.findAll());
     }
 
     @Override

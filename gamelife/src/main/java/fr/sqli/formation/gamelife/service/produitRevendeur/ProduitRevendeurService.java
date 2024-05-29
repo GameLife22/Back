@@ -3,6 +3,7 @@ package fr.sqli.formation.gamelife.service.produitRevendeur;
 import com.sun.xml.bind.v2.TODO;
 import fr.sqli.formation.gamelife.convertisseur.IProduitConvertisseur;
 import fr.sqli.formation.gamelife.dao.IProduitRevendeurDao;
+import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
 import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurRequete;
 import fr.sqli.formation.gamelife.entite.ProduitEntite;
 import fr.sqli.formation.gamelife.entite.ProduitRevendeurEntite;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -91,6 +93,7 @@ public class ProduitRevendeurService {
 
     public List<ProduitRevendeurEntite> recupererProduitsRevendeurUtilisateur(UUID utilisateurID) throws Exception {
         List<ProduitRevendeurEntite> produitRevendeurEntite = produitRevendeurDao.findAllByUtilisateur(utilisateurID);
+        LOGGER.info("Get recupererProduitsRevendeurUtilisateur products: " );
         if (produitRevendeurEntite != null) {
             return produitRevendeurEntite;
         }
@@ -101,10 +104,10 @@ public class ProduitRevendeurService {
     }
     public List<ProduitEntite> getAllProduitByRevendeur(UUID revendeurId) throws Exception {
 
-        //TODO Trouver une solution pour récupérer les produits d'un revendeur avec convertisseur
-        // Retrieve all products
-        List<ProduitEntite> allProducts =produitService.recupererProduits();
 
+        // Retrieve all products
+        List<ProduitEntite> allProducts = IProduitConvertisseur.entitiesFromDtoOut(produitService.recupererProduits());
+        LOGGER.info("Get all products: " );
         // Retrieve all products that the reseller already has
         List<ProduitEntite> revendeurProducts = recupererProduitsRevendeurUtilisateur(revendeurId)
                 .stream()
@@ -112,9 +115,10 @@ public class ProduitRevendeurService {
                 .toList();
 
         // Subtract the list of products that the reseller already has from the list of all products
-        allProducts.removeAll(revendeurProducts);
 
-        return allProducts;
+        return allProducts.stream()
+                .filter(product -> revendeurProducts.stream().noneMatch(revendeurProduct -> revendeurProduct.getId().equals(product.getId())))
+                .collect(Collectors.toList());
     }
 
     public List<ProduitRevendeurEntite> recupererProduitsRevendeur() {

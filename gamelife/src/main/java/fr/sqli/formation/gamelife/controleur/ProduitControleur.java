@@ -40,7 +40,7 @@ public class ProduitControleur {
     }
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/produits")
-    public ResponseEntity<List<ProduitEntite>> recupererProduits() {
+    public ResponseEntity<List<ProduitReponse>> recupererProduits() {
         try {
             var result = this.service.recupererProduits();
             if(result.isEmpty()) {
