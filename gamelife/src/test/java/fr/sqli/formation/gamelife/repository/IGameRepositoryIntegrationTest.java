@@ -62,7 +62,7 @@ class IGameRepositoryIntegrationTest {
      */
     @Test
     @DisplayName("Test saving a GameEntity in GameRepository should return GameEntity saved")
-    void GameRepository_save_ReturnGameEntity() {
+    void GameRepository_Save_ReturnGameEntity() {
         GameEntity gameEntitySaved = this.iGameRepository.save(this.gameEntity);
 
         Assertions.assertNotNull(this.gameEntity);
@@ -83,7 +83,7 @@ class IGameRepositoryIntegrationTest {
      */
     @Test
     @DisplayName("Test to find by ID and return Optional<GameEntity>")
-    void GameRepository_findById_ReturnOptionalGameEntity() {
+    void GameRepository_FindById_ReturnOptionalGameEntity() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
         Optional<GameEntity> optionalGameEntity = this.iGameRepository.findById(gameEntitySaved.getId());
 
@@ -106,7 +106,7 @@ class IGameRepositoryIntegrationTest {
      */
     @Test
     @DisplayName("Test to verify findAll method returns Game entities")
-    void GameRepository_findAll_ReturnGamesEntities() {
+    void GameRepository_FindAll_ReturnGamesEntities() {
         this.iGameRepository.save(gameEntity);
 
         List<GameEntity> gamesEntities = this.iGameRepository.findAll();
@@ -136,7 +136,7 @@ class IGameRepositoryIntegrationTest {
      */
     @Test
     @DisplayName("Test updating GameEntity in GameRepository should return GameEntity updated")
-    void GameRepository_update_ReturnGameEntityUpdated() {
+    void GameRepository_Update_ReturnGameEntityUpdated() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
 
         GameRequest gameRequest = new GameRequest(
@@ -169,7 +169,7 @@ class IGameRepositoryIntegrationTest {
      */
     @Test
     @DisplayName("Test deleting by ID should return nothing")
-    void GameRepository_deleteById_ReturnNothing() {
+    void GameRepository_DeleteById_ReturnNothing() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
 
         this.iGameRepository.deleteById(gameEntitySaved.getId());
@@ -193,7 +193,7 @@ class IGameRepositoryIntegrationTest {
      */
     @Test
     @DisplayName("Test deleting by Ids in GameRepository should return nothing")
-    void GameRepository_deleteAllByIdIn_ReturnNothing() {
+    void GameRepository_DeleteAllByIdIn_ReturnNothing() {
         GameEntity gameEntitySaved1 = this.iGameRepository.save(gameEntity);
 
         GameRequest newGameRequest = new GameRequest(

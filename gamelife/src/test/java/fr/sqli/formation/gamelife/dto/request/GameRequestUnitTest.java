@@ -83,7 +83,7 @@ class GameRequestUnitTest {
     @ParameterizedTest
     @MethodSource("provideFieldAndNullValue")
     @DisplayName("Test invalid game request with null values")
-    void testInvalidGameRequest(String pFieldName, Object pInvalidValue) {
+    void GameRequest_ValidationErrors_ReturnConstraintViolation(String pFieldName, Object pInvalidValue) {
         validateInvalidField(pFieldName, pInvalidValue);
     }
 
