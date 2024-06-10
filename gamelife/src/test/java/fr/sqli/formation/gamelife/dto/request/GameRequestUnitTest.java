@@ -7,7 +7,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,21 +17,14 @@ import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Stream;
 
-/**
- * Unit test class for GameRequest with active profiles set to "test".
- */
 @ActiveProfiles("test")
 class GameRequestUnitTest {
 
-    /**
-     * Validates a GameRequest object to ensure that it is valid and does not contain any constraint violations.
-     * Returns an empty set of constraint violations if the GameRequest is valid without any errors.
-     */
     @Test
-    @DisplayName("Validate a valid GameRequest without errors")
-    void GameRequest_ValidationNoErrors_ReturnEmptyConstraintViolation() {
+    void givenValidGameRequest_whenValidate_thenReturnEmptyConstraintViolation() {
         GameRequest gameRequest = getValidGameRequest();
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -43,12 +35,6 @@ class GameRequestUnitTest {
         Assertions.assertTrue(constraintViolations.isEmpty());
     }
 
-    /**
-     * Provides a stream of arguments representing fields and their corresponding null values for a GameRequest object.
-     * Each argument consists of the field name and a null value to be set for that field.
-     *
-     * @return A stream of arguments, each containing the field name and a null value to be set for that field.
-     */
     private static Stream<Arguments> provideFieldAndNullValue() {
         return Stream.of(
                 Arguments.of("name", null),
@@ -59,12 +45,6 @@ class GameRequestUnitTest {
         );
     }
 
-    /**
-     * Provides a stream of arguments representing invalid values for different fields in a GameRequest object.
-     * Each argument consists of the field name and a list of invalid values for that field.
-     *
-     * @return A stream of arguments, each containing the field name and a list of invalid values for that field.
-     */
     private static Stream<Arguments> provideFieldAndInvalidValue() {
         return Stream.of(
                 Arguments.of("name", List.of("", " ", RandomStringUtils.randomAlphabetic(51))),
@@ -80,39 +60,18 @@ class GameRequestUnitTest {
         );
     }
 
-    /**
-     * Validates a GameRequest object with null values for the specified field based on the provided field name and null value.
-     *
-     * @param pFieldName The name of the field to set as null.
-     * @param pInvalidValue The null value to set for the specified field.
-     */
     @ParameterizedTest
     @MethodSource("provideFieldAndNullValue")
-    @DisplayName("Validate a valid GameRequest with null values")
-    void GameRequest_ValidationErrors_ReturnConstraintViolation(String pFieldName, Object pInvalidValue) {
+    void givenNullFieldsGameRequest_whenValidate_thenReturnConstraintViolation(String pFieldName, Object pInvalidValue) {
         validateInvalidField(pFieldName, pInvalidValue);
     }
 
-    /**
-     * Validates a GameRequest object with invalid values for the specified field based on the provided field name and list of invalid values.
-     *
-     * @param pFieldName The name of the field to set as invalid.
-     * @param pInvalidValues A list of invalid values to set for the specified field.
-     */
     @ParameterizedTest
     @MethodSource("provideFieldAndInvalidValue")
-    @DisplayName("Validate a valid GameRequest with invalid values")
-    void GameRequest_ValidationErrors_ReturnConstraintViolation(String pFieldName, List<Object> pInvalidValues) {
+    void givenInvalidFieldsGameRequest_whenValidate_thenReturnConstraintViolation(String pFieldName, List<Object> pInvalidValues) {
         pInvalidValues.forEach(invalidValue -> validateInvalidField(pFieldName, invalidValue));
     }
 
-    /**
-     * Validates a GameRequest object with an invalid field value based on the provided field name and invalid value.
-     *
-     * @param pFieldName The name of the field to set as invalid.
-     * @param pInvalidValue The invalid value to set for the specified field.
-     * @throws IllegalArgumentException if the provided field name is not valid.
-     */
     private void validateInvalidField(String pFieldName, Object pInvalidValue) {
         GameRequest gameRequest = createGameRequestWithInvalidField(pFieldName, pInvalidValue);
 
@@ -123,15 +82,9 @@ class GameRequestUnitTest {
         Assertions.assertFalse(constraintViolations.isEmpty());
     }
 
-    /**
-     * Creates and returns a valid GameRequest object with predefined values for testing purposes.
-     *
-     * @return A GameRequest object with the name "validName", description "validDescription",
-     * genres set to [ARCADE, ADVENTURE], platforms set to [PC, PLAYSTATION],
-     * and images containing "https://image1.png" and "file://image2.jpg".
-     */
     private GameRequest getValidGameRequest() {
         GameRequest gameRequest = new GameRequest();
+        gameRequest.setId(UUID.randomUUID()); // uuid or null
         gameRequest.setName("validName");
         gameRequest.setDescription("validDescription");
         gameRequest.setGenres(Set.of(Genre.ARCADE, Genre.ADVENTURE));
@@ -140,14 +93,6 @@ class GameRequestUnitTest {
         return gameRequest;
     }
 
-    /**
-     * Creates a new GameRequest object with an invalid field value based on the provided field name and invalid value.
-     *
-     * @param pFieldName The name of the field to set as invalid.
-     * @param pInvalidValue The invalid value to set for the specified field.
-     * @return A new GameRequest object with the specified field set to the invalid value.
-     * @throws IllegalArgumentException if the provided field name is not valid.
-     */
     private GameRequest createGameRequestWithInvalidField(String pFieldName, Object pInvalidValue) {
         GameRequest gameRequest = new GameRequest();
         switch (pFieldName) {

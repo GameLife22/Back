@@ -80,7 +80,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET,"/api/v1/games/search/{name}").permitAll()//.hasAnyAuthority(ADMIN)
                 .requestMatchers(HttpMethod.GET,"/api/v1/games/{id}").permitAll()//.hasAnyAuthority(ADMIN, SELLER)
                 .requestMatchers(HttpMethod.POST, "/api/v1/games").permitAll()//.hasAuthority(ADMIN)
-                .requestMatchers(HttpMethod.PATCH,"/api/v1/games/{id}").permitAll()//.hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.PATCH,"/api/v1/games").permitAll()//.hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/games").permitAll()//.hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/games/{id}").permitAll()//.hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.GET,"/api/v1/games/genres").permitAll()//.hasAuthority(ADMIN)

@@ -6,7 +6,6 @@ import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -46,8 +45,7 @@ class IGameRepositoryIntegrationTest {
     }
     
     @Test
-    @DisplayName("Test saving a GameEntity in GameRepository should return GameEntity saved")
-    void Save_ShouldReturnGameEntity() {
+    void givenGameEntity_Save_thenReturnGameEntitySaved() {
         GameEntity gameEntitySaved = this.iGameRepository.save(this.gameEntity);
 
         Assertions.assertNotNull(this.gameEntity);
@@ -61,8 +59,7 @@ class IGameRepositoryIntegrationTest {
     }
     
     @Test
-    @DisplayName("Test to find by ID and return Optional<GameEntity>")
-    void FindById_ShouldReturnOptionalGameEntity() {
+    void givenGameId_whenFindById_thenReturnExistingOptionalGameEntity() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
         Optional<GameEntity> optionalGameEntity = this.iGameRepository.findById(gameEntitySaved.getId());
 
@@ -78,8 +75,7 @@ class IGameRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Test to find by name and return Optional<GameEntity>")
-    void FindByName_ShouldReturnOptionalGameEntity() {
+    void givenGameName_whenFindByName_thenReturnExistingOptionalGameEntity() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
         Optional<GameEntity> optionalGameEntity = this.iGameRepository.findByName(gameEntitySaved.getName());
 
@@ -95,8 +91,7 @@ class IGameRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Test to verify findAll method returns Game entities")
-    void FindAll_ShouldReturnGamesEntities() {
+    void givenGameEntity_whenFindAll_thenReturnGamesEntities() {
         this.iGameRepository.save(gameEntity);
 
         List<GameEntity> gamesEntities = this.iGameRepository.findAll();
@@ -106,8 +101,7 @@ class IGameRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Test updating GameEntity in GameRepository should return GameEntity updated")
-    void Update_ShouldReturnGameEntityUpdated() {
+    void givenGameEntityUpdated_whenSave_thenReturnGameEntityUpdated() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
 
         GameEntity gameEntityUpdated = new GameEntity();
@@ -130,8 +124,7 @@ class IGameRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Test deleting by ID should return nothing")
-    void DeleteById_ShouldReturnNothing() {
+    void givenGameId_whenDelete_thenReturnNothing() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
 
         this.iGameRepository.deleteById(gameEntitySaved.getId());
@@ -141,8 +134,7 @@ class IGameRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Test deleting by Ids in GameRepository should return nothing")
-    void DeleteAllByIdIn_ShouldReturnNothing() {
+    void givenGamesIds_whenDeleteAllByIdIn_thenReturnNothing() {
         GameEntity gameEntitySaved1 = this.iGameRepository.save(this.gameEntity);
 
         GameEntity gameEntitySaved2 = new GameEntity();

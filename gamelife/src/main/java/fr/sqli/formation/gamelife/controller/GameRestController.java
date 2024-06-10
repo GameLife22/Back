@@ -126,15 +126,15 @@ public class GameRestController {
      * @param pGameRequest The game request containing the updated details of the game
      * @return ResponseEntity<GameResponse> The HTTP response entity containing the updated game response if successful, HttpStatus.NOT_FOUND otherwise
      */
-    @PatchMapping("/games/{id}")
-    public ResponseEntity<GameResponse> updateGame(@PathVariable("id") UUID pGameId, @Valid @RequestBody GameRequest pGameRequest) {
+    @PatchMapping("/games")
+    public ResponseEntity<GameResponse> updateGame(@Valid @RequestBody GameRequest pGameRequest) {
         try {
-            LOGGER.info("Updating game with ID: {}", pGameId);
-            GameResponse gameResponse = this.service.updateGame(pGameId, pGameRequest);
-            LOGGER.info("Game updated successfully with ID: {}", pGameId);
+            LOGGER.info("Updating game with ID: {}", pGameRequest.getId());
+            GameResponse gameResponse = this.service.updateGame(pGameRequest);
+            LOGGER.info("Game updated successfully with ID: {}", pGameRequest.getId());
             return ResponseEntity.ok(gameResponse);
         } catch(Exception pException) {
-            LOGGER.error("Error occurred while updating game with ID: {}", pGameId, pException);
+            LOGGER.error("Error occurred while updating game with ID: {}", pGameRequest.getId(), pException);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -146,10 +146,10 @@ public class GameRestController {
      * @return ResponseEntity<Void> The HTTP response entity with status HttpStatus.NO_CONTENT if the games are successfully deleted, HttpStatus.BAD_REQUEST otherwise
      */
     @DeleteMapping("/games")
-    public ResponseEntity<Void> deleteGames(@RequestBody List<UUID> pGamesIds) {
+    public ResponseEntity<Void> deleteGamesByIds(@RequestBody List<UUID> pGamesIds) {
         try {
             LOGGER.info("Deleting games with IDs: {}", pGamesIds);
-            this.service.deleteGames(pGamesIds);
+            this.service.deleteGamesByIds(pGamesIds);
             LOGGER.info("Games deleted successfully");
             return ResponseEntity.noContent().build();
         } catch(Exception pException) {
@@ -165,10 +165,10 @@ public class GameRestController {
      * @return ResponseEntity<Void> The HTTP response entity with status HttpStatus.NO_CONTENT if the game is successfully deleted, HttpStatus.BAD_REQUEST otherwise
      */
     @DeleteMapping("/games/{id}")
-    public ResponseEntity<Void> deleteGame(@PathVariable("id") UUID pGameId) {
+    public ResponseEntity<Void> deleteGameById(@PathVariable("id") UUID pGameId) {
         try {
             LOGGER.info("Deleting game with ID: {}", pGameId);
-            this.service.deleteGame(pGameId);
+            this.service.deleteGameById(pGameId);
             LOGGER.info("Game deleted successfully with ID: {}", pGameId);
             return ResponseEntity.noContent().build();
         } catch(Exception pException) {

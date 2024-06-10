@@ -43,21 +43,20 @@ public interface IGameService {
     public GameResponse createGame(GameRequest pGameRequest);
 
     /**
-     * Updates a game with the provided game ID and game request data.
+     * Updates the information of a game based on the provided GameRequest object.
      *
-     * @param pGameId the ID of the game to update
-     * @param pGameRequest the request object containing the updated game information
-     * @return the updated GameResponse object
+     * @param pGameRequest the GameRequest object containing the updated information of the game
+     * @return a GameResponse object representing the updated game
      */
-    public GameResponse updateGame(UUID pGameId, GameRequest pGameRequest);
+    public GameResponse updateGame(GameRequest pGameRequest);
 
     /**
      * Method to delete a game by its unique identifier.
      */
-    public void deleteGame(UUID pGameId);
+    public void deleteGameById(UUID pGameId);
 
     /**
      * Method to delete games based on their IDs.
      */
-    public void deleteGames(List<UUID> pGamesIds);
+    public void deleteGamesByIds(List<UUID> pGamesIds);
 }

@@ -28,6 +28,7 @@ public class ImagesURLsValidator implements ConstraintValidator<IInValidImagesUR
 
     @Override
     public void initialize(IInValidImagesURLsConstraint constraintAnnotation) {
+        ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
     @Override

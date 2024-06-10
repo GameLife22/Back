@@ -4,9 +4,7 @@ import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
 
 import fr.sqli.formation.gamelife.utility.constraint.IInValidImagesURLsConstraint;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +15,9 @@ import java.util.UUID;
  * Contains the game's ID, name, description, genres, platforms, and images.
  */
 public class GameRequest {
+
         UUID id;
+
         @Size(max = 50, message = "Name must not exceed 50 characters")
         @NotBlank(message = "Name is required")
         String name;
