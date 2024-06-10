@@ -43,7 +43,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void createGame_ShouldReturnGameResponse() {
+    void CreateGame_ShouldReturnGameResponse() {
         GameRequest gameRequest = createDefaultGameRequest("name");
 
         GameResponse gameResponse = this.gameService.createGame(gameRequest);
@@ -57,7 +57,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void createGame_WithExistingGame_ShouldThrowEntityExistsException() {
+    void CreateGame_WithExistingGame_ShouldThrowEntityExistsException() {
         GameRequest gameRequest = createDefaultGameRequest("name");
 
         this.gameService.createGame(gameRequest);
@@ -65,7 +65,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void getGameByName_ShouldReturnGameResponse() {
+    void GetGameByName_ShouldReturnGameResponse() {
         GameRequest gameRequest = createDefaultGameRequest("name");
 
         this.gameService.createGame(gameRequest);
@@ -80,12 +80,12 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void getGameByName_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
+    void GetGameByName_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameByName(RandomStringUtils.randomAlphabetic(20)));
     }
 
     @Test
-    void getGameById_ShouldReturnGameResponse() {
+    void GetGameById_ShouldReturnGameResponse() {
         GameRequest gameRequest = createDefaultGameRequest("name");
 
         GameResponse createdGame = this.gameService.createGame(gameRequest);
@@ -101,12 +101,12 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void getGameById_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
+    void GetGameById_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameById(UUID.randomUUID()));
     }
 
     @Test
-    void getGamesByPage_ShouldReturnNonEmptyPage() {
+    void GetGamesByPage_ShouldReturnNonEmptyPage() {
         int page = 0;
         int size = 5;
         GameRequest gameRequest = createDefaultGameRequest("name");
@@ -119,7 +119,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void updateGame_ShouldReturnUpdatedGameResponse() {
+    void UpdateGame_ShouldReturnUpdatedGameResponse() {
         GameRequest gameRequest1 = createDefaultGameRequest("name");
         GameResponse createdGame = this.gameService.createGame(gameRequest1);
 
@@ -142,13 +142,13 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void updateGame_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
+    void UpdateGame_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
         GameRequest gameRequest = createDefaultGameRequest("name updated");
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.updateGame(UUID.randomUUID(), gameRequest));
     }
 
     @Test
-    void deleteGame_ShouldSucceed() {
+    void DeleteGame_ShouldSucceed() {
         GameRequest gameRequest = createDefaultGameRequest("name");
         GameResponse createdGame = this.gameService.createGame(gameRequest);
         this.gameService.deleteGame(createdGame.getId());
@@ -157,12 +157,12 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void deleteGame_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
+    void DeleteGame_WithNonExistentGame_ShouldThrowEntityNotFoundException() {
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.deleteGame(UUID.randomUUID()));
     }
 
     @Test
-    void deleteGames_ShouldSucceed() {
+    void DeleteGames_ShouldSucceed() {
         GameRequest gameRequest1 = createDefaultGameRequest("name1");
         GameRequest gameRequest2 = createDefaultGameRequest("name2");
 
@@ -178,7 +178,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void deleteGames_WithNonExistentGames_ShouldThrowEntityNotFoundException() {
+    void DeleteGames_WithNonExistentGames_ShouldThrowEntityNotFoundException() {
         List<UUID> gameIds = List.of(UUID.randomUUID(), UUID.randomUUID());
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.deleteGames(gameIds));
     }

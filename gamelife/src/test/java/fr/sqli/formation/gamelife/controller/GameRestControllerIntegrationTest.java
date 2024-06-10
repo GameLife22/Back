@@ -55,7 +55,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_CreateGame_ReturnHttpStatusCreated() throws Exception {
+    void CreateGame_ReturnHttpStatusCreated() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -68,7 +68,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_CreateGame_ReturnHttpStatusBadRequest() throws Exception {
+    void CreateGame_ReturnHttpStatusBadRequest() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -82,7 +82,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_GetGameById_ReturnHttpStatusOk() throws Exception {
+    void GetGameById_ReturnHttpStatusOk() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                     .contentType("application/json")
                     .accept("application/json")
@@ -97,14 +97,14 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_GetGameById_ReturnHttpStatusNotFound() throws Exception {
+    void GetGameById_ReturnHttpStatusNotFound() throws Exception {
         UUID gameId = UUID.randomUUID();
         this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/{id}", gameId))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
-    void GameController_GetGameByName_ReturnHttpStatusOk() throws Exception {
+    void GetGameByName_ReturnHttpStatusOk() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -119,7 +119,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_GetGameByName_ReturnHttpStatusNotFound() throws Exception {
+    void GetGameByName_ReturnHttpStatusNotFound() throws Exception {
         String gameName = RandomStringUtils.randomAlphabetic(20); // warning: max = 50
 
         this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/search?name={name}", gameName))
@@ -127,7 +127,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_GetGamesByPage_ReturnHttpStatusOk() throws Exception {
+    void GetGamesByPage_ReturnHttpStatusOk() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                 .contentType("application/json")
                 .accept("application/json")
@@ -141,7 +141,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_UpdateGame_ReturnHttpStatusOk() throws Exception {
+    void UpdateGame_ReturnHttpStatusOk() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -164,7 +164,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_UpdateGame_ReturnHttpStatusNotFound() throws Exception {
+    void UpdateGame_ReturnHttpStatusNotFound() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -187,9 +187,9 @@ class GameRestControllerIntegrationTest {
                         .content(this.objectMapper.writeValueAsString(gameRequestUpdated)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-    
+
     @Test
-    void GameController_DeleteGame_ReturnHttpStatusNoContent() throws Exception {
+    void DeleteGame_ReturnHttpStatusNoContent() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -204,14 +204,14 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_DeleteGame_ReturnHttpStatusBadRequest() throws Exception {
+    void DeleteGame_ReturnHttpStatusBadRequest() throws Exception {
         UUID gameId = UUID.randomUUID();
         this.mockMvc.perform(MockMvcRequestBuilders.delete(PREFIX_API_URL + "/games/{id}", gameId))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    void GameController_DeleteGames_ReturnHttpStatusNoContent() throws Exception {
+    void DeleteGames_ReturnHttpStatusNoContent() throws Exception {
         var result1 = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -227,7 +227,7 @@ class GameRestControllerIntegrationTest {
         gameRequest2.setGenres(Set.of(Genre.ARCADE, Genre.ADVENTURE));
         gameRequest2.setPlatforms(Set.of(Platform.PC, Platform.PLAYSTATION));
         gameRequest2.setImages(List.of("https://image1.png", "file://image2.jpg"));
-        
+
         var result2 = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .accept("application/json")
@@ -247,7 +247,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_DeleteGames_ReturnHttpStatusBadRequest() throws Exception {
+    void DeleteGames_ReturnHttpStatusBadRequest() throws Exception {
         UUID gameId1 = UUID.randomUUID();
         UUID gameId2 = UUID.randomUUID();
         List<UUID> gamesIds = List.of(gameId1, gameId2);
@@ -256,13 +256,13 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void GameController_GetGameGenres_ReturnHttpStatusOk() throws Exception {
+    void GetGameGenres_ReturnHttpStatusOk() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/genres"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void GameController_GetGamePlatforms_ReturnHttpStatusOk() throws Exception {
+    void GetGamePlatforms_ReturnHttpStatusOk() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/platforms"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
