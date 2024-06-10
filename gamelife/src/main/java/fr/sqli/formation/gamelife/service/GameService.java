@@ -34,6 +34,13 @@ public class GameService implements IGameService {
     }
 
     @Override
+    public GameResponse getGameByName(String pGameName) {
+        LOGGER.info("Getting game by name: {}", pGameName);
+        return IGameConverter.convertGameEntityToGameResponse(this.gameRepository.findByName(pGameName)
+                .orElseThrow(() -> new EntityNotFoundException("Game not found for name: " + pGameName)));
+    }
+
+    @Override
     public GameResponse getGameById(UUID pGameId) {
         LOGGER.info("Getting game by ID: {}", pGameId);
         return IGameConverter.convertGameEntityToGameResponse(this.gameRepository.findById(pGameId)
@@ -49,11 +56,11 @@ public class GameService implements IGameService {
 
     @Override
     public GameResponse createGame(GameRequest pGameRequest) {
-        LOGGER.info("Creating a new game with name: {}", pGameRequest.name());
+        LOGGER.info("Creating a new game with name: {}", pGameRequest.getName());
 
-        Optional<GameEntity> optionalGameEntity = this.gameRepository.findByName(pGameRequest.name());
+        Optional<GameEntity> optionalGameEntity = this.gameRepository.findByName(pGameRequest.getName());
         optionalGameEntity.ifPresent(entite -> {
-            LOGGER.error("Game with name {} already exists", pGameRequest.name());
+            LOGGER.error("Game with name {} already exists", pGameRequest.getName());
             throw new EntityExistsException("Game with name already exists");
         });
 
@@ -90,6 +97,10 @@ public class GameService implements IGameService {
     @Override
     public void deleteGames(List<UUID> pGamesIds) {
         LOGGER.info("Deleting games with IDs: {}", pGamesIds);
+        for (UUID pGameId : pGamesIds) {
+            this.gameRepository.findById(pGameId)
+                    .orElseThrow(() -> new EntityNotFoundException("Game not found for ID: " + pGameId));
+        }
         this.gameRepository.deleteAllByIdIn(pGamesIds);
         LOGGER.info("Games deleted successfully");
     }

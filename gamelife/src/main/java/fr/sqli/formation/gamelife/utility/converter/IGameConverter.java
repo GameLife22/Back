@@ -24,12 +24,12 @@ public interface IGameConverter {
      */
     public static GameEntity convertGameRequestToGameEntity(GameRequest pGameRequest) {
         GameEntity gameEntity = new GameEntity();
-        gameEntity.setId(pGameRequest.id());
-        gameEntity.setName(pGameRequest.name());
-        gameEntity.setDescription(pGameRequest.description());
-        gameEntity.setGenres(pGameRequest.genres());
-        gameEntity.setPlatforms(pGameRequest.platforms());
-        gameEntity.setImages(pGameRequest.images());
+        gameEntity.setId(pGameRequest.getId());
+        gameEntity.setName(pGameRequest.getName());
+        gameEntity.setDescription(pGameRequest.getDescription());
+        gameEntity.setGenres(pGameRequest.getGenres());
+        gameEntity.setPlatforms(pGameRequest.getPlatforms());
+        gameEntity.setImages(pGameRequest.getImages());
         return gameEntity;
     }
 
@@ -40,10 +40,14 @@ public interface IGameConverter {
      * @return The converted GameResponse object
      */
     public static GameResponse convertGameEntityToGameResponse(GameEntity pGameEntity) {
-        return new GameResponse(pGameEntity.getId(), pGameEntity.getName(), pGameEntity.getDescription(),
-                pGameEntity.getGenres(),
-                pGameEntity.getPlatforms(),
-                pGameEntity.getImages());
+        GameResponse gameResponse = new GameResponse();
+        gameResponse.setId(pGameEntity.getId());
+        gameResponse.setName(pGameEntity.getName());
+        gameResponse.setDescription(pGameEntity.getDescription());
+        gameResponse.setGenres(pGameEntity.getGenres());
+        gameResponse.setPlatforms(pGameEntity.getPlatforms());
+        gameResponse.setImages(pGameEntity.getImages());
+        return gameResponse;
     }
 
     /**

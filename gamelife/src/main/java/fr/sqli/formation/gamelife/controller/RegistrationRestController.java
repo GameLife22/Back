@@ -18,7 +18,7 @@ public class RegistrationRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationRestController.class);
 
     @PostMapping("/inscription")
-    public String inscr01(@RequestBody Registration monbody) throws Exception{
+    public String inscription(@RequestBody Registration monbody) throws Exception{
         LOGGER.info("InscriptionControler : IN {}", monbody);
         UserEntity res;
         res = service.inscription(monbody);

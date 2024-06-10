@@ -13,6 +13,15 @@ import java.util.UUID;
  * update an existing game, delete a single game by ID, and delete multiple games by their IDs.
  */
 public interface IGameService {
+
+    /**
+     * Retrieves a specific game by its name.
+     *
+     * @param pGameName the name of the game to retrieve
+     * @return a GameResponse object representing the game with the provided name
+     */
+    public GameResponse getGameByName(String pGameName);
+
     /**
      * Represents a service class for retrieving game information.
      * Includes methods to get a specific game by its ID and to retrieve a paginated list of games.

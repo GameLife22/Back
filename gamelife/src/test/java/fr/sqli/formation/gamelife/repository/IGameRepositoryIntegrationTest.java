@@ -1,11 +1,9 @@
 package fr.sqli.formation.gamelife.repository;
 
 import fr.sqli.formation.gamelife.TestContainerConfiguration;
-import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.entity.GameEntity;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
-import fr.sqli.formation.gamelife.utility.converter.IGameConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,10 +27,15 @@ import java.util.UUID;
 @DataJpaTest
 @ActiveProfiles("test")
 class IGameRepositoryIntegrationTest {
-    @Autowired
-    private IGameRepository iGameRepository;
+
+    private final IGameRepository iGameRepository;
 
     private GameEntity gameEntity;
+
+    @Autowired
+    IGameRepositoryIntegrationTest(IGameRepository pIGameRepository) {
+        iGameRepository = pIGameRepository;
+    }
 
     /**
      * Set up the test environment by creating a GameRequest object with predefined values
@@ -40,15 +43,13 @@ class IGameRepositoryIntegrationTest {
      */
     @BeforeEach
     void setUp() {
-        GameRequest gameRequest = new GameRequest(
-                null, "name",
-                "description",
-                Set.of(Genre.ARCADE, Genre.ADVENTURE),
-                Set.of(Platform.PC, Platform.PLAYSTATION),
-                List.of("https://image1.png", "file://image2.jpg")
-        );
-
-        this.gameEntity = IGameConverter.convertGameRequestToGameEntity(gameRequest);
+        this.gameEntity = new GameEntity();
+        this.gameEntity.setId(null);
+        this.gameEntity.setName("name");
+        this.gameEntity.setDescription("description");
+        this.gameEntity.setGenres(Set.of(Genre.ARCADE, Genre.ADVENTURE));
+        this.gameEntity.setPlatforms(Set.of(Platform.PC, Platform.PLAYSTATION));
+        this.gameEntity.setImages(List.of("https://image1.png", "file://image2.jpg"));
     }
 
     /**
@@ -86,6 +87,29 @@ class IGameRepositoryIntegrationTest {
     void GameRepository_FindById_ReturnOptionalGameEntity() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
         Optional<GameEntity> optionalGameEntity = this.iGameRepository.findById(gameEntitySaved.getId());
+
+        Assertions.assertNotNull(optionalGameEntity);
+        Assertions.assertTrue(optionalGameEntity.isPresent());
+        Assertions.assertNotNull(optionalGameEntity.get().getId());
+        Assertions.assertEquals(gameEntitySaved.getId(), optionalGameEntity.get().getId());
+        Assertions.assertEquals(gameEntitySaved.getName(), optionalGameEntity.get().getName());
+        Assertions.assertEquals(gameEntitySaved.getDescription(), optionalGameEntity.get().getDescription());
+        Assertions.assertEquals(gameEntitySaved.getGenres(), optionalGameEntity.get().getGenres());
+        Assertions.assertEquals(gameEntitySaved.getPlatforms(), optionalGameEntity.get().getPlatforms());
+        Assertions.assertEquals(gameEntitySaved.getImages(), optionalGameEntity.get().getImages());
+    }
+
+    /**
+     * Test to find a game entity by name and return it as an Optional.
+     *
+     * This test method saves a game entity, retrieves it by name using the 'findByName' method of the game repository,
+     * and asserts that the returned Optional contains the expected game entity with matching attributes.
+     */
+    @Test
+    @DisplayName("Test to find by name and return Optional<GameEntity>")
+    void GameRepository_FindByName_ReturnOptionalGameEntity() {
+        GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
+        Optional<GameEntity> optionalGameEntity = this.iGameRepository.findByName(gameEntitySaved.getName());
 
         Assertions.assertNotNull(optionalGameEntity);
         Assertions.assertTrue(optionalGameEntity.isPresent());
@@ -139,17 +163,15 @@ class IGameRepositoryIntegrationTest {
     void GameRepository_Update_ReturnGameEntityUpdated() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
 
-        GameRequest gameRequest = new GameRequest(
-                gameEntitySaved.getId(),
-                "name updated",
-                "description updated",
-                Set.of(Genre.BOARD_GAMES, Genre.INDIE),
-                Set.of(Platform.GAME_BOY, Platform.XBOX),
-                List.of("https://image3.png", "file://image4.jpg")
-        );
+        GameEntity gameEntityUpdated = new GameEntity();
+        gameEntityUpdated.setId(gameEntitySaved.getId());
+        gameEntityUpdated.setName("updated name");
+        gameEntityUpdated.setDescription("updated description");
+        gameEntityUpdated.setGenres(Set.of(Genre.BOARD_GAMES, Genre.INDIE));
+        gameEntityUpdated.setPlatforms(Set.of(Platform.GAME_BOY, Platform.XBOX));
+        gameEntityUpdated.setImages(List.of("https://image3.png", "file://image4.jpg"));
 
-        GameEntity gameEntityUpdated = IGameConverter.convertGameRequestToGameEntity(gameRequest);
-
+        
         Assertions.assertNotNull(gameEntitySaved);
         Assertions.assertNotNull(gameEntityUpdated);
         Assertions.assertEquals(gameEntitySaved.getId(), gameEntityUpdated.getId());
@@ -194,18 +216,16 @@ class IGameRepositoryIntegrationTest {
     @Test
     @DisplayName("Test deleting by Ids in GameRepository should return nothing")
     void GameRepository_DeleteAllByIdIn_ReturnNothing() {
-        GameEntity gameEntitySaved1 = this.iGameRepository.save(gameEntity);
+        GameEntity gameEntitySaved1 = this.iGameRepository.save(this.gameEntity);
 
-        GameRequest newGameRequest = new GameRequest(
-                null, "name 2",
-                "description 2",
-                Set.of(Genre.CARD, Genre.CASUAL),
-                Set.of(Platform.NES, Platform.SEGA_32X),
-                List.of("https://image3.png", "file://image4.jpg")
-        );
+        GameEntity gameEntitySaved2 = new GameEntity();
+        gameEntitySaved2.setName("name 2");
+        gameEntitySaved2.setDescription("description 2");
+        gameEntitySaved2.setGenres(Set.of(Genre.CARD, Genre.CASUAL));
+        gameEntitySaved2.setPlatforms(Set.of(Platform.NES, Platform.SEGA_32X));
+        gameEntitySaved2.setImages(List.of("https://image3.png", "file://image4.jpg"));
 
-        GameEntity gameEntity = IGameConverter.convertGameRequestToGameEntity(newGameRequest);
-        GameEntity gameEntitySaved2 = this.iGameRepository.save(gameEntity);
+        this.iGameRepository.save(gameEntitySaved2);
         List<UUID> gamesIds = List.of(gameEntitySaved1.getId(), gameEntitySaved2.getId());
 
         this.iGameRepository.deleteAllByIdIn(gamesIds);

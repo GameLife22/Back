@@ -33,8 +33,8 @@ public class GameRestController {
     private final IGameService service;
 
     @Autowired
-    public GameRestController(IGameService pService) {
-        service = pService;
+    public GameRestController(IGameService pIGameService) {
+        service = pIGameService;
     }
 
     /**
@@ -43,8 +43,8 @@ public class GameRestController {
      * @param pGameId The unique identifier of the game to retrieve
      * @return ResponseEntity<GameResponse> The HTTP response entity containing the game response if found, HttpStatus.NOT_FOUND otherwise
      */
-    @GetMapping("/games/{gameId}")
-    public ResponseEntity<GameResponse> getGameById(@PathVariable("gameId") UUID pGameId) {
+    @GetMapping("/games/{id}")
+    public ResponseEntity<GameResponse> getGameById(@PathVariable("id") UUID pGameId) {
         try {
             LOGGER.info("Fetching game with ID: {}", pGameId);
             GameResponse gameResponse = this.service.getGameById(pGameId);
@@ -52,6 +52,25 @@ public class GameRestController {
             return ResponseEntity.ok(gameResponse);
         } catch(Exception pException) {
             LOGGER.error("Error occurred while fetching game with ID: {}", pGameId, pException);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    /**
+     * Retrieves a game by its name.
+     *
+     * @param pGameName The name of the game to retrieve
+     * @return ResponseEntity<GameResponse> The HTTP response entity containing the game response if found, HttpStatus.NOT_FOUND otherwise
+     */
+    @GetMapping("/games/search")
+    public ResponseEntity<GameResponse> getGameByName(@RequestParam("name") String pGameName) {
+        try {
+            LOGGER.info("Fetching game by name: {}", pGameName);
+            GameResponse gameResponse = this.service.getGameByName(pGameName);
+            LOGGER.info("Game retrieved successfully by name: {}", pGameName);
+            return ResponseEntity.ok(gameResponse);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while fetching game by name: {}", pGameName, e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -90,9 +109,9 @@ public class GameRestController {
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(gameResponse.id())
+                    .buildAndExpand(gameResponse.getId())
                     .toUri();
-            LOGGER.info("Game created successfully with ID: {}", gameResponse.id());
+            LOGGER.info("Game created successfully with ID: {}", gameResponse.getId());
             return ResponseEntity.created(location).body(gameResponse);
         } catch (Exception pException) {
             LOGGER.error("Error occurred while creating game: {}", pGameRequest, pException);
@@ -107,8 +126,8 @@ public class GameRestController {
      * @param pGameRequest The game request containing the updated details of the game
      * @return ResponseEntity<GameResponse> The HTTP response entity containing the updated game response if successful, HttpStatus.NOT_FOUND otherwise
      */
-    @PatchMapping("/games/{gameId}")
-    public ResponseEntity<GameResponse> updateGame(@PathVariable("gameId") UUID pGameId, @Valid @RequestBody GameRequest pGameRequest) {
+    @PatchMapping("/games/{id}")
+    public ResponseEntity<GameResponse> updateGame(@PathVariable("id") UUID pGameId, @Valid @RequestBody GameRequest pGameRequest) {
         try {
             LOGGER.info("Updating game with ID: {}", pGameId);
             GameResponse gameResponse = this.service.updateGame(pGameId, pGameRequest);
@@ -127,7 +146,7 @@ public class GameRestController {
      * @return ResponseEntity<Void> The HTTP response entity with status HttpStatus.NO_CONTENT if the games are successfully deleted, HttpStatus.BAD_REQUEST otherwise
      */
     @DeleteMapping("/games")
-    public ResponseEntity<Void> deleteGames(List<UUID> pGamesIds) {
+    public ResponseEntity<Void> deleteGames(@RequestBody List<UUID> pGamesIds) {
         try {
             LOGGER.info("Deleting games with IDs: {}", pGamesIds);
             this.service.deleteGames(pGamesIds);
@@ -145,8 +164,8 @@ public class GameRestController {
      * @param pGameId The unique identifier of the game to delete
      * @return ResponseEntity<Void> The HTTP response entity with status HttpStatus.NO_CONTENT if the game is successfully deleted, HttpStatus.BAD_REQUEST otherwise
      */
-    @DeleteMapping("/games/{gameId}")
-    public ResponseEntity<Void> deleteGame(@PathVariable("gameId") UUID pGameId) {
+    @DeleteMapping("/games/{id}")
+    public ResponseEntity<Void> deleteGame(@PathVariable("id") UUID pGameId) {
         try {
             LOGGER.info("Deleting game with ID: {}", pGameId);
             this.service.deleteGame(pGameId);
@@ -164,18 +183,10 @@ public class GameRestController {
      * @return ResponseEntity containing an array of Genre objects
      */
     @GetMapping("/games/genres")
-    public ResponseEntity<Genre[]> getGenre() {
-        try {
-            LOGGER.info("Retrieving list of genres");
-            Genre[] genres = Genre.values();
-            if (genres.length == 0) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            return ResponseEntity.ok(genres);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while retrieving genres", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Genre[]> getGenres() {
+        LOGGER.info("Retrieving list of genres");
+        Genre[] genres = Genre.values();
+        return ResponseEntity.ok(genres);
     }
 
     /**
@@ -185,16 +196,8 @@ public class GameRestController {
      */
     @GetMapping("/games/platforms")
     public ResponseEntity<Platform[]> getPlatforms() {
-        try {
-            LOGGER.info("Retrieving list of platforms");
-            Platform[] platforms = Platform.values();
-            if (platforms.length == 0) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            return ResponseEntity.ok(platforms);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while retrieving platforms", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        LOGGER.info("Retrieving list of platforms");
+        Platform[] platforms = Platform.values();
+        return ResponseEntity.ok(platforms);
     }
 }
