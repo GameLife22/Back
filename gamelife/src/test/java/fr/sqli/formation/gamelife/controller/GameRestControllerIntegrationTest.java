@@ -1,21 +1,28 @@
 package fr.sqli.formation.gamelife.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.sqli.formation.gamelife.TestContainerConfiguration;
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
+import io.restassured.RestAssured;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.List;
@@ -24,13 +31,38 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@Import(TestContainerConfiguration.class)
 @AutoConfigureMockMvc
 @SpringBootTest
+@Transactional
+@Rollback
 @ActiveProfiles("test")
 class GameRestControllerIntegrationTest {
 
-    private MockMvc mockMvc;
+    @LocalServerPort
+    private Integer port;
+
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
+            "postgres:16.1"
+    );
+
+    @BeforeAll
+    static void beforeAll() {
+        postgres.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgres.stop();
+    }
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+    
+    private final MockMvc mockMvc;
 
     private GameRequest gameRequest;
 
@@ -46,6 +78,8 @@ class GameRestControllerIntegrationTest {
 
     @BeforeEach
     public void setUp() {;
+        RestAssured.baseURI = "http://localhost:" + port;
+
         this.gameRequest = new GameRequest();
         this.gameRequest.setName("name");
         this.gameRequest.setDescription("description");
@@ -64,6 +98,9 @@ class GameRestControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value(gameRequest.getName()))
                 .andExpect(jsonPath("$.description").value(gameRequest.getDescription()));
+                //.andExpect(jsonPath("$.genres").value(gameRequest.getGenres()))
+                //.andExpect(jsonPath("$.platforms").value(gameRequest.getPlatforms()))
+                //.andExpect(jsonPath("$.images").value(gameRequest.getImages()));
         //todo: add the others fields
     }
 
@@ -133,8 +170,8 @@ class GameRestControllerIntegrationTest {
                 .accept("application/json")
                 .content(this.objectMapper.writeValueAsString(this.gameRequest)));
 
-        int page = 0;
-        int size = 5; // total element
+        int page = 0; // first page
+        int size = 5; // total elements
 
         this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games?page={page}&size={size}", page, size))
                 .andExpect(MockMvcResultMatchers.status().isOk());;

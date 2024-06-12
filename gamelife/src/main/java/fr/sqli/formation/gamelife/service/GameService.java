@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+
 import java.util.*;
 
 /**
@@ -23,7 +23,6 @@ import java.util.*;
  * Provides methods for retrieving, creating, updating, and deleting game entities.
  */
 @Service
-@Transactional
 public class GameService implements IGameService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
     private final IGameRepository gameRepository;
@@ -36,14 +35,14 @@ public class GameService implements IGameService {
     @Override
     public GameResponse getGameByName(String pGameName) {
         LOGGER.info("Getting game by name: {}", pGameName);
-        return IGameConverter.convertGameEntityToGameResponse(gameRepository.findByName(pGameName)
+        return IGameConverter.convertGameEntityToGameResponse(this.gameRepository.findByName(pGameName)
                 .orElseThrow(() -> new EntityNotFoundException("Game not found for name: " + pGameName)));
     }
 
     @Override
     public GameResponse getGameById(UUID pGameId) {
         LOGGER.info("Getting game by ID: {}", pGameId);
-        return IGameConverter.convertGameEntityToGameResponse(gameRepository.findById(pGameId)
+        return IGameConverter.convertGameEntityToGameResponse(this.gameRepository.findById(pGameId)
                 .orElseThrow(() -> new EntityNotFoundException("Game not found for ID: " + pGameId)));
     }
 
@@ -51,37 +50,47 @@ public class GameService implements IGameService {
     public Page<GameResponse> getGamesByPage(int pPage, int pTotalPages) {
         LOGGER.info("Getting games for page: {} with total pages: {}", pPage, pTotalPages);
         Pageable pageable = PageRequest.of(pPage, pTotalPages);
-        return IGameConverter.convertGamesEntitiesToPageGameResponse(gameRepository.findAll(pageable));
+        return IGameConverter.convertGamesEntitiesToPageGameResponse(this.gameRepository.findAll(pageable));
     }
 
     @Override
     public GameResponse createGame(GameRequest pGameRequest) {
         LOGGER.info("Creating a new game with name: {}", pGameRequest.getName());
 
-        Optional<GameEntity> optionalGameEntity = gameRepository.findByName(pGameRequest.getName());
+        Optional<GameEntity> optionalGameEntity = this.gameRepository.findByName(pGameRequest.getName());
         optionalGameEntity.ifPresent(entite -> {
             LOGGER.error("Game with name {} already exists", pGameRequest.getName());
             throw new EntityExistsException("Game with name already exists");
         });
 
         GameEntity gameEntity = IGameConverter.convertGameRequestToGameEntity(pGameRequest);
-        GameEntity savedGameEntity = gameRepository.save(gameEntity);
+        GameEntity savedGameEntity = this.gameRepository.save(gameEntity);
         LOGGER.info("Game created successfully with ID: {}", savedGameEntity.getId());
 
         return IGameConverter.convertGameEntityToGameResponse(savedGameEntity);
     }
 
+    private static GameEntity updateGameEntityFromRequest(GameRequest pGameRequest, GameEntity existingGameEntity) {
+        existingGameEntity.setName(pGameRequest.getName());
+        existingGameEntity.setDescription(pGameRequest.getDescription());
+        existingGameEntity.setGenres(pGameRequest.getGenres());
+        existingGameEntity.setPlatforms(pGameRequest.getPlatforms());
+        existingGameEntity.setImages(pGameRequest.getImages());
+        return existingGameEntity;
+    }
+
     @Override
-    public GameResponse updateGame(GameRequest pGameRequest) {
+    public GameResponse updateGame(UUID pGameId, GameRequest pGameRequest) {
         LOGGER.info("Updating game with ID: {}", pGameRequest.getId());
 
-        Optional<GameEntity> existingOptionalGameEntity = this.gameRepository.findById(pGameRequest.getId());
+        Optional<GameEntity> existingOptionalGameEntity = this.gameRepository.findById(pGameId);
 
         if (existingOptionalGameEntity.isEmpty())
-            throw new EntityNotFoundException("Game with ID " + pGameRequest.getId() + " not found");
+            throw new EntityNotFoundException("Game with ID " + pGameId + " not found");
 
-        GameEntity gameEntity = IGameConverter.convertGameRequestToGameEntity(pGameRequest);
-        GameEntity updatedGameEntity = gameRepository.save(gameEntity);
+        GameEntity gameEntity = updateGameEntityFromRequest(pGameRequest, existingOptionalGameEntity.get());
+
+        GameEntity updatedGameEntity = this.gameRepository.save(gameEntity);
 
         LOGGER.info("Game updated successfully. Game : {}", updatedGameEntity);
         return IGameConverter.convertGameEntityToGameResponse(updatedGameEntity);

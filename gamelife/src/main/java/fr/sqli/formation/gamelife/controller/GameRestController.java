@@ -82,7 +82,7 @@ public class GameRestController {
      * @param size The total number of games per page
      * @return ResponseEntity<Page<GameResponse>> The HTTP response entity containing the page of GameResponse objects if successful, HttpStatus.BAD_REQUEST otherwise
      */
-    @GetMapping("/games")
+    @GetMapping("/games&page={page}&size={size}")
     public ResponseEntity<Page<GameResponse>> getGamesByPage(@RequestParam int page, @RequestParam int size) {
         try {
             LOGGER.info("Fetching games for page: {} and size: {}", page, size);
@@ -126,15 +126,15 @@ public class GameRestController {
      * @param pGameRequest The game request containing the updated details of the game
      * @return ResponseEntity<GameResponse> The HTTP response entity containing the updated game response if successful, HttpStatus.NOT_FOUND otherwise
      */
-    @PatchMapping("/games")
-    public ResponseEntity<GameResponse> updateGame(@Valid @RequestBody GameRequest pGameRequest) {
+    @PatchMapping("/games/{id}")
+    public ResponseEntity<GameResponse> updateGame(@PathVariable("id") UUID pGameId, @Valid @RequestBody GameRequest pGameRequest) {
         try {
-            LOGGER.info("Updating game with ID: {}", pGameRequest.getId());
-            GameResponse gameResponse = this.service.updateGame(pGameRequest);
-            LOGGER.info("Game updated successfully with ID: {}", pGameRequest.getId());
+            LOGGER.info("Updating game with ID: {}", pGameId);
+            GameResponse gameResponse = this.service.updateGame(pGameId, pGameRequest);
+            LOGGER.info("Game updated successfully with ID: {}", pGameId);
             return ResponseEntity.ok(gameResponse);
         } catch(Exception pException) {
-            LOGGER.error("Error occurred while updating game with ID: {}", pGameRequest.getId(), pException);
+            LOGGER.error("Error occurred while updating game with ID: {}", pGameId, pException);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }

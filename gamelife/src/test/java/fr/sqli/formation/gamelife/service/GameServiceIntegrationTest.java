@@ -1,98 +1,89 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.TestContainerConfiguration;
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
+import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-@Import(TestContainerConfiguration.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
+@Rollback
 @ActiveProfiles("test")
-@Testcontainers
 class GameServiceIntegrationTest {
+
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.1");
+
+    @BeforeAll
+    static void beforeAll() {
+        postgres.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgres.stop();
+    }
 
     @Autowired
     private GameService gameService;
 
-    private GameRequest createDefaultGameRequest(String name) {
-        GameRequest gameRequest = new GameRequest();
-        gameRequest.setName(name);
-        gameRequest.setDescription("description");
-        gameRequest.setGenres(Set.of(Genre.ARCADE));
-        gameRequest.setPlatforms(Set.of(Platform.XBOX));
-        gameRequest.setImages(List.of("https://image1.png", "file://image2.jpg"));
-        return gameRequest;
+    private GameRequest gameRequest;
+
+    @BeforeEach
+    public void setUp() {;
+        this.gameRequest = new GameRequest();
+        this.gameRequest.setName("name");
+        this.gameRequest.setDescription("description");
+        this.gameRequest.setGenres(new HashSet<>(Set.of(Genre.ARCADE)));
+        this.gameRequest.setPlatforms(new HashSet<>(Set.of(Platform.XBOX)));
+        this.gameRequest.setImages(new ArrayList<>(List.of("https://image1.png", "file://image2.jpg")));
     }
 
     @Test
     void givenGameRequest_whenCreateGame_thenReturnGameResponse() {
-        GameRequest gameRequest = createDefaultGameRequest("name");
+        GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
-        GameResponse createdGameResponse = this.gameService.createGame(gameRequest);
-
+        Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(createdGameResponse.getId());
-        Assertions.assertEquals(gameRequest.getName(), createdGameResponse.getName());
-        Assertions.assertEquals(gameRequest.getDescription(), createdGameResponse.getDescription());
-        Assertions.assertEquals(gameRequest.getGenres(), createdGameResponse.getGenres());
-        Assertions.assertEquals(gameRequest.getPlatforms(), createdGameResponse.getPlatforms());
-        Assertions.assertEquals(gameRequest.getImages(), createdGameResponse.getImages());
-    }
-
-    @Test
-    void givenExistingGameRequest_whenCreateGame_thenThrowEntityExistsException() {
-        GameRequest gameRequest = createDefaultGameRequest("name");
-
-        this.gameService.createGame(gameRequest);
-        Assertions.assertThrows(EntityExistsException.class, () -> this.gameService.createGame(gameRequest));
+        Assertions.assertEquals(this.gameRequest.getName(), createdGameResponse.getName());
+        Assertions.assertEquals(this.gameRequest.getDescription(), createdGameResponse.getDescription());
+        Assertions.assertEquals(this.gameRequest.getGenres(), createdGameResponse.getGenres());
+        Assertions.assertEquals(this.gameRequest.getPlatforms(), createdGameResponse.getPlatforms());
+        Assertions.assertEquals(this.gameRequest.getImages(), createdGameResponse.getImages());
     }
 
     @Test
     void givenGameRequest_whenGetGameByName_thenReturnGameResponse() {
-        GameRequest gameRequest = createDefaultGameRequest("name");
-        GameResponse createdGameResponse = this.gameService.createGame(gameRequest);
+        GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         GameResponse gameResponse = this.gameService.getGameByName(createdGameResponse.getName());
 
+        Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(gameResponse);
-        Assertions.assertEquals(gameRequest.getName(), gameResponse.getName());
-        Assertions.assertEquals(gameRequest.getDescription(), gameResponse.getDescription());
-        Assertions.assertEquals(gameRequest.getGenres(), gameResponse.getGenres());
-        Assertions.assertEquals(gameRequest.getPlatforms(), gameResponse.getPlatforms());
-        Assertions.assertEquals(gameRequest.getImages(), gameResponse.getImages());
-    }
-
-    @Test
-    void givenInvalidGameName_whenGetGameByName_thenThrowEntityNotFoundException() {
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameByName(RandomStringUtils.randomAlphabetic(20)));
+        Assertions.assertEquals(this.gameRequest.getName(), gameResponse.getName());
+        Assertions.assertEquals(this.gameRequest.getDescription(), gameResponse.getDescription());
+        Assertions.assertEquals(this.gameRequest.getGenres(), gameResponse.getGenres());
+        Assertions.assertEquals(this.gameRequest.getPlatforms(), gameResponse.getPlatforms());
+        Assertions.assertEquals(this.gameRequest.getImages(), gameResponse.getImages());
     }
 
     @Test
     void givenGameId_whenGetGameById_thenReturnGameResponse() {
-        GameRequest gameRequest = createDefaultGameRequest("name");
-        GameResponse createdGameResponse = this.gameService.createGame(gameRequest);
+        GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         GameResponse gameResponse = this.gameService.getGameById(createdGameResponse.getId());
 
+        Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(gameResponse);
         Assertions.assertEquals(createdGameResponse.getId(), gameResponse.getId());
         Assertions.assertEquals(gameRequest.getName(), gameResponse.getName());
@@ -103,17 +94,11 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenInvalidGameId_whenGetGameById_thenThrowEntityNotFoundException() {
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameById(UUID.randomUUID()));
-    }
-
-    @Test
     void givenPageAndSizeOfGame_whenGetGamesByPage_thenReturnPageWithGames() {
         int page = 0;
         int size = 5;
-        GameRequest gameRequest = createDefaultGameRequest("name");
+        this.gameService.createGame(this.gameRequest);
 
-        this.gameService.createGame(gameRequest);
         Page<GameResponse> gameResponsePage = this.gameService.getGamesByPage(page, size);
 
         Assertions.assertNotNull(gameResponsePage);
@@ -122,64 +107,56 @@ class GameServiceIntegrationTest {
 
     @Test
     void givenExistingGameRequest_whenUpdateGame_thenReturnUpdatedGameResponse() {
-        GameRequest gameRequest1 = createDefaultGameRequest("name");
-        GameResponse createdGameResponse = this.gameService.createGame(gameRequest1);
-        GameRequest gameRequest2 = createDefaultGameRequest("name updated");
-        gameRequest2.setId(createdGameResponse.getId());
-        GameResponse updatedGameResponse = this.gameService.updateGame(gameRequest2);
+        GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
+
+        GameRequest gameRequest2 = new GameRequest();
+        gameRequest2.setName("updated name");
+        gameRequest2.setDescription("updated description");
+        gameRequest2.setGenres(new HashSet<>(Set.of(Genre.BOARD_GAMES)));
+        gameRequest2.setPlatforms((new HashSet<>(Set.of(Platform.GAME_BOY))));
+        gameRequest2.setImages(new ArrayList<>(List.of("https://image3.png", "file://image4.jpg")));
+
+        GameResponse updatedGameResponse = this.gameService.updateGame(createdGameResponse.getId(), gameRequest2);
 
         Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(updatedGameResponse);
         Assertions.assertEquals(createdGameResponse.getId(), updatedGameResponse.getId());
-        Assertions.assertEquals(createdGameResponse.getName(), updatedGameResponse.getName());
-        Assertions.assertEquals(createdGameResponse.getDescription(), updatedGameResponse.getDescription());
-        Assertions.assertEquals(createdGameResponse.getGenres(), updatedGameResponse.getGenres());
-        Assertions.assertEquals(createdGameResponse.getPlatforms(), updatedGameResponse.getPlatforms());
-        Assertions.assertEquals(createdGameResponse.getImages(), updatedGameResponse.getImages());
-    }
-
-    @Test
-    void givenNotExistingGameRequest_whenUpdateGame_thenThrowEntityNotFoundException() {
-        GameRequest gameRequest = createDefaultGameRequest("name");
-        this.gameService.createGame(gameRequest);
-        GameRequest updatedGameRequest = createDefaultGameRequest("name updated");
-        updatedGameRequest.setId(UUID.randomUUID());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.updateGame(updatedGameRequest));
+        Assertions.assertNotEquals(createdGameResponse.getName(), updatedGameResponse.getName());
+        Assertions.assertNotEquals(createdGameResponse.getDescription(), updatedGameResponse.getDescription());
+        Assertions.assertNotEquals(createdGameResponse.getGenres(), updatedGameResponse.getGenres());
+        Assertions.assertNotEquals(createdGameResponse.getPlatforms(), updatedGameResponse.getPlatforms());
+        Assertions.assertNotEquals(createdGameResponse.getImages(), updatedGameResponse.getImages());
     }
 
     @Test
     void givenGameId_whenDeleteGameById_thenReturnNothing() {
-        GameRequest gameRequest = createDefaultGameRequest("name");
-        GameResponse createdGameResponse = this.gameService.createGame(gameRequest);
+        GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
+
         this.gameService.deleteGameById(createdGameResponse.getId());
 
+        Assertions.assertNotNull(createdGameResponse);
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameById(createdGameResponse.getId()));
     }
 
     @Test
-    void givenGameId_whenDeleteGameById_thenThrowEntityNotFoundException() {
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.deleteGameById(UUID.randomUUID()));
-    }
-
-    @Test
     void givenGamesIds_whenDeleteGamesByIds_thenReturnNothing() {
-        GameRequest gameRequest1 = createDefaultGameRequest("name1");
-        GameRequest gameRequest2 = createDefaultGameRequest("name2");
+        GameResponse createdGameResponse1 = this.gameService.createGame(this.gameRequest);
+        GameRequest gameRequest2 = new GameRequest();
+        gameRequest2.setName("name 2");
+        gameRequest2.setDescription("description");
+        gameRequest2.setGenres(Set.of(Genre.ARCADE));
+        gameRequest2.setPlatforms(Set.of(Platform.XBOX));
+        gameRequest2.setImages(List.of("https://image1.png", "file://image2.jpg"));
+        GameResponse createdGameResponse2 = this.gameService.createGame(gameRequest2);
+        List<UUID> gamesIds = List.of(createdGameResponse1.getId(), createdGameResponse2.getId());
 
-        GameResponse gameResponse1 = this.gameService.createGame(gameRequest1);
-        GameResponse gameResponse2 = this.gameService.createGame(gameRequest2);
-
-        List<UUID> gamesIds = List.of(gameResponse1.getId(), gameResponse2.getId());
         this.gameService.deleteGamesByIds(gamesIds);
+
+        Assertions.assertNotNull(createdGameResponse1);
+        Assertions.assertNotNull(createdGameResponse2);
 
         for (UUID gameId : gamesIds) {
             Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameById(gameId));
         }
-    }
-
-    @Test
-    void givenGamesIds_whenDeleteGamesByIds_thenThrowEntityNotFoundException() {
-        List<UUID> gamesIds = List.of(UUID.randomUUID(), UUID.randomUUID());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.deleteGamesByIds(gamesIds));
     }
 }

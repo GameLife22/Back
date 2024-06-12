@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface for converting GameRequest and GameEntity objects to each other,
@@ -24,7 +25,6 @@ public interface IGameConverter {
      */
     public static GameEntity convertGameRequestToGameEntity(GameRequest pGameRequest) {
         GameEntity gameEntity = new GameEntity();
-        gameEntity.setId(pGameRequest.getId());
         gameEntity.setName(pGameRequest.getName());
         gameEntity.setDescription(pGameRequest.getDescription());
         gameEntity.setGenres(pGameRequest.getGenres());

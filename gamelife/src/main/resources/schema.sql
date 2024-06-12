@@ -23,8 +23,8 @@ CREATE TABLE gamelife.glutilisateur
     ville                 VARCHAR(80)          NOT NULL,
     code_postal           INT                  NOT NULL,
     role                  VARCHAR(50)          NOT NULL,
-    num_siren             CHAR(9) NULL DEFAULT NULL UNIQUE,
-    etat_compte           BOOLEAN DEFAULT TRUE NOT NULL,
+    num_siren             CHAR(9) NULL UNIQUE,
+    etat_compte           BOOLEAN NOT NULL,
     reset_password_token  VARCHAR(30) NULL
 );
 
