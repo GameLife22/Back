@@ -1,20 +1,19 @@
 package fr.sqli.formation.gamelife.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
 @Service
 public class EmailService {
-    private static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
     @Autowired
     private JavaMailSender emailSender;
 
@@ -53,7 +52,7 @@ public class EmailService {
         String subject = "Here's the link to activate your account";
 
         String content = "<p>Hello,</p>"
-                + "<p>You have created an account on our site.</p>"
+                + "<p>You have creerd an account on our site.</p>"
                 + "<p>Click the link below to activate your account:</p>"
                 + "<p><a href=\"" + link + "\">Activate my account</a></p>"
                 + "<br>"
