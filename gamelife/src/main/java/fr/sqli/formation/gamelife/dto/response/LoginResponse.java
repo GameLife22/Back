@@ -60,11 +60,11 @@ public class LoginResponse {
         this.etat = etat;
     }
 
-    public String getNom() {
+    public String getLastName() {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setLastName(String nom) {
         this.nom = nom;
     }
 
@@ -84,28 +84,28 @@ public class LoginResponse {
         this.num_siren = num_siren;
     }
 
-    public String getPrenom() {
+    public String getFirstName() {
         return prenom;
     }
 
-    public void setPrenom(String prenom) {
+    public void setFirstName(String prenom) {
         this.prenom = prenom;
     }
 
 
-    public String getRue() {
+    public String getStreet() {
         return rue;
     }
 
-    public void setRue(String rue) {
+    public void setStreet(String rue) {
         this.rue = rue;
     }
 
-    public String getVille() {
+    public String getCity() {
         return ville;
     }
 
-    public void setVille(String ville) {
+    public void setCity(String ville) {
         this.ville = ville;
     }
 

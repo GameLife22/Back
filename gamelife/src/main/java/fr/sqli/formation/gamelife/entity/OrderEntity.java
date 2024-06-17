@@ -18,7 +18,7 @@ public class OrderEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "utilisateur_id", nullable = false)
-    private UserEntity utilisateur;
+    private UserEntity user;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
     private List<ItemOrderEntity> itemsCommande;
@@ -54,11 +54,11 @@ public class OrderEntity {
     }
 
     public UserEntity getUtilisateur() {
-        return utilisateur;
+        return user;
     }
 
     public void setUtilisateur(UserEntity pUtilisateur) {
-        utilisateur = pUtilisateur;
+        user = pUtilisateur;
     }
 
     public List<ItemOrderEntity> getItemsCommande() {
@@ -77,35 +77,35 @@ public class OrderEntity {
         etat = pEtat;
     }
 
-    public Integer getNumRueLivraison() {
+    public Integer getStreetNumberLivraison() {
         return numRueLivraison;
     }
 
-    public void setNumRueLivraison(Integer pNumRueLivraison) {
+    public void setStreetNumberLivraison(Integer pNumRueLivraison) {
         numRueLivraison = pNumRueLivraison;
     }
 
-    public String getRueLivraison() {
+    public String getStreetLivraison() {
         return rueLivraison;
     }
 
-    public void setRueLivraison(String pRueLivraison) {
+    public void setStreetLivraison(String pRueLivraison) {
         rueLivraison = pRueLivraison;
     }
 
-    public String getVilleLivraison() {
+    public String getCityLivraison() {
         return villeLivraison;
     }
 
-    public void setVilleLivraison(String pVilleLivraison) {
+    public void setCityLivraison(String pVilleLivraison) {
         villeLivraison = pVilleLivraison;
     }
 
-    public Integer getCodePostalLivraison() {
+    public Integer getZipCodeLivraison() {
         return codePostalLivraison;
     }
 
-    public void setCodePostalLivraison(Integer pCodePostalLivraison) {
+    public void setZipCodeLivraison(Integer pCodePostalLivraison) {
         codePostalLivraison = pCodePostalLivraison;
     }
 
@@ -122,12 +122,12 @@ public class OrderEntity {
         if (this == pObject) return true;
         if (pObject == null || getClass() != pObject.getClass()) return false;
         OrderEntity that = (OrderEntity) pObject;
-        return Objects.equals(id, that.id) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(itemsCommande, that.itemsCommande) && etat == that.etat && Objects.equals(numRueLivraison, that.numRueLivraison) && Objects.equals(rueLivraison, that.rueLivraison) && Objects.equals(villeLivraison, that.villeLivraison) && Objects.equals(codePostalLivraison, that.codePostalLivraison) && Objects.equals(date, that.date);
+        return Objects.equals(id, that.id) && Objects.equals(user, that.user) && Objects.equals(itemsCommande, that.itemsCommande) && etat == that.etat && Objects.equals(numRueLivraison, that.numRueLivraison) && Objects.equals(rueLivraison, that.rueLivraison) && Objects.equals(villeLivraison, that.villeLivraison) && Objects.equals(codePostalLivraison, that.codePostalLivraison) && Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, utilisateur, itemsCommande, etat, numRueLivraison, rueLivraison, villeLivraison, codePostalLivraison, date);
+        return Objects.hash(id, user, itemsCommande, etat, numRueLivraison, rueLivraison, villeLivraison, codePostalLivraison, date);
     }
 
     @Override

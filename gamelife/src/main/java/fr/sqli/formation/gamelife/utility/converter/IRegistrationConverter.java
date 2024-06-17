@@ -8,30 +8,30 @@ public interface IRegistrationConverter {
 
 	public static Registration fromEntity(UserEntity entity) {
 		var u = new Registration();
-		u.setPrenom(entity.getPrenom());
-		u.setNom(entity.getNom());
-		u.setMdp(entity.getMdp());
+		u.setFirstName(entity.getFirstName());
+		u.setLastName(entity.getLastName());
+		u.setPassword(entity.getPassword());
 		u.setEmail(entity.getEmail());
-		u.setVille(entity.getVille());
-		u.setRue(entity.getRue());
-		u.setNum_rue(entity.getNumRue());
-		u.setNum_siret(entity.getNumSiren());
-		u.setCode_postal(entity.getCodePostal());
+		u.setCity(entity.getCity());
+		u.setStreet(entity.getStreet());
+		u.setNum_rue(entity.getStreetNumber());
+		u.setNum_siret(entity.getSirenNumber());
+		u.setCode_postal(entity.getZipCode());
 		return u;
 	}
 
 	public static UserEntity fromDto(Registration dto) {
 
 		var u = new UserEntity();
-		u.setPrenom(dto.getPrenom());
-		u.setNom(dto.getNom());
-		u.setMdp(dto.getMdp());
+		u.setFirstName(dto.getFirstName());
+		u.setLastName(dto.getLastName());
+		u.setPassword(dto.getPassword());
 		u.setEmail(dto.getEmail());
-		u.setVille(dto.getVille());
-		u.setRue(dto.getRue());
-		u.setNumRue(dto.getNum_rue());
-		u.setNumSiren(dto.getNum_siret());
-		u.setCodePostal(dto.getCode_postal());
+		u.setCity(dto.getCity());
+		u.setStreet(dto.getStreet());
+		u.setStreetNumber(dto.getNum_rue());
+		u.setSirenNumber(dto.getNum_siret());
+		u.setZipCode(dto.getCode_postal());
 		return u;
 	}
 }

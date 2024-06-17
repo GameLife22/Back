@@ -133,7 +133,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void givenGameName_whenGetGameByName_thenReturnHttpStatusOk() throws Exception {
+    void givenGameName_whenfindByNameContainingIgnoreCase_thenReturnHttpStatusOk() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .header("Authorization", "Bearer " + adminToken)
@@ -150,8 +150,8 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void givenInvalidGameName_whenGetGameByName_thenReturnHttpStatusNotFound() throws Exception {
-        String gameName = RandomStringUtils.randomAlphabetic(20); // warning: max = 50
+    void givenInvalidGameName_whenFindByNameContainingIgnoreCase_thenReturnHttpStatusNotFound() throws Exception {
+        String gameName = RandomStringUtils.randomAlphabetic(4); // warning: max = 50
 
         this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/search?name={name}", gameName)
                         .header("Authorization", "Bearer " + adminToken))

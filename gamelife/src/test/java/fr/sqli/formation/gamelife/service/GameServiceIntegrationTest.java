@@ -63,18 +63,14 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenGameRequest_whenGetGameByName_thenReturnGameResponse() {
+    void givenGameRequest_whenFindByNameContainingIgnoreCase_thenReturnGamesResponses() {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
-        GameResponse gameResponse = this.gameService.getGameByName(createdGameResponse.getName());
+        List<GameResponse> gameResponse = this.gameService.findByNameContainingIgnoreCase("nam");
 
         Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(gameResponse);
-        Assertions.assertEquals(this.gameRequest.getName(), gameResponse.getName());
-        Assertions.assertEquals(this.gameRequest.getDescription(), gameResponse.getDescription());
-        Assertions.assertEquals(this.gameRequest.getGenres(), gameResponse.getGenres());
-        Assertions.assertEquals(this.gameRequest.getPlatforms(), gameResponse.getPlatforms());
-        Assertions.assertEquals(this.gameRequest.getImages(), gameResponse.getImages());
+        Assertions.assertFalse(gameResponse.isEmpty());
     }
 
     @Test

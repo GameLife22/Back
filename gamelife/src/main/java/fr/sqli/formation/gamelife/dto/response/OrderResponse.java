@@ -32,35 +32,35 @@
             etat = pEtat;
         }
 
-        public Integer getNumRueLivraison() {
+        public Integer getStreetNumberLivraison() {
             return numRueLivraison;
         }
 
-        public void setNumRueLivraison(Integer pNumRueLivraison) {
+        public void setStreetNumberLivraison(Integer pNumRueLivraison) {
             numRueLivraison = pNumRueLivraison;
         }
 
-        public String getRueLivraison() {
+        public String getStreetLivraison() {
             return rueLivraison;
         }
 
-        public void setRueLivraison(String pRueLivraison) {
+        public void setStreetLivraison(String pRueLivraison) {
             rueLivraison = pRueLivraison;
         }
 
-        public String getVilleLivraison() {
+        public String getCityLivraison() {
             return villeLivraison;
         }
 
-        public void setVilleLivraison(String pVilleLivraison) {
+        public void setCityLivraison(String pVilleLivraison) {
             villeLivraison = pVilleLivraison;
         }
 
-        public Integer getCodePostalLivraison() {
+        public Integer getZipCodeLivraison() {
             return codePostalLivraison;
         }
 
-        public void setCodePostalLivraison(Integer pCodePostalLivraison) {
+        public void setZipCodeLivraison(Integer pCodePostalLivraison) {
             codePostalLivraison = pCodePostalLivraison;
         }
 

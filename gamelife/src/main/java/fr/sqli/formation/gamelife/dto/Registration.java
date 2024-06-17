@@ -54,19 +54,19 @@ public class Registration {
         etat = pEtat;
     }
 
-    public String getMdp() {
+    public String getPassword() {
         return mdp;
     }
 
-    public void setMdp(String pMdp) {
+    public void setPassword(String pMdp) {
         mdp = pMdp;
     }
 
-    public String getNom() {
+    public String getLastName() {
         return nom;
     }
 
-    public void setNom(String pNom) {
+    public void setLastName(String pNom) {
         nom = pNom;
     }
 
@@ -86,27 +86,27 @@ public class Registration {
         num_siret = pNum_siret;
     }
 
-    public String getPrenom() {
+    public String getFirstName() {
         return prenom;
     }
 
-    public void setPrenom(String pPrenom) {
+    public void setFirstName(String pPrenom) {
         prenom = pPrenom;
     }
 
-    public String getRue() {
+    public String getStreet() {
         return rue;
     }
 
-    public void setRue(String pRue) {
+    public void setStreet(String pRue) {
         rue = pRue;
     }
 
-    public String getVille() {
+    public String getCity() {
         return ville;
     }
 
-    public void setVille(String pVille) {
+    public void setCity(String pVille) {
         ville = pVille;
     }
 

@@ -2,43 +2,43 @@ CREATE SCHEMA IF NOT EXISTS gamelife;
 
 SET search_path TO gamelife;
 
-DROP TABLE IF EXISTS gamelife.glutilisateur CASCADE;
-DROP TABLE IF EXISTS gamelife.glcommande CASCADE;
+DROP TABLE IF EXISTS gamelife.gluser CASCADE;
+DROP TABLE IF EXISTS gamelife.glorder CASCADE;
 DROP TABLE IF EXISTS gamelife.glgame CASCADE;
 DROP TABLE IF EXISTS gamelife.glgenre CASCADE;
 DROP TABLE IF EXISTS gamelife.glplatform;
 DROP TABLE IF EXISTS gamelife.glimage CASCADE;
-DROP TABLE IF EXISTS gamelife.glitem_commande CASCADE;
-DROP TABLE IF EXISTS gamelife.glproduit_revendeur CASCADE;
+DROP TABLE IF EXISTS gamelife.glorder_item CASCADE;
+DROP TABLE IF EXISTS gamelife.glproduct_seller CASCADE;
 
-CREATE TABLE gamelife.glutilisateur
+CREATE TABLE gamelife.gluser
 (
     id                    UUID   PRIMARY KEY,
-    nom                   VARCHAR(50)          NOT NULL,
-    prenom                VARCHAR(50)          NOT NULL,
-    mdp                   VARCHAR(80)          NOT NULL,
+    last_name             VARCHAR(50)          NOT NULL,
+    first_name            VARCHAR(50)          NOT NULL,
+    password              VARCHAR(80)          NOT NULL,
     email                 VARCHAR(80)          NOT NULL UNIQUE,
-    num_rue               INT                  NOT NULL,
-    rue                   VARCHAR(255)         NOT NULL,
-    ville                 VARCHAR(80)          NOT NULL,
-    code_postal           INT                  NOT NULL,
+    street_number         INT                  NOT NULL,
+    street                VARCHAR(255)         NOT NULL,
+    city                  VARCHAR(80)          NOT NULL,
+    zip_code           INT                  NOT NULL,
     role                  VARCHAR(50)          NOT NULL,
-    num_siren             CHAR(9) NULL DEFAULT NULL UNIQUE,
-    etat_compte           BOOLEAN DEFAULT TRUE NOT NULL,
+    siren_number          CHAR(9) NULL DEFAULT NULL UNIQUE,
+    account_status        BOOLEAN DEFAULT TRUE NOT NULL,
     reset_password_token  VARCHAR(30) NULL
 );
 
-CREATE TABLE gamelife.glcommande
+CREATE TABLE gamelife.glorder
 (
     id                    UUID   PRIMARY KEY,
-    etat                  VARCHAR(80)  NOT NULL,
-    num_rue_livraison     INT          NOT NULL,
-    rue_livraison         VARCHAR(255) NOT NULL,
-    ville_livraison       VARCHAR(80)  NOT NULL,
-    code_postal_livraison INT          NOT NULL,
+    status                VARCHAR(80)  NOT NULL,
+    delivery_street_number INT         NOT NULL,
+    delivery_street        VARCHAR(255) NOT NULL,
+    delivery_city          VARCHAR(80)  NOT NULL,
+    delivery_postal_code   INT          NOT NULL,
     date                  DATE         NOT NULL,
-    utilisateur_id        UUID   NOT NULL,
-    FOREIGN KEY (utilisateur_id) REFERENCES gamelife.glutilisateur (id)
+    user_id               UUID         NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES gamelife.gluser (id)
 );
 
 CREATE TABLE gamelife.glgame
@@ -55,9 +55,9 @@ CREATE TABLE gamelife.glgenre (
 );
 
 CREATE TABLE gamelife.glplatform(
-   game_id UUID NOT NULL,
-   platform VARCHAR(255) NOT NULL,
-   CONSTRAINT fk_glplatform_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
+    game_id UUID NOT NULL,
+    platform VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_glplatform_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE gamelife.glimage
@@ -67,24 +67,24 @@ CREATE TABLE gamelife.glimage
     CONSTRAINT fk_glimage_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE gamelife.glproduit_revendeur
+CREATE TABLE gamelife.glproduct_seller
 (
     id             UUID   PRIMARY KEY,
     stock          INT            NOT NULL,
-    prix           DECIMAL(10, 0) NOT NULL,
-    etat           VARCHAR(25)    NOT NULL,
-    game_id     UUID             NOT NULL,
-    utilisateur_id UUID             NOT NULL,
+    price          DECIMAL(10, 0) NOT NULL,
+    status         VARCHAR(25)    NOT NULL,
+    game_id        UUID           NOT NULL,
+    user_id        UUID           NOT NULL,
     FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id),
-    FOREIGN KEY (utilisateur_id) REFERENCES gamelife.glutilisateur (id)
+    FOREIGN KEY (user_id) REFERENCES gamelife.gluser (id)
 );
 
-CREATE TABLE gamelife.glitem_commande
+CREATE TABLE gamelife.glorder_item
 (
     id                    UUID   PRIMARY KEY,
-    quantite              INT NOT NULL,
-    commande_id           UUID   NOT NULL,
-    produit_revendeur_id  UUID   NOT NULL,
-    FOREIGN KEY (commande_id) REFERENCES gamelife.glcommande (id),
-    FOREIGN KEY (produit_revendeur_id) REFERENCES gamelife.glproduit_revendeur (id)
+    quantity              INT NOT NULL,
+    order_id              UUID   NOT NULL,
+    product_seller_id     UUID   NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES gamelife.glorder (id),
+    FOREIGN KEY (product_seller_id) REFERENCES gamelife.glproduct_seller (id)
 );

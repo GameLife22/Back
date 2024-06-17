@@ -33,10 +33,14 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public GameResponse getGameByName(String pGameName) {
-        LOGGER.info("Getting game by name: {}", pGameName);
-        return IGameConverter.convertGameEntityToGameResponse(this.gameRepository.findByName(pGameName)
-                .orElseThrow(() -> new EntityNotFoundException("Game not found for name: " + pGameName)));
+    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName) {
+        LOGGER.info("Searching for game by name containing (case-insensitive): {}", pGameName);
+        List<GameEntity> gamesEntities = this.gameRepository.findByNameContainingIgnoreCase(pGameName);
+
+        if(gamesEntities.isEmpty())
+            throw new EntityNotFoundException("No games found with the name: " + pGameName);
+
+        return IGameConverter.convertGamesEntitiesToGamesResponse(gamesEntities);
     }
 
     @Override
@@ -50,7 +54,7 @@ public class GameService implements IGameService {
     public Page<GameResponse> getGamesByPage(int pPage, int pTotalPages) {
         LOGGER.info("Getting games for page: {} with total pages: {}", pPage, pTotalPages);
         Pageable pageable = PageRequest.of(pPage, pTotalPages);
-        return IGameConverter.convertGamesEntitiesToPageGameResponse(this.gameRepository.findAll(pageable));
+        return IGameConverter.convertGamesEntitiesToPageGamesResponses(this.gameRepository.findAll(pageable));
     }
 
     @Override
@@ -70,12 +74,21 @@ public class GameService implements IGameService {
         return IGameConverter.convertGameEntityToGameResponse(savedGameEntity);
     }
 
+    /**
+     * Updates the fields of an existing GameEntity object with the values from a GameRequest object.
+     *
+     * @param pGameRequest The GameRequest object containing the new values for the fields.
+     * @param existingGameEntity The existing GameEntity object to be updated.
+     * @return The updated GameEntity object with fields modified based on the GameRequest object.
+     */
     private static GameEntity updateGameEntityFromRequest(GameRequest pGameRequest, GameEntity existingGameEntity) {
+        LOGGER.info("Updating game entity from request: {}", pGameRequest.getId());
         existingGameEntity.setName(pGameRequest.getName());
         existingGameEntity.setDescription(pGameRequest.getDescription());
         existingGameEntity.setGenres(pGameRequest.getGenres());
         existingGameEntity.setPlatforms(pGameRequest.getPlatforms());
         existingGameEntity.setImages(pGameRequest.getImages());
+        LOGGER.info("Game entity updated successfully: {}", existingGameEntity.getId());
         return existingGameEntity;
     }
 

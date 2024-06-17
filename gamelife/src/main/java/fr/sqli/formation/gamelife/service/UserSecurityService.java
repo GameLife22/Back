@@ -21,7 +21,7 @@ public class UserSecurityService implements UserDetails {
     public UserSecurityService(String username, String encodedPassword, Collection<? extends GrantedAuthority> authorities) {
         this.user = new UserEntity();
         this.user.setEmail(username);
-        this.user.setMdp(encodedPassword);
+        this.user.setPassword(encodedPassword);
         this.user.setRole(authorities.stream()
                 .map(GrantedAuthority::getAuthority)
         .reduce("", String::concat));
@@ -34,7 +34,7 @@ public class UserSecurityService implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getMdp();
+        return user.getPassword();
     }
 
     @Override

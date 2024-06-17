@@ -11,14 +11,14 @@ public interface ILoginConverter {
         //todo: replace
         //u.setId(entity.getId());
         u.setEmail(entity.getEmail());
-        u.setNom(entity.getNom());
-        u.setEtat(entity.getEtatCompte());
-        u.setNum_rue(entity.getNumRue());
-        u.setRue(entity.getRue());
-        u.setNum_siren(entity.getNumSiren());
-        u.setPrenom(entity.getPrenom());
-        u.setVille(entity.getVille());
-        u.setCode_postal(entity.getCodePostal());
+        u.setLastName(entity.getLastName());
+        u.setEtat(entity.getAccountStatus());
+        u.setNum_rue(entity.getStreetNumber());
+        u.setStreet(entity.getStreet());
+        u.setNum_siren(entity.getSirenNumber());
+        u.setFirstName(entity.getFirstName());
+        u.setCity(entity.getCity());
+        u.setCode_postal(entity.getZipCode());
         return u;
     }
 
@@ -26,7 +26,7 @@ public interface ILoginConverter {
 
         var u = new UserEntity();
         u.setEmail(dto.email());
-        u.setMdp(dto.password());
+        u.setPassword(dto.password());
         return u;
     }
 }

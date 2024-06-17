@@ -57,18 +57,18 @@ public class GameRestController {
     }
 
     /**
-     * Retrieves a game by its name.
+     * Retrieves a list of games whose names contain the provided game name (case-insensitive).
      *
-     * @param pGameName The name of the game to retrieve
-     * @return ResponseEntity<GameResponse> The HTTP response entity containing the game response if found, HttpStatus.NOT_FOUND otherwise
+     * @param pGameName The name to search for within game names
+     * @return ResponseEntity<List<GameResponse>> The HTTP response entity containing the list of GameResponse objects if successful, HttpStatus.NOT_FOUND otherwise
      */
     @GetMapping("/games/search")
-    public ResponseEntity<GameResponse> getGameByName(@RequestParam("name") String pGameName) {
+    public ResponseEntity<List<GameResponse>> findByNameContainingIgnoreCase(@RequestParam("name") String pGameName) {
         try {
             LOGGER.info("Fetching game by name: {}", pGameName);
-            GameResponse gameResponse = this.service.getGameByName(pGameName);
-            LOGGER.info("Game retrieved successfully by name: {}", pGameName);
-            return ResponseEntity.ok(gameResponse);
+            List<GameResponse> gamesResponses = this.service.findByNameContainingIgnoreCase(pGameName);
+            LOGGER.info("Game(s) retrieved successfully by name: {}", pGameName);
+            return ResponseEntity.ok(gamesResponses);
         } catch (Exception e) {
             LOGGER.error("Error occurred while fetching game by name: {}", pGameName, e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

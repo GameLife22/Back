@@ -62,7 +62,7 @@ def send_game_to_backend(game, token):
 if __name__ == "__main__":
     token = get_token()
     if token:
-        for game_id in range(1, 500):
+        for game_id in range(1, 100):
             game = get_game_details(game_id)
             if game and len(game['genres']) > 0 and len(game['platforms']) > 0:
                 send_game_to_backend(game, token)

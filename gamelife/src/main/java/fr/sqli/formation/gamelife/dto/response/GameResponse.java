@@ -12,6 +12,7 @@ import java.util.UUID;
  * genres, platforms, and a list of images associated with the game.
  */
 public class GameResponse {
+
     UUID id;
     String name;
     String description;

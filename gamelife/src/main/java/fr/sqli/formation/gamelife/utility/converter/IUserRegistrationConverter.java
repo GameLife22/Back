@@ -9,8 +9,8 @@ public interface IUserRegistrationConverter {
     public static UserRegistration fromEntity(UserEntity entity) {
         var u = new UserRegistration();
         u.setId(entity.getId());
-        u.setNom(entity.getNom());
-        u.setPrenom(entity.getPrenom());
+        u.setLastName(entity.getLastName());
+        u.setFirstName(entity.getFirstName());
         return u;
     }
 
@@ -18,8 +18,8 @@ public interface IUserRegistrationConverter {
 
         var u = new UserEntity();
         u.setId(dto.getId());
-        u.setNom(dto.getNom());
-        u.setPrenom(dto.getPrenom());
+        u.setLastName(dto.getLastName());
+        u.setFirstName(dto.getFirstName());
         return u;
     }
 
