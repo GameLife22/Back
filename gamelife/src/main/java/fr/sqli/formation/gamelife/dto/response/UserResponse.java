@@ -18,19 +18,19 @@ public class UserResponse {
         this.num_siret = num_siret;
     }
 
-    public String getNom() {
+    public String getLastName() {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setLastName(String nom) {
         this.nom = nom;
     }
 
-    public String getPrenom() {
+    public String getFirstName() {
         return prenom;
     }
 
-    public void setPrenom(String prenom) {
+    public void setFirstName(String prenom) {
         this.prenom = prenom;
     }
 
@@ -50,19 +50,19 @@ public class UserResponse {
         this.num_rue = num_rue;
     }
 
-    public String getRue() {
+    public String getStreet() {
         return rue;
     }
 
-    public void setRue(String rue) {
+    public void setStreet(String rue) {
         this.rue = rue;
     }
 
-    public String getVille() {
+    public String getCity() {
         return ville;
     }
 
-    public void setVille(String ville) {
+    public void setCity(String ville) {
         this.ville = ville;
     }
 

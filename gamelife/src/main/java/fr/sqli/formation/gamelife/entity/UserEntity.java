@@ -6,48 +6,48 @@ import java.util.UUID;
 import java.util.List;
 
 @Entity
-@Table(name = "glutilisateur", schema = "gamelife")
+@Table(name = "gluser", schema = "gamelife")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true, nullable = false)
     private UUID id;
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
-    private List<OrderEntity> commandes = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<OrderEntity> orders = new ArrayList<>();
 
-    @Column(name = "nom", nullable = false, length = 50)
-    private String nom;
+    @Column(name = "last_name", nullable = false, length = 50)
+    private String lastName;
 
-    @Column(name = "prenom", nullable = false, length = 50)
-    private String prenom;
+    @Column(name = "first_name", nullable = false, length = 50)
+    private String firstName;
 
-    @Column(name = "mdp", nullable = false, length = 80)
-    private String mdp;
+    @Column(name = "password", nullable = false, length = 80)
+    private String password;
 
     @Column(name = "email", nullable = false, length = 80)
     private String email;
 
-    @Column(name = "num_rue", nullable = false)
-    private Integer numRue;
+    @Column(name = "street_number", nullable = false)
+    private Integer streetNumber;
 
-    @Column(name = "rue", nullable = false)
-    private String rue;
+    @Column(name = "street", nullable = false)
+    private String street;
 
-    @Column(name = "ville", nullable = false, length = 80)
-    private String ville;
+    @Column(name = "city", nullable = false, length = 80)
+    private String city;
 
-    @Column(name = "code_postal", nullable = false)
-    private Integer codePostal;
+    @Column(name = "zip_code", nullable = false)
+    private Integer zipCode;
 
     @Column(name = "role", nullable = false, length = 50)
     private String role;
 
-    @Column(name = "num_siren", length = 9)
-    private String numSiren;
+    @Column(name = "siren_number", length = 9)
+    private String sirenNumber;
 
-    @Column(name = "etat_compte", nullable = false)
-    private Boolean etatCompte = false;
+    @Column(name = "account_status", nullable = false)
+    private Boolean accountStatus = false;
 
     @Column(name = "reset_password_token", length = 30)
     private String resetPasswordToken;
@@ -55,22 +55,22 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(String pNom, String pPrenom, String pMdp, String pEmail, Integer pNumRue, String pRue, String pVille, Integer pCodePostal, String pRole, String pNumSiren, Boolean pEtatCompte, String pResetPasswordToken) {
-        nom = pNom;
-        prenom = pPrenom;
-        mdp = pMdp;
+    public UserEntity(String pLastName, String pFirstName, String pPassword, String pEmail, Integer pStreetNumber, String pStreet, String pCity, Integer pZipCode, String pRole, String pSirenNumber, Boolean pAccountStatus, String pResetPasswordToken) {
+        lastName = pLastName;
+        firstName = pFirstName;
+        password = pPassword;
         email = pEmail;
-        numRue = pNumRue;
-        rue = pRue;
-        ville = pVille;
-        codePostal = pCodePostal;
+        streetNumber = pStreetNumber;
+        street = pStreet;
+        city = pCity;
+        zipCode = pZipCode;
         role = pRole;
-        numSiren = pNumSiren;
-        etatCompte = pEtatCompte;
+        sirenNumber = pSirenNumber;
+        accountStatus = pAccountStatus;
         resetPasswordToken = pResetPasswordToken;
     }
 
-    public UserEntity(UUID pUtilisateurId) {
+    public UserEntity(UUID pUserId) {
     }
 
     public UUID getId() {
@@ -81,36 +81,36 @@ public class UserEntity {
         this.id = id;
     }
 
-    public List<OrderEntity> getCommandes() {
-        return commandes;
+    public List<OrderEntity> getOrders() {
+        return orders;
     }
 
-    public void setCommandes(List<OrderEntity> commandes) {
-        this.commandes = commandes;
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 
-    public String getNom() {
-        return nom;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getMdp() {
-        return mdp;
+    public String getPassword() {
+        return password;
     }
 
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -121,36 +121,36 @@ public class UserEntity {
         this.email = email;
     }
 
-    public Integer getNumRue() {
-        return numRue;
+    public Integer getStreetNumber() {
+        return streetNumber;
     }
 
-    public void setNumRue(Integer numRue) {
-        this.numRue = numRue;
+    public void setStreetNumber(Integer streetNumber) {
+        this.streetNumber = streetNumber;
     }
 
-    public String getRue() {
-        return rue;
+    public String getStreet() {
+        return street;
     }
 
-    public void setRue(String rue) {
-        this.rue = rue;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public String getVille() {
-        return ville;
+    public String getCity() {
+        return city;
     }
 
-    public void setVille(String ville) {
-        this.ville = ville;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public Integer getCodePostal() {
-        return codePostal;
+    public Integer getZipCode() {
+        return zipCode;
     }
 
-    public void setCodePostal(Integer codePostal) {
-        this.codePostal = codePostal;
+    public void setZipCode(Integer zipCode) {
+        this.zipCode = zipCode;
     }
 
     public String getRole() {
@@ -161,20 +161,20 @@ public class UserEntity {
         this.role = role;
     }
 
-    public String getNumSiren() {
-        return numSiren;
+    public String getSirenNumber() {
+        return sirenNumber;
     }
 
-    public void setNumSiren(String numSiren) {
-        this.numSiren = numSiren;
+    public void setSirenNumber(String sirenNumber) {
+        this.sirenNumber = sirenNumber;
     }
 
-    public Boolean getEtatCompte() {
-        return etatCompte;
+    public Boolean getAccountStatus() {
+        return accountStatus;
     }
 
-    public void setEtatCompte(Boolean etatCompte) {
-        this.etatCompte = etatCompte;
+    public void setAccountStatus(Boolean accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
     public String getResetPasswordToken() {
@@ -185,37 +185,36 @@ public class UserEntity {
         this.resetPasswordToken = resetPasswordToken;
     }
 
-    public static void validate(String nom, String prenom, String pwd, String email, String ville, Integer num_rue, String rue, String num_Siren, Integer code_postal) throws Exception{
-        if(!(nom != null && !nom.trim().isEmpty() &&
-                prenom != null && !prenom.trim().isEmpty() &&
+    public static void validate(String lastName, String firstName, String pwd, String email, String city, Integer streetNumber, String street, String sirenNumber, Integer postalCode) throws Exception {
+        if (!(lastName != null && !lastName.trim().isEmpty() &&
+                firstName != null && !firstName.trim().isEmpty() &&
                 email != null && !email.trim().isEmpty() &&
                 email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") &&
                 pwd != null && !pwd.trim().isEmpty() &&
                 pwd.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$") &&
-                num_rue != null && num_rue >= 0 &&
-                rue != null && !rue.trim().isEmpty() &&
-                ville != null && !ville.trim().isEmpty()) &&
-                code_postal != null && code_postal > 0){
-            throw new IllegalArgumentException("Champs invalides");
-
+                streetNumber != null && streetNumber >= 0 &&
+                street != null && !street.trim().isEmpty() &&
+                city != null && !city.trim().isEmpty()) &&
+                postalCode != null && postalCode > 0) {
+            throw new IllegalArgumentException("Invalid fields");
         }
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("UtilisateurEntity{");
+        final StringBuffer sb = new StringBuffer("UserEntity{");
         sb.append("id=").append(id);
-        sb.append(", nom='").append(nom).append('\'');
-        sb.append(", prenom='").append(prenom).append('\'');
-        sb.append(", mdp='").append(mdp).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", password='").append(password).append('\'');
         sb.append(", email='").append(email).append('\'');
-        sb.append(", numRue=").append(numRue);
-        sb.append(", rue='").append(rue).append('\'');
-        sb.append(", ville='").append(ville).append('\'');
-        sb.append(", codePostal=").append(codePostal);
+        sb.append(", streetNumber=").append(streetNumber);
+        sb.append(", street='").append(street).append('\'');
+        sb.append(", city='").append(city).append('\'');
+        sb.append(", zipCode=").append(zipCode);
         sb.append(", role='").append(role).append('\'');
-        sb.append(", numSiren='").append(numSiren).append('\'');
-        sb.append(", etatCompte=").append(etatCompte);
+        sb.append(", sirenNumber='").append(sirenNumber).append('\'');
+        sb.append(", accountStatus=").append(accountStatus);
         sb.append(", resetPasswordToken='").append(resetPasswordToken).append('\'');
         sb.append('}');
         return sb.toString();

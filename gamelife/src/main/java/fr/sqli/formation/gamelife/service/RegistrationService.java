@@ -26,7 +26,7 @@ public class RegistrationService {
 
     public UserEntity inscription(Registration dto) throws Exception{
         LOGGER.info("Inscription - {}", dto.getEmail());
-        UserEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getNum_siret(), dto.getCode_postal());
+        UserEntity.validate(dto.getLastName(),dto.getFirstName(), dto.getPassword(), dto.getEmail(),dto.getCity(),dto.getNum_rue(),dto.getStreet(), dto.getNum_siret(), dto.getCode_postal());
             var newUser = uDao.findByEmail(dto.getEmail());
             String token = ISecureTokenGenerator.generateToken(22);
             if(newUser.isEmpty()){
@@ -36,21 +36,21 @@ public class RegistrationService {
                 }else{
                     u.setRole("ROLE_REVENDEUR");
                 }
-                u.setMdp(encoder.encode(u.getMdp()));
-                u.setEtatCompte(false);
+                u.setPassword(encoder.encode(u.getPassword()));
+                u.setAccountStatus(false);
                 u.setResetPasswordToken(token);
                 return uDao.saveAndFlush(u);
             }else {
-                if(!newUser.get().getEtatCompte()){
-                    newUser.get().setEtatCompte(false);
-                    newUser.get().setNom(dto.getNom());
-                    newUser.get().setPrenom(dto.getPrenom());
-                    newUser.get().setMdp(encoder.encode(dto.getMdp()));
+                if(!newUser.get().getAccountStatus()){
+                    newUser.get().setAccountStatus(false);
+                    newUser.get().setLastName(dto.getLastName());
+                    newUser.get().setFirstName(dto.getFirstName());
+                    newUser.get().setPassword(encoder.encode(dto.getPassword()));
                     newUser.get().setEmail(dto.getEmail());
-                    newUser.get().setVille(dto.getVille());
-                    newUser.get().setCodePostal(dto.getCode_postal());
-                    newUser.get().setRue(dto.getRue());
-                    newUser.get().setNumRue(dto.getNum_rue());
+                    newUser.get().setCity(dto.getCity());
+                    newUser.get().setZipCode(dto.getCode_postal());
+                    newUser.get().setStreet(dto.getStreet());
+                    newUser.get().setStreetNumber(dto.getNum_rue());
 
                     if( dto.getNum_siret() == null ){
                         newUser.get().setRole("ROLE_ACHETEUR");
@@ -58,7 +58,7 @@ public class RegistrationService {
                         newUser.get().setRole("ROLE_REVENDEUR");
                     }
 
-                    newUser.get().setNumSiren(dto.getNum_siret());
+                    newUser.get().setSirenNumber(dto.getNum_siret());
                     return uDao.saveAndFlush(newUser.get());
                 }else{
                     throw new ExistingUserException("Utilisateur deja enregistre");
@@ -92,7 +92,7 @@ public class RegistrationService {
         var result = this.uDao.findByEmail(email);
         if (result.isPresent()) {
             var user = result.get();
-            if (!user.getEtatCompte()) {
+            if (!user.getAccountStatus()) {
                 LOGGER.info("validateAccount - found user with ID {}", user.getId());
 
 
@@ -101,7 +101,7 @@ public class RegistrationService {
                 this.service.sendEmailValidationInscription(email,resetPasswordLink);
                 return;
             }
-            LOGGER.warn("validateAccount - {}, Status {}", email, user.getEtatCompte());
+            LOGGER.warn("validateAccount - {}, Status {}", email, user.getAccountStatus());
 
         }else {
             LOGGER.warn("validateAccount - No user found with email={}", email);
@@ -111,7 +111,7 @@ public class RegistrationService {
     }
     public void activateAccount(String token){
         UserEntity u = uDao.findByResetPasswordToken(token);
-        u.setEtatCompte(true);
+        u.setAccountStatus(true);
         u.setResetPasswordToken(null);
         uDao.save(u);
     }

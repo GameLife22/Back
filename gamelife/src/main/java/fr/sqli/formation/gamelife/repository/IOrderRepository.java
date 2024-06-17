@@ -15,5 +15,5 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, UUID> {
     @Query("SELECT c FROM OrderEntity c JOIN FETCH c.itemsCommande WHERE c.id = :id")
     Optional<OrderEntity> findByIdWithItemCommandes(@Param("id") UUID id);
 
-    Optional<OrderEntity> findByUtilisateurId(UUID pIdUtilisateur);
+    Optional<OrderEntity> findByUserId(UUID pIdUtilisateur);
 }

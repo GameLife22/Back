@@ -46,7 +46,7 @@ public class PasswordRestController {
 
     @PostMapping("/mdpreset")
     public void mdpreset(@RequestBody ResetPasswordRequest monbody, @RequestParam String token) {
-        LOGGER.info("MdpResetControler : IN {} {}", token,monbody.getPwd());
+        LOGGER.info("MdpResetControler : IN {} {}", token,monbody.getPassword());
         UserEntity user = userService.getByResetPasswordToken(token);
         userService.modifierMotDePasse(user,monbody);
         LOGGER.info("MdpResetControler : OUT ");

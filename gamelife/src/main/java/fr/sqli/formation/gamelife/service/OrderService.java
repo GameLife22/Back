@@ -117,10 +117,10 @@ public class OrderService implements IOrderService {
 
         // Mettre à jour les informations de la commande avec les données fournies dans le DTO
         existingCommande.setEtat(commandeDto.getEtat());
-        existingCommande.setNumRueLivraison(commandeDto.getNumRueLivraison());
-        existingCommande.setRueLivraison(commandeDto.getRueLivraison());
-        existingCommande.setVilleLivraison(commandeDto.getVilleLivraison());
-        existingCommande.setCodePostalLivraison(commandeDto.getCodePostalLivraison());
+        existingCommande.setStreetNumberLivraison(commandeDto.getStreetNumberLivraison());
+        existingCommande.setStreetLivraison(commandeDto.getStreetLivraison());
+        existingCommande.setCityLivraison(commandeDto.getCityLivraison());
+        existingCommande.setZipCodeLivraison(commandeDto.getZipCodeLivraison());
         existingCommande.setDate(commandeDto.getDate());
 
         iOrderRepository.save(existingCommande);
@@ -206,7 +206,7 @@ public class OrderService implements IOrderService {
     @Override
     public ItemOrderResponse ajoutProduit(UUID pIdUtilisateur, ItemOrderRequest pItemOrderRequest) throws SellerGameException, ParameterException, OrderNotFoundException, InvalidStatusOrderException {
         // Chercher la commande de l'utilisateur
-        OrderEntity orderEntity = iOrderRepository.findByUtilisateurId(pIdUtilisateur)
+        OrderEntity orderEntity = iOrderRepository.findByUserId(pIdUtilisateur)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'identifiant : " + pIdUtilisateur));
 
         // Vérifier si la commande est dans un état permettant l'ajout de produit

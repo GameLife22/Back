@@ -15,19 +15,19 @@ public class UserRegistration {
         id = pId;
     }
 
-    public String getNom() {
+    public String getLastName() {
         return nom;
     }
 
-    public void setNom(String pNom) {
+    public void setLastName(String pNom) {
         nom = pNom;
     }
 
-    public String getPrenom() {
+    public String getFirstName() {
         return prenom;
     }
 
-    public void setPrenom(String pPrenom) {
+    public void setFirstName(String pPrenom) {
         prenom = pPrenom;
     }
 }

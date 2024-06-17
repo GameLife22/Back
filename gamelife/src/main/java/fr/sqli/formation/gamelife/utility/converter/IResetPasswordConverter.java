@@ -8,7 +8,7 @@ public interface IResetPasswordConverter {
     public static UserEntity toEntity(ResetPasswordRequest dto) {
 
         var u = new UserEntity();
-        u.setMdp(dto.getPwd());
+        u.setPassword(dto.getPassword());
         return u;
     }
 }

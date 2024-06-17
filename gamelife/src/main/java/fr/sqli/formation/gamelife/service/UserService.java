@@ -68,7 +68,7 @@ public class UserService {
         var result = this.repository.findByEmail(pEmail);
         if (result.isPresent()) {
             var user = result.get();
-            if (user.getEtatCompte()) {
+            if (user.getAccountStatus()) {
                 UserService.LOGGER.debug("forgotPassword - found user with ID {}", user.getId());
                 String token = ISecureTokenGenerator.generateToken(22);
 
@@ -79,7 +79,7 @@ public class UserService {
                 this.emailService.sendEmail(pEmail,resetPasswordLink);
                 return;
             }
-            UserService.LOGGER.warn("forgotPassword - {}, Status {}", pEmail, user.getEtatCompte());
+            UserService.LOGGER.warn("forgotPassword - {}, Status {}", pEmail, user.getAccountStatus());
             throw new DisableAccountException("Compte Desactive");
         }
         UserService.LOGGER.warn("forgotPassword - No user found with email={}", pEmail);
@@ -104,10 +104,10 @@ public class UserService {
 
     public void modifierMotDePasse(UserEntity user, ResetPasswordRequest dto) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        LOGGER.info("MDP : {}",dto.getPwd());
-        String encodedPassword = passwordEncoder.encode(dto.getPwd());
+        LOGGER.info("MDP : {}",dto.getPassword());
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
         LOGGER.info("MDP Encoded : {}",encodedPassword);
-        user.setMdp(encodedPassword);
+        user.setPassword(encodedPassword);
         user.setResetPasswordToken(null);
         repository.save(user);
     }

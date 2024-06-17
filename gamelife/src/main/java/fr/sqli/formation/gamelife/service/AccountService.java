@@ -27,11 +27,11 @@ public class AccountService {
         var control = uDao.findByEmail(dto.getEmail());
         if(user.isPresent()){
             UserEntity u = user.get();
-            if (dto.getPrenom() != null && !dto.getPrenom().isEmpty()) {
-                u.setPrenom(dto.getPrenom());
+            if (dto.getFirstName() != null && !dto.getFirstName().isEmpty()) {
+                u.setFirstName(dto.getFirstName());
             }
-            if (dto.getNom()!= null && !dto.getNom().isEmpty()) {
-                u.setNom(dto.getNom());
+            if (dto.getLastName()!= null && !dto.getLastName().isEmpty()) {
+                u.setLastName(dto.getLastName());
             }
             if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
                 if (control.isEmpty()) {
@@ -43,19 +43,19 @@ public class AccountService {
                 }
             }
             if (dto.getNum_rue() != null && dto.getNum_rue() != 0) {
-                u.setNumRue(dto.getNum_rue());
+                u.setStreetNumber(dto.getNum_rue());
             }
-            if (dto.getRue() != null && !dto.getRue().isEmpty()) {
-                u.setRue(dto.getRue());
+            if (dto.getStreet() != null && !dto.getStreet().isEmpty()) {
+                u.setStreet(dto.getStreet());
             }
-            if (dto.getVille() != null && !dto.getVille().isEmpty()) {
-                u.setVille(dto.getVille());
+            if (dto.getCity() != null && !dto.getCity().isEmpty()) {
+                u.setCity(dto.getCity());
             }
-            if (dto.getCodePostal() != null && dto.getCodePostal() != 0) {
-                u.setCodePostal(dto.getCodePostal());
+            if (dto.getZipCode() != null && dto.getZipCode() != 0) {
+                u.setZipCode(dto.getZipCode());
             }
-            if (dto.getNumSiren() != null && !dto.getNumSiren().isEmpty()) {
-                u.setNumSiren(dto.getNumSiren());
+            if (dto.getSirenNumber() != null && !dto.getSirenNumber().isEmpty()) {
+                u.setSirenNumber(dto.getSirenNumber());
             }
             return uDao.save(u);
         }else {
@@ -70,13 +70,13 @@ public class AccountService {
             if(dto.getNew_mdp() == null || dto.getNew_mdp().isEmpty() || dto.getOld_mdp() == null || dto.getOld_mdp().isEmpty()){
                 throw new IllegalArgumentException("Champs vide ou null");
             }
-            if (!encoder.matches(dto.getOld_mdp(), u.getMdp())){
+            if (!encoder.matches(dto.getOld_mdp(), u.getPassword())){
                 throw new OldPasswordException("Mot de passe incorrect");
             }
-            if(encoder.matches(dto.getNew_mdp(), u.getMdp())){
+            if(encoder.matches(dto.getNew_mdp(), u.getPassword())){
                 throw new OldPasswordException("Mot de passe déjà utilise");
             }
-            u.setMdp(encoder.encode(dto.getNew_mdp()));
+            u.setPassword(encoder.encode(dto.getNew_mdp()));
             return uDao.save(u);
         } else {
             throw new ExistingUserException("utilisateur inéxistant");
@@ -90,7 +90,7 @@ public class AccountService {
             if (dto.getNew_etat() == null){
                 throw  new IllegalArgumentException();
             }
-            u.setEtatCompte(dto.getNew_etat());
+            u.setAccountStatus(dto.getNew_etat());
             return uDao.save(u);
         } else {
             throw new ExistingUserException("utilisateur inexistant");
@@ -103,7 +103,7 @@ public class AccountService {
             throw new ExistingUserException("utilisateur inexistant");
         }
         UserEntity u = uDao.findById(id).get();
-        if (u.getNumSiren() != null && !u.getNumSiren().isEmpty()) {
+        if (u.getSirenNumber() != null && !u.getSirenNumber().isEmpty()) {
             return true;
         }
         return false;
