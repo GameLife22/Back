@@ -69,7 +69,7 @@ public class UserService {
         if (result.isPresent()) {
             var user = result.get();
             if (user.getEtatCompte()) {
-                UserService.LOGGER.debug("forgotPassword - found user with id {}", user.getId());
+                UserService.LOGGER.debug("forgotPassword - found user with ID {}", user.getId());
                 String token = ISecureTokenGenerator.generateToken(22);
 
                 this.modifierResetPasswordToken(token,pEmail);

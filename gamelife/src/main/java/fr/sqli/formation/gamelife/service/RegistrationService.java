@@ -93,7 +93,7 @@ public class RegistrationService {
         if (result.isPresent()) {
             var user = result.get();
             if (!user.getEtatCompte()) {
-                LOGGER.info("validateAccount - found user with id {}", user.getId());
+                LOGGER.info("validateAccount - found user with ID {}", user.getId());
 
 
                 String resetPasswordLink = "http://localhost:4200/activationcompte?token=" + user.getResetPasswordToken();

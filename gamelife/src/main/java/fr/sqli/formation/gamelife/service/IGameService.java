@@ -15,12 +15,12 @@ import java.util.UUID;
 public interface IGameService {
 
     /**
-     * Retrieves a specific game by its name.
+     * Retrieves a list of GameResponse objects that contain the provided game name (case-insensitive).
      *
-     * @param pGameName the name of the game to retrieve
-     * @return a GameResponse object representing the game with the provided name
+     * @param pGameName the name of the game to search for
+     * @return a list of GameResponse objects that match the provided game name
      */
-    public GameResponse getGameByName(String pGameName);
+    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName);
 
     /**
      * Represents a service class for retrieving game information.

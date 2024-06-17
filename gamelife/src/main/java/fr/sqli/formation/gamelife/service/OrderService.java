@@ -92,7 +92,7 @@ public class OrderService implements IOrderService {
     public OrderRequest creerCommande(OrderRequest commandeDto) throws NonExistentUserException {
         // Vérifier si l'utilisateur existe
         UserEntity utilisateur = IUserRepository.findById(commandeDto.getIdUtilisateur())
-                .orElseThrow(() -> new NonExistentUserException("User not found with id: " + commandeDto.getIdUtilisateur()));
+                .orElseThrow(() -> new NonExistentUserException("User not found with ID: " + commandeDto.getIdUtilisateur()));
 
         OrderEntity orderEntity = IOrderConverter.DtoToEntity(commandeDto);
 

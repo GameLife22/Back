@@ -24,6 +24,14 @@ public interface IGameRepository extends JpaRepository<GameEntity, UUID> {
     public Optional<GameEntity> findByName(String pGameName);
 
     /**
+     * Retrieves an Optional of GameEntity by searching for a game with a name containing the specified case-insensitive substring.
+     *
+     * @param pGameName the case-insensitive substring to search for in the game names
+     * @return an Optional containing the GameEntity if found, empty otherwise
+     */
+    public List<GameEntity> findByNameContainingIgnoreCase(String pGameName);
+
+    /**
      * Deletes all entities with the specified IDs.
      */
     void deleteAllByIdIn(List<UUID> pGamesIds);

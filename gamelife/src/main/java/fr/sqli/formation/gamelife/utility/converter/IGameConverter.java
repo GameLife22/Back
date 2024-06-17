@@ -56,12 +56,24 @@ public interface IGameConverter {
      * @param pGamesEntities The Page of GameEntity objects to be converted
      * @return The converted Page of GameResponse objects
      */
-    public static Page<GameResponse> convertGamesEntitiesToPageGameResponse(Page<GameEntity> pGamesEntities) {
-        List<GameResponse> produitReponse = pGamesEntities.stream()
+    public static Page<GameResponse> convertGamesEntitiesToPageGamesResponses(Page<GameEntity> pGamesEntities) {
+        List<GameResponse> produitsReponses = pGamesEntities.stream()
                 .map(IGameConverter::convertGameEntityToGameResponse)
                 .toList();
 
         Pageable pageable = pGamesEntities.getPageable();
-        return new PageImpl<>(produitReponse, pageable, pGamesEntities.getTotalElements());
+        return new PageImpl<>(produitsReponses, pageable, pGamesEntities.getTotalElements());
+    }
+
+    /**
+     * Converts a list of GameEntity objects to a list of GameResponse objects.
+     *
+     * @param pGamesEntities The list of GameEntity objects to be converted
+     * @return The converted list of GameResponse objects
+     */
+    public static List<GameResponse> convertGamesEntitiesToGamesResponse(List<GameEntity> pGamesEntities) {
+        return pGamesEntities.stream()
+                .map(IGameConverter::convertGameEntityToGameResponse)
+                .toList();
     }
 }
