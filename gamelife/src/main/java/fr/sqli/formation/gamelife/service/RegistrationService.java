@@ -26,7 +26,7 @@ public class RegistrationService {
 
     public UserEntity inscription(Registration dto) throws Exception{
         LOGGER.info("Inscription - {}", dto.getEmail());
-        UserEntity.validate(dto.getLastName(),dto.getFirstName(), dto.getPassword(), dto.getEmail(),dto.getCity(),dto.getNum_rue(),dto.getStreet(), dto.getNum_siret(), dto.getCode_postal());
+        UserEntity.validate(dto.getNom(),dto.getPrenom(), dto.getMdp(), dto.getEmail(),dto.getVille(),dto.getNum_rue(),dto.getRue(), dto.getNum_siret(), dto.getCode_postal());
             var newUser = uDao.findByEmail(dto.getEmail());
             String token = ISecureTokenGenerator.generateToken(22);
             if(newUser.isEmpty()){
@@ -43,13 +43,13 @@ public class RegistrationService {
             }else {
                 if(!newUser.get().getAccountStatus()){
                     newUser.get().setAccountStatus(false);
-                    newUser.get().setLastName(dto.getLastName());
-                    newUser.get().setFirstName(dto.getFirstName());
-                    newUser.get().setPassword(encoder.encode(dto.getPassword()));
+                    newUser.get().setLastName(dto.getNom());
+                    newUser.get().setFirstName(dto.getPrenom());
+                    newUser.get().setPassword(encoder.encode(dto.getMdp()));
                     newUser.get().setEmail(dto.getEmail());
-                    newUser.get().setCity(dto.getCity());
+                    newUser.get().setCity(dto.getVille());
                     newUser.get().setZipCode(dto.getCode_postal());
-                    newUser.get().setStreet(dto.getStreet());
+                    newUser.get().setStreet(dto.getRue());
                     newUser.get().setStreetNumber(dto.getNum_rue());
 
                     if( dto.getNum_siret() == null ){
