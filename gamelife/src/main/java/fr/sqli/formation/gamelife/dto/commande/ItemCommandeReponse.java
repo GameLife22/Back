@@ -5,13 +5,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class ItemCommandeReponse {
-    @Serial
-    private static final long serialVersionUID = 1L;
+        @Serial
+        private static final long serialVersionUID = 1L;
 
-    private UUID id;
-    private UUID idCommande;
-    private UUID idProduitRevendeur;
-    private Integer quantite;
+        private UUID id;
+        private UUID idCommande;
+        private UUID idProduitRevendeur;
+        private Integer quantite;
 
     public UUID getId() {
         return id;

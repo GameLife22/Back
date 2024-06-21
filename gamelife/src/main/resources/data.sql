@@ -12,7 +12,11 @@ VALUES ('171642f4-d2b5-49a3-91f9-dd31bf07d237', 'test 2');
 
 -- produits
 INSERT INTO gamelife.glproduit (id, nom, description)
-VALUES ('6a4a4185-cdb4-418e-9249-a160e384d877', 'test', 'resse');
+VALUES ('6a4a4185-cdb4-418e-9249-a160e384d877', 'FIFA', 'FOOTBALL');
+INSERT INTO gamelife.glproduit (id, nom, description)
+VALUES ('994a4185-cdb4-418e-9249-a160e3840000', 'GTA', 'Grand Theft Auto');
+INSERT INTO gamelife.glproduit (id, nom, description)
+VALUES ('884a4185-cdb4-418e-9249-a160e3840044', 'CALL OFF', 'Guerre');
 
 -- produits_categories
 INSERT INTO gamelife.glproduit_glcategorie(produit_id, categorie_id)
@@ -26,7 +30,10 @@ VALUES('6a4a4185-cdb4-418e-9249-a160e384d877', '4a523eed-9372-4979-89a8-2eec8d41
 INSERT INTO gamelife.glimage (id, image, titre, produit_id)
 VALUES ('d9798c40-173f-4061-bc2e-a39edece42ff', 'test', 'test', '6a4a4185-cdb4-418e-9249-a160e384d877');
 INSERT INTO gamelife.glimage (id, image, titre, produit_id)
-VALUES ('1b014282-3fa7-4997-be24-4538dbb74f81', 'test 2', 'test 2', '6a4a4185-cdb4-418e-9249-a160e384d877');
+VALUES ('1b014282-3fa7-4997-be24-4538dbb74f81', 'test 2', 'test 2', '994a4185-cdb4-418e-9249-a160e3840000');
+INSERT INTO gamelife.glimage (id, image, titre, produit_id)
+VALUES ('1b014282-3fa7-4997-be24-4538dbb74f82', 'test 3', 'test 3', '884a4185-cdb4-418e-9249-a160e3840044');
+
 
 -- utilisateurs
 INSERT INTO gamelife.glutilisateur (id, nom, prenom, mdp, email, num_rue, rue, ville, code_postal, role, num_siren, etat_compte, reset_password_token)
@@ -41,3 +48,12 @@ VALUES ('906d837f-c451-4aa1-9bc1-e92038e93f1d', 'revendeur', 'revendeur', '$2a$1
 -- Produits Revendeurs
 INSERT INTO gamelife.glproduit_revendeur (id, stock, prix, etat, produit_id, utilisateur_id)
 VALUES ('63ef0498-3148-4e57-a4f6-4c17a9ed9352', 10, 49.99, true, '6a4a4185-cdb4-418e-9249-a160e384d877', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');
+
+INSERT INTO gamelife.glproduit_revendeur (id, stock, prix, etat, produit_id, utilisateur_id)
+VALUES ('56ef0498-3148-4e57-a4f6-4c17a9ed9366', 10, 59.99, true, '6a4a4185-cdb4-418e-9249-a160e384d877', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');
+
+INSERT INTO gamelife.glproduit_revendeur (id, stock, prix, etat, produit_id, utilisateur_id)
+VALUES ('77ef0498-3148-4e57-a4f6-4c17a9ed9399', 10, 29.99, false,'994a4185-cdb4-418e-9249-a160e3840000', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');
+
+INSERT INTO gamelife.glcommande (id, etat, num_rue_livraison, rue_livraison, ville_livraison, code_postal_livraison, date, utilisateur_id)
+VALUES ('01234567-89ab-cdef-0123-456789abcdef','NOUVELLE', 123,'Rue de la Peace','Paris',75000, '2024-05-07', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');

@@ -5,6 +5,7 @@ import fr.sqli.formation.gamelife.dto.platforme.PlateformeReponse;
 import fr.sqli.formation.gamelife.dto.image.ImageReponse;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -22,6 +23,9 @@ public class ProduitReponse {
     private Set<PlateformeReponse> plateformes;
 
     private List<ImageReponse> images;
+
+    private BigDecimal prix;
+
 
     public ProduitReponse() {
     }
@@ -73,6 +77,13 @@ public class ProduitReponse {
     public void setImages(List<ImageReponse> pImages) {
         images = pImages;
     }
+    public BigDecimal getPrix() {
+        return prix;
+    }
+
+    public void setPrix(BigDecimal pPrix) {
+        prix = pPrix;
+    }
 
     @Override
     public String toString() {
@@ -83,6 +94,7 @@ public class ProduitReponse {
         sb.append(", categories=").append(categories);
         sb.append(", plateformes=").append(plateformes);
         sb.append(", images=").append(images);
+        sb.append(", prix=").append(prix);
         sb.append('}');
         return sb.toString();
     }

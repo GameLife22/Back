@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.dao;
 import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurRequete;
 import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
 import fr.sqli.formation.gamelife.entite.CommandeEntite;
+import fr.sqli.formation.gamelife.entite.ItemCommandeEntite;
 import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,12 @@ import java.util.UUID;
     @ComponentScan
     public interface ICommandeDao extends JpaRepository<CommandeEntite, UUID> {
         @Query("SELECT c FROM CommandeEntite c JOIN FETCH c.itemsCommande WHERE c.id = :id")
+
         Optional<CommandeEntite> findByIdWithItemCommandes(@Param("id") UUID id);
 
-        Optional<CommandeEntite> findByUtilisateurId(UUID pIdUtilisateur);
+    //recuperer tous les produits qu'un utilisateur a dans son panier
+    @Query("SELECT c FROM CommandeEntite c JOIN FETCH c.itemsCommande WHERE c.utilisateur.id = :id")
+    Optional<CommandeEntite> findByUtilisateurIdWithItemCommandes(@Param("id") UUID id);
+
+    Optional<CommandeEntite> findByUtilisateurId(UUID pIdUtilisateur);
 }

@@ -16,6 +16,7 @@ public class ICommandeConvertisseur {
 
     public static CommandeEntite DtoToEntity(CommandeRequete dto) {
         CommandeEntite CommandeEntite = new CommandeEntite();
+        CommandeEntite.setId(dto.getId());
         CommandeEntite.setUtilisateur(new UtilisateurEntite(dto.getIdUtilisateur()));
         CommandeEntite.setEtat(dto.getEtat());
         CommandeEntite.setNumRueLivraison(dto.getNumRueLivraison());
@@ -23,12 +24,20 @@ public class ICommandeConvertisseur {
         CommandeEntite.setVilleLivraison(dto.getVilleLivraison());
         CommandeEntite.setCodePostalLivraison(dto.getCodePostalLivraison());
         CommandeEntite.setDate(dto.getDate());
+
+        if (dto.getItemsCommande() != null) {
+            List<ItemCommandeEntite> itemCommandeEntites = dto.getItemsCommande().stream()
+                    .map(ItemCommandeConvertisseur::DtoToEntity)
+                    .collect(Collectors.toList());
+            CommandeEntite.setItemsCommande(itemCommandeEntites);
+        }
         return CommandeEntite;
     }
 
 
     public static CommandeReponse EntityToDto(CommandeEntite entity) {
         CommandeReponse commandeReponse = new CommandeReponse();
+        commandeReponse.setId(entity.getId());
         commandeReponse.setEtat(entity.getEtat());
         commandeReponse.setNumRueLivraison(entity.getNumRueLivraison());
         commandeReponse.setRueLivraison(entity.getRueLivraison());
@@ -41,6 +50,7 @@ public class ICommandeConvertisseur {
                     .map(ItemCommandeEntite::getId)
                     .collect(Collectors.toList());
         }
+
 
         return commandeReponse;
     }

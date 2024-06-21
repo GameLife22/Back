@@ -4,6 +4,7 @@ import fr.sqli.formation.gamelife.dto.commande.CommandeRequete;
 import fr.sqli.formation.gamelife.dto.commande.ItemCommandeRequete;
 import fr.sqli.formation.gamelife.dto.commande.CommandeReponse;
 import fr.sqli.formation.gamelife.dto.commande.ItemCommandeReponse;
+import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
 import fr.sqli.formation.gamelife.exception.commande.EtatCommandeInvalideException;
 import fr.sqli.formation.gamelife.exception.ParameterException;
 import fr.sqli.formation.gamelife.exception.ProduitRevendeurException;
@@ -18,10 +19,12 @@ import java.util.UUID;
 public interface ICommandeService {
     List<CommandeReponse> getAllCommandes();
 
+    List<ProduitReponse> getAllProduitsPanier(UUID userId) throws CommandeNotFoundException;
+
     // Recuperer une seule commande
     CommandeReponse getCommande(UUID id) throws CommandeNotFoundException;
 
-
+    // recuperer tous les produits qu'un utilisateur a dans son panier
    CommandeRequete creerCommande(CommandeRequete commandeDto) throws UtilisateurNonExistantException;
 
     CommandeRequete modifierCommande(UUID id, CommandeRequete commandeDto) throws CommandeNotFoundException;

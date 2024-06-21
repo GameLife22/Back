@@ -6,6 +6,7 @@ import fr.sqli.formation.gamelife.convertisseur.ICommandeConvertisseur;
 import fr.sqli.formation.gamelife.dto.commande.ItemCommandeRequete;
 import fr.sqli.formation.gamelife.dto.commande.CommandeReponse;
 import fr.sqli.formation.gamelife.dto.commande.ItemCommandeReponse;
+import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
 import fr.sqli.formation.gamelife.entite.*;
 import fr.sqli.formation.gamelife.enumeration.EtatCommande;
 import fr.sqli.formation.gamelife.exception.commande.EtatCommandeInvalideException;
@@ -24,9 +25,11 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CommandeService implements ICommandeService {
@@ -57,6 +60,18 @@ public class CommandeService implements ICommandeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandeService.class);
 
+    public Optional<CommandeEntite> getCommandeByIdWithItems(UUID id) {
+        return iCommandeDao.findByIdWithItemCommandes(id);
+    }
+
+    public Optional<CommandeEntite> getCommandesByUtilisateurIdWithItems(UUID utilisateurId) {
+        return iCommandeDao.findByUtilisateurIdWithItemCommandes(utilisateurId);
+    }
+
+    public Optional<CommandeEntite> getCommandesByUtilisateurId(UUID utilisateurId) {
+        return iCommandeDao.findByUtilisateurId(utilisateurId);
+    }
+
     @Autowired
     public CommandeService(ICommandeConvertisseur pICommandeConvertisseur) {
         this.ICommandeConvertisseur = pICommandeConvertisseur;
@@ -74,6 +89,29 @@ public class CommandeService implements ICommandeService {
     }
     */
 
+    // Recuperer tous les produits d'un utilisateur dans son panier
+    @Override
+    public List<ProduitReponse> getAllProduitsPanier(UUID userId) throws CommandeNotFoundException {
+        CommandeEntite commandeEntite = iCommandeDao.findByUtilisateurIdWithItemCommandes(userId)
+                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'identifiant de l'utilisateur : " + userId));
+
+        List<ProduitReponse> produitsPanier = new ArrayList<>();
+
+        for (ItemCommandeEntite itemCommande : commandeEntite.getItemsCommande()) {
+            ProduitEntite produit = itemCommande.recupererProduitRevendeur().recupererProduit();
+
+            ProduitReponse produitDetails = new ProduitReponse();
+            produitDetails.setNom(produit.getNom()); // Utiliser le nom du produit
+            produitDetails.setPrix(itemCommande.recupererProduitRevendeur().getPrix()); // Utiliser le prix du produit revendeur
+            produitsPanier.add(produitDetails);
+        }
+
+        return produitsPanier;
+    }
+
+
+
+
     // Recuperer une seule commande
 
     @Override
@@ -82,17 +120,18 @@ public class CommandeService implements ICommandeService {
     }
 
     public CommandeReponse getCommande(UUID id) throws CommandeNotFoundException {
-        CommandeEntite commandeEntite = iCommandeDao.findById(id)
-                .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
+        try {
+            CommandeEntite commandeEntite = iCommandeDao.findByUtilisateurId(id)
+                    .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        // Récupérer l'état de la commande depuis l'entité CommandeEntity
-        EtatCommande etat = commandeEntite.getEtat();
-
-        // Mapper l'entité CommandeEntity vers CommandeDtoOut
-        CommandeReponse commandeReponse = ICommandeConvertisseur.EntityToDto(commandeEntite);
-        commandeReponse.setEtat(etat);
-
-        return commandeReponse;
+            return ICommandeConvertisseur.EntityToDto(commandeEntite);
+        } catch (CommandeNotFoundException ex) {
+            LOGGER.error("Erreur lors de la récupération de la commande avec l'ID : {}", id, ex);
+            throw ex;
+        } catch (Exception ex) {
+            LOGGER.error("Une erreur inattendue est survenue lors de la récupération de la commande avec l'ID : {}", id, ex);
+            throw ex;
+        }
     }
 
     // Création du commande
@@ -139,10 +178,10 @@ public class CommandeService implements ICommandeService {
 
     @Override
     public void deleteCommande(UUID id) throws CommandeNotFoundException {
-        CommandeEntite commande = iCommandeDao.findById(id)
+        CommandeEntite commandeEntite = iCommandeDao.findByUtilisateurId(id)
                 .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        iCommandeDao.delete(commande);
+        iCommandeDao.delete(commandeEntite);
     }
 
 
@@ -268,7 +307,8 @@ public class CommandeService implements ICommandeService {
     // Valider une commande, changer son état en EN_COURS_DE_TRAITEMENT
     @Override
     public CommandeReponse validerCommande(UUID id) throws CommandeNotFoundException {
-        CommandeEntite commandeEntite = iCommandeDao.findById(id)
+        // Chercher la commande
+        CommandeEntite commandeEntite = iCommandeDao.findByUtilisateurIdWithItemCommandes(id)
                 .orElseThrow(() -> new CommandeNotFoundException("Commande non trouvée avec l'ID : " + id));
 
         // Changer l'état de la commande

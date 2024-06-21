@@ -5,11 +5,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 
 //todo: rename
 public class SecuriteUtilisateur implements UserDetails {
 
     private final UtilisateurEntite user;
+
+
+    public UUID getId() {
+        if (user != null) {
+            return user.getId();
+        } else {
+            return null;
+        }
+    }
+
 
 
     public SecuriteUtilisateur(UtilisateurEntite user) {

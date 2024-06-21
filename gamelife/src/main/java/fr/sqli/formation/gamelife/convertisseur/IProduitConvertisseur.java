@@ -3,8 +3,10 @@ package fr.sqli.formation.gamelife.convertisseur;
 import fr.sqli.formation.gamelife.dto.produit.ProduitRequete;
 import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
 import fr.sqli.formation.gamelife.entite.ProduitEntite;
+import fr.sqli.formation.gamelife.entite.ProduitRevendeurEntite;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,10 @@ public interface IProduitConvertisseur {
         produitDtoOut.setCategories(ICategorieConvertisseur.convertirEnCategoriesReponse(pProduitEntite.recupererCategories()));
         produitDtoOut.setPlateformes(IPlateformeConvertisseur.dtoOutFromEntities(pProduitEntite.getPlateformes()));
         produitDtoOut.setImages(IImageConvertisseur.dtoOutFromEntities(pProduitEntite.getImages()));
+        BigDecimal prix = pProduitEntite.getProduitRevendeurEntites().stream()
+                .map(ProduitRevendeurEntite::getPrix)
+                .min(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
         return produitDtoOut;
     }
 

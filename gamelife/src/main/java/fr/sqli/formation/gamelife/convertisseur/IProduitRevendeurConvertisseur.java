@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.convertisseur;
 
+import fr.sqli.formation.gamelife.dto.produit.ProduitReponse;
 import fr.sqli.formation.gamelife.dto.produit.ProduitRevendeurReponse;
 import fr.sqli.formation.gamelife.entite.ProduitRevendeurEntite;
 
@@ -13,8 +14,19 @@ public interface IProduitRevendeurConvertisseur {
         produitRevendeurReponse.setStock(pProduitRevendeurEntite.getStock());
         produitRevendeurReponse.setPrix(pProduitRevendeurEntite.getPrix());
         produitRevendeurReponse.setEtat(pProduitRevendeurEntite.getEtat());
+
+        // THEESAN A FAIS CREE la Conversion de l'entité ProduitEntite en ProduitReponse
+        ProduitReponse produitReponse = new ProduitReponse();
+        produitReponse.setId(pProduitRevendeurEntite.recupererProduit().getId());
+        produitReponse.setNom(pProduitRevendeurEntite.recupererProduit().getNom());
+        produitReponse.setDescription(pProduitRevendeurEntite.recupererProduit().getDescription());
+
+        // Définir le produit dans la réponse du revendeur
+        produitRevendeurReponse.setProduit(produitReponse);
+
         return produitRevendeurReponse;
     }
+
 
     public static List<ProduitRevendeurReponse> convertirEnProduitRevendeursReponse(List<ProduitRevendeurEntite> pProduitRevendeurEntites) {
         return pProduitRevendeurEntites.stream()

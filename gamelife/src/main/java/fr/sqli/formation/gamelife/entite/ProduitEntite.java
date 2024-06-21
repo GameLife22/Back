@@ -42,6 +42,17 @@ public class ProduitEntite {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<ImageEntite> images;
 
+    @OneToMany(mappedBy = "produit", fetch = FetchType.LAZY)
+    private List<ProduitRevendeurEntite> produitRevendeurEntites;
+
+    public List<ProduitRevendeurEntite> getProduitRevendeurEntites() {
+        return produitRevendeurEntites;
+    }
+
+    public void setProduitRevendeurEntites(List<ProduitRevendeurEntite> produitRevendeurEntites) {
+        this.produitRevendeurEntites = produitRevendeurEntites;
+    }
+
     public UUID getId() {
         return id;
     }

@@ -89,6 +89,7 @@ public class SecuriteConfiguration {
                         .antMatchers("/utilisateur/mdpoublie").permitAll()
                         .antMatchers("/utilisateur/mdpreset").permitAll()
                         .antMatchers("/utilisateur/getEmailByToken").permitAll()
+                        .antMatchers("/utilisateur/moi").permitAll()
                         .antMatchers("/api/v1/produits").permitAll()//hasAnyRole(ROLE_ADMIN, ROLE_MODERATEUR)
                         .antMatchers("/api/v1/produits/{produitId}").permitAll()//hasAnyRole(ROLE_ADMIN, ROLE_MODERATEUR)
                         .antMatchers("/api/v1/produits/disable/{produitId}").permitAll()//hasAnyRole(ROLE_ADMIN, ROLE_MODERATEUR)
@@ -109,6 +110,7 @@ public class SecuriteConfiguration {
                         .antMatchers("/commande/{id}/ajout-produit").permitAll()
                         .antMatchers("/commande/{id}/valider-commande").permitAll()
                         .antMatchers("/commande/{idCommande}/supp-article/{idProduit}").permitAll()
+                        .antMatchers("/commande/{userId}/produits").permitAll()
                         .antMatchers("/produitrevendeurs/{pProduitId}").permitAll() //todo: à supprimer après que yassine à terminé sa feature
                         .anyRequest().authenticated()
                 )

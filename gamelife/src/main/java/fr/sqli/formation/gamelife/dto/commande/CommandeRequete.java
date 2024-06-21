@@ -16,6 +16,7 @@ public class CommandeRequete {
     private String villeLivraison;
     private Integer codePostalLivraison;
     private LocalDate date;
+    private List<ItemCommandeRequete> itemsCommande;
 
     public UUID getId() {
         return id;
@@ -24,8 +25,6 @@ public class CommandeRequete {
     public void setId(UUID pId) {
         id = pId;
     }
-
-    private List<ItemCommandeRequete> itemsCommande;
 
     public List<ItemCommandeRequete> getItemsCommande() {
         return itemsCommande;

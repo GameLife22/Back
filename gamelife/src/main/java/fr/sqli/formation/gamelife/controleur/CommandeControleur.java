@@ -33,14 +33,33 @@ public class CommandeControleur {
     private ICommandeDao ICommandeDAO;
     private ICommandeConvertisseur ICommandeConvertisseur;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CategorieControleur.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategorieControleur.class);
 
+    //recuperer tous les produits qu'un utilisateur a dans son panier
+    @GetMapping("/{userId}/produits")
+    public ResponseEntity<?> getAllProduitsPanier(@PathVariable UUID userId) {
+        try {
+            return ResponseEntity.ok(ICommandeService.getAllProduitsPanier(userId));
+        } catch (CommandeNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionDtoOut("Une erreur s'est produite lors de la récupération des produits."));
+        }
+    }
 
     // Recuperer une seule commande
     @GetMapping("/{id}")
-    public ResponseEntity<CommandeReponse> getCommande(@PathVariable UUID id) throws CommandeNotFoundException {
-        CommandeReponse commandeDto = ICommandeService.getCommande(id);
-        return ResponseEntity.status(commandeDto != null ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(commandeDto);
+    public ResponseEntity<CommandeReponse> getCommande(@PathVariable UUID id) {
+        try {
+            CommandeReponse commandeDto = ICommandeService.getCommande(id);
+            return new ResponseEntity<>(commandeDto, HttpStatus.OK);
+        } catch (CommandeNotFoundException ex) {
+            logger.error("Commande non trouvée avec l'ID : {}", id, ex);
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            logger.error("Une erreur inattendue est survenue lors de la récupération de la commande avec l'ID : {}", id, ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // Afficher le prix total du commande
@@ -71,12 +90,14 @@ public class CommandeControleur {
 
     // Supprimer une commande
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCommande(@PathVariable("id") UUID id) {
+    public ResponseEntity<?> deleteCommande(@PathVariable UUID id) {
         try {
             ICommandeService.deleteCommande(id);
-            return new ResponseEntity<>("La commande a été supprimée avec succès", HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } catch (CommandeNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionDtoOut("Une erreur s'est produite lors de la suppression de la commande."));
         }
     }
 
@@ -105,11 +126,23 @@ public class CommandeControleur {
     public ResponseEntity<ItemCommandeReponse> ajoutProduit(@PathVariable("id") UUID idUtilisateur,
                                                             @RequestBody ItemCommandeRequete itemCommandeDto) {
         try {
+            // Utilisation du logger pour enregistrer des informations de débogage
+            logger.info("Requête d'ajout de produit pour l'utilisateur avec l'ID : {}", idUtilisateur);
+
+            // Votre logique métier pour ajouter le produit à la commande
             ItemCommandeReponse itemCommandeReponse = ICommandeService.ajoutProduit(idUtilisateur, itemCommandeDto);
-            return ResponseEntity.ok(itemCommandeReponse);
+
+            // Utilisation du logger pour enregistrer des informations de débogage
+            logger.info("Produit ajouté avec succès pour l'utilisateur avec l'ID : {}", idUtilisateur);
+
+            // Retourner une réponse avec le statut 201 Created
+            return new ResponseEntity<>(itemCommandeReponse, HttpStatus.CREATED);
         } catch (ProduitRevendeurException | ParameterException  |
                  CommandeNotFoundException | EtatCommandeInvalideException e) {
-            // Gérer les exceptions
+            // Utilisation du logger pour enregistrer des informations sur l'erreur
+            logger.error("Une erreur s'est produite lors de l'ajout du produit pour l'utilisateur avec l'ID : {}", idUtilisateur, e);
+
+            // Retourner une réponse avec un code d'erreur
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -142,12 +175,12 @@ public class CommandeControleur {
 
     // Supprimer un item dans une commande
     @DeleteMapping("/{idCommande}/supp-article/{idProduit}")
-    public ResponseEntity<?> supprimerProduit(@PathVariable("idCommande") UUID idCommande,
+public ResponseEntity<?> supprimerArticle(@PathVariable("idCommande") UUID idCommande,
                                              @PathVariable("idProduit") UUID idProduit) {
         try {
-            CommandeRequete commandeRequete = ICommandeService.supprimerProduit(idCommande, idProduit);
-            return ResponseEntity.ok(commandeRequete);
-        } catch (CommandeNotFoundException | ProduitRevendeurException | ItemCommandeNotFoundException e) {
+            ICommandeService.supprimerProduit(idCommande, idProduit);
+            return ResponseEntity.ok().build();
+        } catch (CommandeNotFoundException | ItemCommandeNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionDtoOut(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionDtoOut("Une erreur s'est produite lors de la suppression de l'article."));

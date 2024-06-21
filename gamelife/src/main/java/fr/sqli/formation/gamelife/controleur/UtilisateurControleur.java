@@ -4,6 +4,8 @@ import fr.sqli.formation.gamelife.dto.IdDto;
 import fr.sqli.formation.gamelife.dto.login.LoginRequest;
 import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDto;
 import fr.sqli.formation.gamelife.dto.utilisateur.UtilisateurDtoHandler;
+import fr.sqli.formation.gamelife.entite.SecuriteUtilisateur;
+import fr.sqli.formation.gamelife.entite.UtilisateurEntite;
 import fr.sqli.formation.gamelife.service.utilisateur.UtilisateurService;
 import fr.sqli.formation.gamelife.service.authentification.TokenService;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,6 +32,27 @@ public class UtilisateurControleur {
     public UtilisateurControleur(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
+
+
+    @GetMapping("/moi")
+    public UtilisateurDto getMoi(@AuthenticationPrincipal SecuriteUtilisateur user){
+        LOGGER.info("InscriptionControler : IN {}", user);
+        UtilisateurDto res;
+        try {
+            if (user != null) {
+                res = UtilisateurDtoHandler.fromEntity(service.getUtilisateurById(user.getId()));
+                LOGGER.info("InscriptionControler : OUT {}", res);
+                return res;
+            } else {
+                return null;
+            }
+        } catch (Exception err){
+            LOGGER.warn("ERROR : {}", err);
+            // Gérer l'exception
+            return null;
+        }
+    }
+
 
     @PostMapping("/auth")
     public String token(@RequestBody LoginRequest userLogin) throws Exception {

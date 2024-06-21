@@ -18,7 +18,6 @@ public class ItemCommandeConvertisseur {
         ProduitRevendeurEntite produitRevendeurEntite = new ProduitRevendeurEntite();
         produitRevendeurEntite.setId(dto.getIdProduitRevendeur());
         itemCommandeEntite.setProduitRevendeur(produitRevendeurEntite);
-
         itemCommandeEntite.setQuantite(dto.getQuantite());
 
         return itemCommandeEntite;
@@ -31,6 +30,10 @@ public class ItemCommandeConvertisseur {
         itemCommandeReponse.setIdCommande(entity.getCommande().getId());
         itemCommandeReponse.setIdProduitRevendeur(entity.recupererProduitRevendeur().getId());
         itemCommandeReponse.setQuantite(entity.getQuantite());
+
         return itemCommandeReponse;
+
+
+
     }
 }
