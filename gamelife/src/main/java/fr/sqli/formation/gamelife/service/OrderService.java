@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.dto.response.GameResponse;
 import fr.sqli.formation.gamelife.utility.converter.IItemOrderConverter;
 import fr.sqli.formation.gamelife.dto.request.OrderRequest;
 import fr.sqli.formation.gamelife.utility.converter.IOrderConverter;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,21 +35,24 @@ import java.util.UUID;
 public class OrderService implements IOrderService {
 
     @Autowired
-    private IOrderRepository iOrderRepository;
-    @Autowired
-    private ItemOrderRepository itemOrderRepository;
-    @Autowired
-    private IGameRepository produitRepository;
+    private IOrderRepository IOrderRepository;
 
+    @Autowired
+    private ItemOrderRepository ItemOrderRepository;
+
+    @Autowired
+    private IGameRepository ProduitRepository;
+
+    @Autowired
+    private IUserRepository IUserRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
-
     private OrderRequest commandeDto;
+
+
     @Autowired
-    private IUserRepository IUserRepository;
-    @Autowired
-    private ISellerGameRepository iSellerGameRepository;
+    private ISellerGameRepository ISellerGameRepository;
 
     @Autowired
     private OrderValidator orderValidator;
@@ -54,17 +60,30 @@ public class OrderService implements IOrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
 
+    
 
-    /*
-    // Recuperation de tous les paniers
     @Override
-    public List<CommandeDtoOut> getAllCommandes() {
-        List<CommandeEntity> commandeEntities = commandeRepository.findAll();
-        return commandeEntities.stream()
-                .map(commandeDtoHandler::EntityToDto)
-                .collect(Collectors.toList());
+    public List<GameResponse> getAllProduitsPanier(UUID userId) throws OrderNotFoundException {
+
+        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurIdWithItemCommandes(userId)
+                .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'identifiant de l'utilisateur : " + userId));
+
+        List<GameResponse> produitsPanier = new ArrayList<>();
+
+        for (ItemOrderEntity itemCommande : OrderEntity.getItemsCommande()) {
+            GameEntity produit = itemCommande.recupererProduitRevendeur().getProduit();
+
+            GameResponse produitDetails = new GameResponse();
+            produitDetails.setName(produit.getName()); // Utiliser le nom du produit
+            produitDetails.setPrix(itemCommande.recupererProduitRevendeur().getPrix()); // Utiliser le prix du produit revendeur
+            produitsPanier.add(produitDetails);
+        }
+
+        return produitsPanier;
     }
-    */
+
+
+
 
     // Recuperer une seule commande
 
@@ -74,17 +93,18 @@ public class OrderService implements IOrderService {
     }
 
     public OrderResponse getCommande(UUID id) throws OrderNotFoundException {
-        OrderEntity orderEntity = iOrderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
+        try {
+            OrderEntity OrderEntity = IOrderRepository.findByUtilisateurId(id)
+                    .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        // Récupérer l'état de la commande depuis l'entité CommandeEntity
-        OrderStatus etat = orderEntity.getEtat();
-
-        // Mapper l'entité CommandeEntity vers CommandeDtoOut
-        OrderResponse orderResponse = IOrderConverter.EntityToDto(orderEntity);
-        orderResponse.setEtat(etat);
-
-        return orderResponse;
+            return IOrderConverter.EntityToDto(OrderEntity);
+        } catch (OrderNotFoundException ex) {
+            LOGGER.error("Erreur lors de la récupération de la commande avec l'ID : {}", id, ex);
+            throw ex;
+        } catch (Exception ex) {
+            LOGGER.error("Une erreur inattendue est survenue lors de la récupération de la commande avec l'ID : {}", id, ex);
+            throw ex;
+        }
     }
 
     // Création du commande
@@ -92,16 +112,16 @@ public class OrderService implements IOrderService {
     public OrderRequest creerCommande(OrderRequest commandeDto) throws NonExistentUserException {
         // Vérifier si l'utilisateur existe
         UserEntity utilisateur = IUserRepository.findById(commandeDto.getIdUtilisateur())
-                .orElseThrow(() -> new NonExistentUserException("User not found with ID: " + commandeDto.getIdUtilisateur()));
+                .orElseThrow(() -> new NonExistentUserException("User not found with id: " + commandeDto.getIdUtilisateur()));
 
-        OrderEntity orderEntity = IOrderConverter.DtoToEntity(commandeDto);
+        OrderEntity OrderEntity = IOrderConverter.DtoToEntity(commandeDto);
 
-        orderEntity.setEtat(OrderStatus.NOUVELLE);
+        OrderEntity.setEtat(OrderStatus.NOUVELLE);
 
 
-        orderEntity.setUtilisateur(utilisateur);
+        OrderEntity.setUtilisateur(utilisateur);
 
-        OrderEntity savedOrderEntity = iOrderRepository.save(orderEntity);
+        OrderEntity savedOrderEntity = IOrderRepository.save(OrderEntity);
 
         OrderResponse savedCommandeDto = IOrderConverter.EntityToDto(savedOrderEntity);
 
@@ -112,18 +132,18 @@ public class OrderService implements IOrderService {
     @Override
     public OrderRequest modifierCommande(UUID id, OrderRequest commandeDto) throws OrderNotFoundException {
 
-        OrderEntity existingCommande = iOrderRepository.findById(id)
+        OrderEntity existingCommande = IOrderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
         // Mettre à jour les informations de la commande avec les données fournies dans le DTO
         existingCommande.setEtat(commandeDto.getEtat());
-        existingCommande.setStreetNumberLivraison(commandeDto.getStreetNumberLivraison());
-        existingCommande.setStreetLivraison(commandeDto.getStreetLivraison());
-        existingCommande.setCityLivraison(commandeDto.getCityLivraison());
-        existingCommande.setZipCodeLivraison(commandeDto.getZipCodeLivraison());
+        existingCommande.setStreetNumberLivraison(commandeDto.getNumRueLivraison());
+        existingCommande.setStreetLivraison(commandeDto.getRueLivraison());
+        existingCommande.setCityLivraison(commandeDto.getVilleLivraison());
+        existingCommande.setZipCodeLivraison(commandeDto.getCodePostalLivraison());
         existingCommande.setDate(commandeDto.getDate());
 
-        iOrderRepository.save(existingCommande);
+        IOrderRepository.save(existingCommande);
 
         return commandeDto;
     }
@@ -131,20 +151,20 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteCommande(UUID id) throws OrderNotFoundException {
-        OrderEntity commande = iOrderRepository.findById(id)
+        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurId(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        iOrderRepository.delete(commande);
+        IOrderRepository.delete(OrderEntity);
     }
 
 
     // Prix total du commande
     @Override
     public double getPrixTotalCommande(UUID id) throws OrderNotFoundException {
-        OrderEntity orderEntity = iOrderRepository.findByIdWithItemCommandes(id)
+        OrderEntity OrderEntity = IOrderRepository.findByIdWithItemCommandes(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
-        List<ItemOrderEntity> itemsCommande = orderEntity.getItemsCommande();
+        List<ItemOrderEntity> itemsCommande = OrderEntity.getItemsCommande();
 
         // Vérification que la liste des éléments de commande n'est pas vide
         if (itemsCommande.isEmpty()) {
@@ -174,12 +194,12 @@ public class OrderService implements IOrderService {
     public ItemOrderResponse modifierQuantite(UUID id, ItemOrderRequest itemCommandeDto)
             throws OrderNotFoundException, ItemOrderNotFoundException, ParameterException, IllegalAccessException {
         // Vérifier l'existence de la commande avec l'ID spécifié
-        OrderEntity orderEntity = iOrderRepository.findByIdWithItemCommandes(id)
+        OrderEntity OrderEntity = IOrderRepository.findByIdWithItemCommandes(id)
                 .orElseThrow(() -> new OrderNotFoundException("La commande avec l'ID " + id + " n'a pas été trouvée."));
 
         // Trouver l'item de commande correspondant dans la commande
         ItemOrderEntity itemOrderEntity = null;
-        for (ItemOrderEntity item : orderEntity.getItemsCommande()) {
+        for (ItemOrderEntity item : OrderEntity.getItemsCommande()) {
             if (item.getId().equals(itemCommandeDto.getIdCommande())) {
                 itemOrderEntity = item;
                 break;
@@ -191,11 +211,11 @@ public class OrderService implements IOrderService {
         }
 
         // Vérifier si la quantité est valide
-        FieldValidator.validateNonNegative(itemCommandeDto.getQuantite(), "La quantité ne peut pas être négative.");
+        FieldValidator.ItemOrderRepository(itemCommandeDto.getQuantite(), "La quantité ne peut pas être négative.");
 
         // Mettre à jour la quantité de l'item de commande
         itemOrderEntity.setQuantite(itemCommandeDto.getQuantite());
-        iOrderRepository.save(orderEntity);
+        IOrderRepository.save(OrderEntity);
 
         // Mapper l'entité mise à jour vers un DTO de sortie
         return IItemOrderConverter.EntityToDto(itemOrderEntity);
@@ -206,22 +226,22 @@ public class OrderService implements IOrderService {
     @Override
     public ItemOrderResponse ajoutProduit(UUID pIdUtilisateur, ItemOrderRequest pItemOrderRequest) throws SellerGameException, ParameterException, OrderNotFoundException, InvalidStatusOrderException {
         // Chercher la commande de l'utilisateur
-        OrderEntity orderEntity = iOrderRepository.findByUserId(pIdUtilisateur)
+        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurId(pIdUtilisateur)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'identifiant : " + pIdUtilisateur));
 
         // Vérifier si la commande est dans un état permettant l'ajout de produit
-        if (orderEntity.getEtat() == OrderStatus.EN_COURS_DE_TRAITEMENT) {
+        if (OrderEntity.getEtat() == OrderStatus.EN_COURS_DE_TRAITEMENT) {
             throw new InvalidStatusOrderException("Impossible d'ajouter un produit à une commande en cours de traitement.");
         }
 
         // Vérifier si le produit revendeur existe
-        Optional<SellerGameEntity> produitRevendeurOptional = iSellerGameRepository.findById(pItemOrderRequest.getIdProduitRevendeur());
+        Optional<SellerGameEntity> produitRevendeurOptional = ISellerGameRepository.findById(pItemOrderRequest.getIdProduitRevendeur());
 
         if (produitRevendeurOptional.isEmpty()) {
             throw new SellerGameException("Produit revendeur non trouvé avec l'identifiant : " + pItemOrderRequest.getIdProduitRevendeur());
         }
 
-        SellerGameEntity sellerGameEntity = produitRevendeurOptional.get();
+        SellerGameEntity SellerGameEntity = produitRevendeurOptional.get();
 
         // Vérifier si la quantité est valide
         if (pItemOrderRequest.getQuantite() <= 0) {
@@ -229,28 +249,28 @@ public class OrderService implements IOrderService {
         }
 
         // Vérifier si le stock est suffisant
-        if (sellerGameEntity.getStock() < pItemOrderRequest.getQuantite()) {
-            throw new SellerGameException("Stock insuffisant pour le produit revendeur avec l'identifiant : " + sellerGameEntity.getId());
+        if (SellerGameEntity.getStock() < pItemOrderRequest.getQuantite()) {
+            throw new SellerGameException("Stock insuffisant pour le produit revendeur avec l'identifiant : " + SellerGameEntity.getId());
         }
 
 
         // Créer un nouvel item de commande
         ItemOrderEntity itemOrderEntity = new ItemOrderEntity();
-        itemOrderEntity.setCommande(orderEntity);
-        itemOrderEntity.setProduitRevendeur(sellerGameEntity);
+        itemOrderEntity.setCommande(OrderEntity);
+        itemOrderEntity.setProduitRevendeur(SellerGameEntity);
         itemOrderEntity.setQuantite(pItemOrderRequest.getQuantite());
 
         // Décrémenter le stock du produit revendeur
-        sellerGameEntity.setStock(sellerGameEntity.getStock() - pItemOrderRequest.getQuantite());
+        SellerGameEntity.setStock(SellerGameEntity.getStock() - pItemOrderRequest.getQuantite());
 
 
         // Enregistrer l'item de commande et mettre à jour le produit revendeur
-        itemOrderEntity = itemOrderRepository.save(itemOrderEntity);
-        sellerGameEntity = iSellerGameRepository.save(sellerGameEntity);
+        itemOrderEntity = ItemOrderRepository.save(itemOrderEntity);
+        SellerGameEntity = ISellerGameRepository.save(SellerGameEntity);
 
         // Mettre à jour la liste des items de commande de la commande
-        orderEntity.getItemsCommande().add(itemOrderEntity);
-        var commandeEntite1 = iOrderRepository.save(orderEntity);
+        OrderEntity.getItemsCommande().add(itemOrderEntity);
+        var OrderEntity1 = IOrderRepository.save(OrderEntity);
 
         // Convertir l'item de commande en DTO de sortie
         return IItemOrderConverter.EntityToDto(itemOrderEntity);
@@ -260,33 +280,34 @@ public class OrderService implements IOrderService {
     // Valider une commande, changer son état en EN_COURS_DE_TRAITEMENT
     @Override
     public OrderResponse validerCommande(UUID id) throws OrderNotFoundException {
-        OrderEntity orderEntity = iOrderRepository.findById(id)
+        // Chercher la commande
+        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurIdWithItemCommandes(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
         // Changer l'état de la commande
-        orderEntity.setEtat(OrderStatus.EN_COURS_DE_TRAITEMENT);
-        iOrderRepository.save(orderEntity);
+        OrderEntity.setEtat(OrderStatus.EN_COURS_DE_TRAITEMENT);
+        IOrderRepository.save(OrderEntity);
 
 
-        return IOrderConverter.EntityToDto(orderEntity);
+        return IOrderConverter.EntityToDto(OrderEntity);
     }
 
 
     // Supprimer un article dans une commande existante
     @Override
-    public OrderRequest deleteGame(UUID idCommande, UUID idProduit) throws OrderNotFoundException, ItemOrderNotFoundException, InvalidStatusOrderException {
+    public OrderRequest supprimerProduit(UUID idCommande, UUID idProduit) throws OrderNotFoundException, ItemOrderNotFoundException, InvalidStatusOrderException {
         // Chercher la commande
-        OrderEntity orderEntity = iOrderRepository.findById(idCommande)
+        OrderEntity OrderEntity = IOrderRepository.findById(idCommande)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + idCommande));
 
         // Vérifier si la commande est dans un état permettant la suppression d'article
-        if (orderEntity.getEtat() == OrderStatus.EN_COURS_DE_TRAITEMENT) {
+        if (OrderEntity.getEtat() == OrderStatus.EN_COURS_DE_TRAITEMENT) {
             throw new InvalidStatusOrderException("Impossible de supprimer un article d'une commande en cours de traitement.");
         }
 
         // Chercher l'item de commande
         ItemOrderEntity itemOrderEntity = null;
-        for (ItemOrderEntity item : orderEntity.getItemsCommande()) {
+        for (ItemOrderEntity item : OrderEntity.getItemsCommande()) {
             if (item.recupererProduitRevendeur().getId() == idProduit) {
                 itemOrderEntity = item;
                 break;
@@ -298,19 +319,21 @@ public class OrderService implements IOrderService {
         }
 
         // Récupérer le produit revendeur
-        SellerGameEntity sellerGameEntity = itemOrderEntity.recupererProduitRevendeur();
+        SellerGameEntity SellerGameEntity = itemOrderEntity.recupererProduitRevendeur();
 
         // Supprimer l'item de commande
-        orderEntity.getItemsCommande().remove(itemOrderEntity);
-        itemOrderRepository.delete(itemOrderEntity);
+        OrderEntity.getItemsCommande().remove(itemOrderEntity);
+        ItemOrderRepository.delete(itemOrderEntity);
 
         // Incrémenter le stock du produit revendeur
-        sellerGameEntity.setStock(sellerGameEntity.getStock() + itemOrderEntity.getQuantite());
-        iSellerGameRepository.save(sellerGameEntity);
+        SellerGameEntity.setStock(SellerGameEntity.getStock() + itemOrderEntity.getQuantite());
+        ISellerGameRepository.save(SellerGameEntity);
 
         // Mettre à jour la commande
-        iOrderRepository.save(orderEntity);
+        IOrderRepository.save(OrderEntity);
 
         return commandeDto;
     }
+
+
 }

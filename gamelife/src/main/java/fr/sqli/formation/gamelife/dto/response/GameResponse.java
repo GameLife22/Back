@@ -3,6 +3,7 @@ package fr.sqli.formation.gamelife.dto.response;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -19,6 +20,16 @@ public class GameResponse {
     Set<Genre> genres;
     Set<Platform> platforms;
     List<String> images;
+    BigDecimal prix;
+
+
+    public BigDecimal getPrix() {
+        return prix;
+    }
+
+    public void setPrix(BigDecimal prix) {
+        this.prix = prix;
+    }
 
     public UUID getId() {
         return id;
@@ -77,6 +88,7 @@ public class GameResponse {
         sb.append(", genres=").append(genres);
         sb.append(", platforms=").append(platforms);
         sb.append(", images=").append(images);
+        sb.append(", prix=").append(prix);
         sb.append('}');
         return sb.toString();
     }

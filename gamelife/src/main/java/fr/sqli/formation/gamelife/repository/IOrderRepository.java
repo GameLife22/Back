@@ -13,7 +13,12 @@ import java.util.UUID;
 @ComponentScan
 public interface IOrderRepository extends JpaRepository<OrderEntity, UUID> {
     @Query("SELECT c FROM OrderEntity c JOIN FETCH c.itemsCommande WHERE c.id = :id")
-    Optional<OrderEntity> findByIdWithItemCommandes(@Param("id") UUID id);
 
-    Optional<OrderEntity> findByUserId(UUID pIdUtilisateur);
+     Optional<OrderEntity> findByIdWithItemCommandes(@Param("id") UUID id);
+
+    //recuperer tous les produits qu'un utilisateur a dans son panier
+     @Query("SELECT c FROM OrderEntity c JOIN FETCH c.itemsCommande WHERE c.user.id = :id")
+      Optional<OrderEntity> findByUtilisateurIdWithItemCommandes(@Param("id") UUID id);
+
+     Optional<OrderEntity> findByUtilisateurId(UUID pIdUtilisateur);
 }

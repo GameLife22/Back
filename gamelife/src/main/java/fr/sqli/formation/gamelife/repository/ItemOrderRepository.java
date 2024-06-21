@@ -7,5 +7,7 @@ import java.util.UUID;
 
 @Repository
 public interface ItemOrderRepository extends JpaRepository<ItemOrderEntity, UUID> {
+    //Optional<ItemOrderEntity> findByIdCommandeAndIdProduitRevendeur(UUID pItemCommandeId, UUID pProduitRevendeurId);
+
 }
 

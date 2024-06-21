@@ -15,6 +15,7 @@ public class OrderRequest {
     private String villeLivraison;
     private Integer codePostalLivraison;
     private LocalDate date;
+    private List<ItemOrderRequest> itemsCommande;
 
     public UUID getId() {
         return id;
@@ -23,8 +24,6 @@ public class OrderRequest {
     public void setId(UUID pId) {
         id = pId;
     }
-
-    private List<ItemOrderRequest> itemsCommande;
 
     public List<ItemOrderRequest> getItemsCommande() {
         return itemsCommande;
@@ -50,35 +49,35 @@ public class OrderRequest {
         this.etat = etat;
     }
 
-    public Integer getStreetNumberLivraison() {
+    public Integer getNumRueLivraison() {
         return numRueLivraison;
     }
 
-    public void setStreetNumberLivraison(Integer pNumRueLivraison) {
+    public void setNumRueLivraison(Integer pNumRueLivraison) {
         numRueLivraison = pNumRueLivraison;
     }
 
-    public String getStreetLivraison() {
+    public String getRueLivraison() {
         return rueLivraison;
     }
 
-    public void setStreetLivraison(String pRueLivraison) {
+    public void setRueLivraison(String pRueLivraison) {
         rueLivraison = pRueLivraison;
     }
 
-    public String getCityLivraison() {
+    public String getVilleLivraison() {
         return villeLivraison;
     }
 
-    public void setCityLivraison(String pVilleLivraison) {
+    public void setVilleLivraison(String pVilleLivraison) {
         villeLivraison = pVilleLivraison;
     }
 
-    public Integer getZipCodeLivraison() {
+    public Integer getCodePostalLivraison() {
         return codePostalLivraison;
     }
 
-    public void setZipCodeLivraison(Integer pCodePostalLivraison) {
+    public void setCodePostalLivraison(Integer pCodePostalLivraison) {
         codePostalLivraison = pCodePostalLivraison;
     }
 

@@ -14,6 +14,8 @@ import fr.sqli.formation.gamelife.exception.ItemOrderNotFoundException;
 import fr.sqli.formation.gamelife.exception.OrderNotFoundException;
 import fr.sqli.formation.gamelife.repository.IOrderRepository;
 import fr.sqli.formation.gamelife.service.IOrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +33,33 @@ public class OrderRestController {
     private IOrderRepository IOrderRepository;
     private IOrderConverter IOrderConverter;
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountRestController.class);
+
+    // Recuperer une seule commande
+    @GetMapping("/{userId}/produits")
+    public ResponseEntity<?> getAllProduitsPanier(@PathVariable UUID userId) {
+        try {
+            return ResponseEntity.ok(this.IOrderService.getAllProduitsPanier(userId));
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse("Une erreur s'est produite lors de la récupération des produits."));
+        }
+    }
+
     // Recuperer une seule commande
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponse> getCommande(@PathVariable UUID id) throws OrderNotFoundException {
-        OrderResponse commandeDto = IOrderService.getCommande(id);
-        return ResponseEntity.status(commandeDto != null ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(commandeDto);
+    public ResponseEntity<OrderResponse> getCommande(@PathVariable UUID id) {
+        try {
+            OrderResponse commandeDto = IOrderService.getCommande(id);
+            return new ResponseEntity<>(commandeDto, HttpStatus.OK);
+        } catch (OrderNotFoundException ex) {
+            logger.error("Commande non trouvée avec l'ID : {}", id, ex);
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            logger.error("Une erreur inattendue est survenue lors de la récupération de la commande avec l'ID : {}", id, ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // Afficher le prix total du commande
@@ -66,12 +90,14 @@ public class OrderRestController {
 
     // Supprimer une commande
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCommande(@PathVariable("id") UUID id) {
+    public ResponseEntity<?> deleteCommande(@PathVariable UUID id) {
         try {
             IOrderService.deleteCommande(id);
-            return new ResponseEntity<>("La commande a été supprimée avec succès", HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } catch (OrderNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse("Une erreur s'est produite lors de la suppression de la commande."));
         }
     }
 
@@ -98,13 +124,25 @@ public class OrderRestController {
     // Ajouter un produit dans une commande existante (id) sinon créer une nouvelle commande
     @PutMapping("/{id}/ajout-produit")
     public ResponseEntity<ItemOrderResponse> ajoutProduit(@PathVariable("id") UUID idUtilisateur,
-                                                          @RequestBody ItemOrderRequest itemCommandeDto) {
+                                                            @RequestBody ItemOrderRequest itemCommandeDto) {
         try {
+            // Utilisation du logger pour enregistrer des informations de débogage
+            logger.info("Requête d'ajout de produit pour l'utilisateur avec l'ID : {}", idUtilisateur);
+
+            // Votre logique métier pour ajouter le produit à la commande
             ItemOrderResponse itemOrderResponse = IOrderService.ajoutProduit(idUtilisateur, itemCommandeDto);
-            return ResponseEntity.ok(itemOrderResponse);
-        } catch (SellerGameException | ParameterException |
+
+            // Utilisation du logger pour enregistrer des informations de débogage
+            logger.info("Produit ajouté avec succès pour l'utilisateur avec l'ID : {}", idUtilisateur);
+
+            // Retourner une réponse avec le statut 201 Created
+            return new ResponseEntity<>(itemOrderResponse, HttpStatus.CREATED);
+        } catch (SellerGameException | ParameterException  |
                  OrderNotFoundException | InvalidStatusOrderException e) {
-            // Gérer les exceptions
+            // Utilisation du logger pour enregistrer des informations sur l'erreur
+            logger.error("Une erreur s'est produite lors de l'ajout du produit pour l'utilisateur avec l'ID : {}", idUtilisateur, e);
+
+            // Retourner une réponse avec un code d'erreur
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -119,9 +157,9 @@ public class OrderRestController {
     @PutMapping("/{id}/valider-commande")
     public ResponseEntity<?> validerCommande(@PathVariable("id") UUID id) {
         try {
-            OrderResponse orderResponse = IOrderService.validerCommande(id);
+            OrderResponse OrderResponse = IOrderService.validerCommande(id);
 
-            return ResponseEntity.ok(orderResponse);
+            return ResponseEntity.ok(OrderResponse);
         } catch (OrderNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(e.getMessage()));
         } catch (IllegalStateException e) {
@@ -137,12 +175,12 @@ public class OrderRestController {
 
     // Supprimer un item dans une commande
     @DeleteMapping("/{idCommande}/supp-article/{idProduit}")
-    public ResponseEntity<?> deleteGame(@PathVariable("idCommande") UUID idCommande,
-                                             @PathVariable("idProduit") UUID idProduit) {
+    public ResponseEntity<?> supprimerArticle(@PathVariable("idCommande") UUID idCommande,
+                                              @PathVariable("idProduit") UUID idProduit) {
         try {
-            OrderRequest orderRequest = IOrderService.deleteGame(idCommande, idProduit);
-            return ResponseEntity.ok(orderRequest);
-        } catch (OrderNotFoundException | SellerGameException | ItemOrderNotFoundException e) {
+            IOrderService.supprimerProduit(idCommande, idProduit);
+            return ResponseEntity.ok().build();
+        } catch (OrderNotFoundException | ItemOrderNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse("Une erreur s'est produite lors de la suppression de l'article."));

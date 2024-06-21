@@ -23,7 +23,7 @@ public final class FieldValidator {
         throw new ParameterException(pMessage);
     }
 
-    public static void validateNonNegative(Integer value, String message) throws ParameterException {
+    public static void ItemOrderRepository(Integer value, String message) throws ParameterException {
         if (value != null && value >= 0) {
             return;
         }

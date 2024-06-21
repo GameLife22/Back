@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "glitem_commande", schema = "gamelife")
+@Table(name = "glorder_item", schema = "gamelife")
 public class ItemOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -12,14 +12,14 @@ public class ItemOrderEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "commande_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity commande;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "produit_revendeur_id", nullable = false)
+    @JoinColumn(name = "product_seller_id", nullable = false)
     private SellerGameEntity produitRevendeur;
 
-    @Column(name = "quantite", nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Integer quantite;
 
     public ItemOrderEntity() {

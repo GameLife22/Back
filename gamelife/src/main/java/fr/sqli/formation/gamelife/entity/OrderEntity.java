@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "glcommande", schema = "gamelife")
+@Table(name = "glorder", schema = "gamelife")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,26 +17,26 @@ public class OrderEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "utilisateur_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
     private List<ItemOrderEntity> itemsCommande;
 
-    @Column(name = "etat", nullable = false, length = 80)
+    @Column(name = "status", nullable = false, length = 80)
     @Enumerated(EnumType.STRING)
     private OrderStatus etat;
 
-    @Column(name = "num_rue_livraison", nullable = false)
+    @Column(name = "delivery_street_number", nullable = false)
     private Integer numRueLivraison;
 
-    @Column(name = "rue_livraison", nullable = false)
+    @Column(name = "delivery_street", nullable = false)
     private String rueLivraison;
 
-    @Column(name = "ville_livraison", nullable = false, length = 80)
+    @Column(name = "delivery_city", nullable = false, length = 80)
     private String villeLivraison;
 
-    @Column(name = "code_postal_livraison", nullable = false)
+    @Column(name = "delivery_postal_code", nullable = false)
     private Integer codePostalLivraison;
 
     @Column(name = "date", nullable = false)

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
-@Table(name = "glproduit_revendeur", schema = "gamelife")
+@Table(name = "glproduct_seller", schema = "gamelife")
 public class SellerGameEntity {
 
     @Id
@@ -25,18 +25,18 @@ public class SellerGameEntity {
     private Integer stock;
 
     @Getter
-    @Column(name = "prix", nullable = false, precision = 10)
+    @Column(name = "price", nullable = false, precision = 10)
     private BigDecimal prix;
 
-    @Column(name = "etat", nullable = false, length = 25)
+    @Column(name = "status", nullable = false, length = 25)
     private String etat;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "produit_id", nullable = false)
+    @JoinColumn(name = "game_id", nullable = false)
     private GameEntity produit;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "utilisateur_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity utilisateur;
 
 

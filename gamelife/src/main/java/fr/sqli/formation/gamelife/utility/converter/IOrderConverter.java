@@ -3,6 +3,7 @@ package fr.sqli.formation.gamelife.utility.converter;
 import fr.sqli.formation.gamelife.dto.request.OrderRequest;
 import fr.sqli.formation.gamelife.dto.response.OrderResponse;
 import fr.sqli.formation.gamelife.entity.OrderEntity;
+import fr.sqli.formation.gamelife.entity.OrderEntity;
 import fr.sqli.formation.gamelife.entity.ItemOrderEntity;
 import fr.sqli.formation.gamelife.entity.UserEntity;
 
@@ -14,32 +15,42 @@ public interface IOrderConverter {
 
     public static OrderEntity DtoToEntity(OrderRequest dto) {
         OrderEntity OrderEntity = new OrderEntity();
+        OrderEntity.setId(dto.getId());
         OrderEntity.setUtilisateur(new UserEntity(dto.getIdUtilisateur()));
         OrderEntity.setEtat(dto.getEtat());
-        OrderEntity.setStreetNumberLivraison(dto.getStreetNumberLivraison());
-        OrderEntity.setStreetLivraison(dto.getStreetLivraison());
-        OrderEntity.setCityLivraison(dto.getCityLivraison());
-        OrderEntity.setZipCodeLivraison(dto.getZipCodeLivraison());
+        OrderEntity.setStreetNumberLivraison(dto.getNumRueLivraison());
+        OrderEntity.setStreetLivraison(dto.getRueLivraison());
+        OrderEntity.setCityLivraison(dto.getVilleLivraison());
+        OrderEntity.setZipCodeLivraison(dto.getCodePostalLivraison());
         OrderEntity.setDate(dto.getDate());
+
+        if (dto.getItemsCommande() != null) {
+            List<ItemOrderEntity> ItemOrderEntitys = dto.getItemsCommande().stream()
+                    .map(IItemOrderConverter::DtoToEntity)
+                    .collect(Collectors.toList());
+            OrderEntity.setItemsCommande(ItemOrderEntitys);
+        }
         return OrderEntity;
     }
 
 
     public static OrderResponse EntityToDto(OrderEntity entity) {
-        OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setEtat(entity.getEtat());
-        orderResponse.setStreetNumberLivraison(entity.getStreetNumberLivraison());
-        orderResponse.setStreetLivraison(entity.getStreetLivraison());
-        orderResponse.setCityLivraison(entity.getCityLivraison());
-        orderResponse.setZipCodeLivraison(entity.getZipCodeLivraison());
-        orderResponse.setDate(entity.getDate());
+        OrderResponse OrderResponse = new OrderResponse();
+        OrderResponse.setId(entity.getId());
+        OrderResponse.setEtat(entity.getEtat());
+        OrderResponse.setNumRueLivraison(entity.getStreetNumberLivraison());
+        OrderResponse.setRueLivraison(entity.getStreetLivraison());
+        OrderResponse.setVilleLivraison(entity.getCityLivraison());
+        OrderResponse.setCodePostalLivraison(entity.getZipCodeLivraison());
+        OrderResponse.setDate(entity.getDate());
 
         if (entity.getItemsCommande() != null) {
             List<UUID> itemIds = entity.getItemsCommande().stream()
                     .map(ItemOrderEntity::getId)
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
-        return orderResponse;
+
+        return OrderResponse;
     }
 }
