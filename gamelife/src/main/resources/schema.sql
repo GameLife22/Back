@@ -1,90 +1,48 @@
-CREATE SCHEMA IF NOT EXISTS gamelife;
+-- Users
+INSERT INTO gamelife.gluser (id, last_name, first_name, password, email, street_number, street, city, zip_code, role, siren_number, account_status, reset_password_token)
+VALUES
+    ('ede28d8b-9170-4e8e-83b3-3c2c16c39ae8', 'admin', 'admin', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'admin@gamelife.fr', 2, 'rue de capucine', 'paris', 75000, 'ROLE_ADMIN', NULL, true, NULL),
+    ('b114050e-1341-4ce4-9380-8c01b3eb52fb', 'moderateur', 'moderateur', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'moderateur@gamelife.fr', 2, 'rue du general de Gaulle', 'paris', 75000, 'ROLE_MODERATEUR', NULL, true, NULL),
+    ('c81f4beb-d17d-4b68-8a10-195745ddb894', 'acheteur', 'acheteur', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'acheteur@gamelife.fr', 2, 'rue du marechal', 'nantes', 44000, 'ROLE_ACHETEUR', NULL, true, NULL),
+    ('906d837f-c451-4aa1-9bc1-e92038e93f1d', 'revendeur', 'revendeur', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'revendeur@gamelife.fr', 3, 'rue dupont', 'lille', 59000, 'ROLE_REVENDEUR', '325987418', true, NULL);
 
-SET search_path TO gamelife;
+-- Games
+INSERT INTO gamelife.glgame (id, name, description)
+VALUES
+    ('6a4a4185-cdb4-418e-9249-a160e384d877', 'FIFA', 'FOOTBALL'),
+    ('994a4185-cdb4-418e-9249-a160e3840000', 'GTA', 'Grand Theft Auto'),
+    ('884a4185-cdb4-418e-9249-a160e3840044', 'CALL OFF', 'Guerre');
 
-DROP TABLE IF EXISTS gamelife.gluser CASCADE;
-DROP TABLE IF EXISTS gamelife.glorder CASCADE;
-DROP TABLE IF EXISTS gamelife.glgame CASCADE;
-DROP TABLE IF EXISTS gamelife.glgenre CASCADE;
-DROP TABLE IF EXISTS gamelife.glplatform;
-DROP TABLE IF EXISTS gamelife.glimage CASCADE;
-DROP TABLE IF EXISTS gamelife.glorder_item CASCADE;
-DROP TABLE IF EXISTS gamelife.glproduct_seller CASCADE;
+-- Genres
+INSERT INTO gamelife.glgenre (game_id, genre)
+VALUES
+    ('6a4a4185-cdb4-418e-9249-a160e384d877', 'Sports');
 
-CREATE TABLE gamelife.gluser
-(
-    id                    UUID   PRIMARY KEY,
-    last_name             VARCHAR(50)          NOT NULL,
-    first_name            VARCHAR(50)          NOT NULL,
-    password              VARCHAR(80)          NOT NULL,
-    email                 VARCHAR(80)          NOT NULL UNIQUE,
-    street_number         INT                  NOT NULL,
-    street                VARCHAR(255)         NOT NULL,
-    city                  VARCHAR(80)          NOT NULL,
-    zip_code           INT                  NOT NULL,
-    role                  VARCHAR(50)          NOT NULL,
-    siren_number          CHAR(9) NULL DEFAULT NULL UNIQUE,
-    account_status        BOOLEAN DEFAULT TRUE NOT NULL,
-    reset_password_token  VARCHAR(30) NULL
-);
+-- Platforms
+INSERT INTO gamelife.glplatform (game_id, platform)
+VALUES
+    ('6a4a4185-cdb4-418e-9249-a160e384d877', 'PlayStation');
 
-CREATE TABLE gamelife.glorder
-(
-    id                    UUID   PRIMARY KEY,
-    status                VARCHAR(80)  NOT NULL,
-    delivery_street_number INT         NOT NULL,
-    delivery_street        VARCHAR(255) NOT NULL,
-    delivery_city          VARCHAR(80)  NOT NULL,
-    delivery_zip_code      INT          NOT NULL,
-    date                  DATE         NOT NULL,
-    user_id               UUID         NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES gamelife.gluser (id)
-);
+-- Images
+INSERT INTO gamelife.glimage (image_url, game_id)
+VALUES
+    ('test', '6a4a4185-cdb4-418e-9249-a160e384d877'),
+    ('test 2', '994a4185-cdb4-418e-9249-a160e3840000'),
+    ('test 3', '884a4185-cdb4-418e-9249-a160e3840044');
 
-CREATE TABLE gamelife.glgame
-(
-    id            UUID   PRIMARY KEY,
-    name          VARCHAR(50) NOT NULL,
-    description   TEXT         NOT NULL
-);
+-- Orders
+INSERT INTO gamelife.glorder (id, status, delivery_street_number, delivery_street, delivery_city, delivery_zip_code, date, user_id)
+VALUES
+    ('01234567-89ab-cdef-0123-456789abcdef', 'NOUVELLE', 123, 'Rue de la Peace', 'Paris', 75000, '2024-05-07', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');
 
-CREATE TABLE gamelife.glgenre (
-    game_id UUID NOT NULL,
-    genre VARCHAR(25) NOT NULL,
-    CONSTRAINT fk_glgenre_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- Product Sellers
+INSERT INTO gamelife.glproduct_seller (id, stock, price, status, game_id, user_id)
+VALUES
+    ('63ef0498-3148-4e57-a4f6-4c17a9ed9352', 10, 49, 'Active', '6a4a4185-cdb4-418e-9249-a160e384d877', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8'),
+    ('56ef0498-3148-4e57-a4f6-4c17a9ed9366', 10, 59, 'Active', '6a4a4185-cdb4-418e-9249-a160e384d877', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8'),
+    ('77ef0498-3148-4e57-a4f6-4c17a9ed9399', 10, 29, 'Inactive', '994a4185-cdb4-418e-9249-a160e3840000', 'ede28d8b-9170-4e8e-83b3-3c2c16c39ae8');
 
-CREATE TABLE gamelife.glplatform(
-    game_id UUID NOT NULL,
-    platform VARCHAR(255) NOT NULL,
-    CONSTRAINT fk_glplatform_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE gamelife.glimage
-(
-    image_url VARCHAR(2083) NOT NULL,
-    game_id UUID NOT NULL,
-    CONSTRAINT fk_glimage_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE gamelife.glproduct_seller
-(
-    id             UUID   PRIMARY KEY,
-    stock          INT            NOT NULL,
-    price          DECIMAL(10, 0) NOT NULL,
-    status         VARCHAR(25)    NOT NULL,
-    game_id        UUID           NOT NULL,
-    user_id        UUID           NOT NULL,
-    FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id),
-    FOREIGN KEY (user_id) REFERENCES gamelife.gluser (id)
-);
-
-CREATE TABLE gamelife.glorder_item
-(
-    id                    UUID   PRIMARY KEY,
-    quantity              INT NOT NULL,
-    order_id              UUID   NOT NULL,
-    product_seller_id     UUID   NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES gamelife.glorder (id),
-    FOREIGN KEY (product_seller_id) REFERENCES gamelife.glproduct_seller (id)
-);
+-- Order Items
+INSERT INTO gamelife.glorder_item (id, quantity, order_id, product_seller_id)
+VALUES
+    ('1', 2, '01234567-89ab-cdef-0123-456789abcdef', '63ef0498-3148-4e57-a4f6-4c17a9ed9352');
