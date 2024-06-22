@@ -45,4 +45,4 @@ VALUES
 -- Order Items
 INSERT INTO gamelife.glorder_item (id, quantity, order_id, product_seller_id)
 VALUES
-    ('1', 2, '01234567-89ab-cdef-0123-456789abcdef', '63ef0498-3148-4e57-a4f6-4c17a9ed9352');
+    ('123e4567-e89b-12d3-a456-426614174000', 2, '01234567-89ab-cdef-0123-456789abcdef', '63ef0498-3148-4e57-a4f6-4c17a9ed9352');
