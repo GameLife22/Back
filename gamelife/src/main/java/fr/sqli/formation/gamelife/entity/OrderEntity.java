@@ -36,7 +36,7 @@ public class OrderEntity {
     @Column(name = "delivery_city", nullable = false, length = 80)
     private String villeLivraison;
 
-    @Column(name = "delivery_postal_code", nullable = false)
+    @Column(name = "delivery_zip_code", nullable = false)
     private Integer codePostalLivraison;
 
     @Column(name = "date", nullable = false)
@@ -53,68 +53,68 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public UserEntity getUtilisateur() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUtilisateur(UserEntity pUtilisateur) {
-        user = pUtilisateur;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public List<ItemOrderEntity> getItemsCommande() {
         return itemsCommande;
     }
 
-    public void setItemsCommande(List<ItemOrderEntity> pItemsCommande) {
-        this.itemsCommande = pItemsCommande;
+    public void setItemsCommande(List<ItemOrderEntity> itemsCommande) {
+        this.itemsCommande = itemsCommande;
     }
 
     public OrderStatus getEtat() {
         return etat;
     }
 
-    public void setEtat(OrderStatus pEtat) {
-        etat = pEtat;
+    public void setEtat(OrderStatus etat) {
+        this.etat = etat;
     }
 
-    public Integer getStreetNumberLivraison() {
+    public Integer getNumRueLivraison() {
         return numRueLivraison;
     }
 
-    public void setStreetNumberLivraison(Integer pNumRueLivraison) {
-        numRueLivraison = pNumRueLivraison;
+    public void setNumRueLivraison(Integer numRueLivraison) {
+        this.numRueLivraison = numRueLivraison;
     }
 
-    public String getStreetLivraison() {
+    public String getRueLivraison() {
         return rueLivraison;
     }
 
-    public void setStreetLivraison(String pRueLivraison) {
-        rueLivraison = pRueLivraison;
+    public void setRueLivraison(String rueLivraison) {
+        this.rueLivraison = rueLivraison;
     }
 
-    public String getCityLivraison() {
+    public String getVilleLivraison() {
         return villeLivraison;
     }
 
-    public void setCityLivraison(String pVilleLivraison) {
-        villeLivraison = pVilleLivraison;
+    public void setVilleLivraison(String villeLivraison) {
+        this.villeLivraison = villeLivraison;
     }
 
-    public Integer getZipCodeLivraison() {
+    public Integer getCodePostalLivraison() {
         return codePostalLivraison;
     }
 
-    public void setZipCodeLivraison(Integer pCodePostalLivraison) {
-        codePostalLivraison = pCodePostalLivraison;
+    public void setCodePostalLivraison(Integer codePostalLivraison) {
+        this.codePostalLivraison = codePostalLivraison;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate pDate) {
-        date = pDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override

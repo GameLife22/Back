@@ -18,7 +18,7 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     //recuperer tous les produits qu'un utilisateur a dans son panier
      @Query("SELECT c FROM OrderEntity c JOIN FETCH c.itemsCommande WHERE c.user.id = :id")
-      Optional<OrderEntity> findByUtilisateurIdWithItemCommandes(@Param("id") UUID id);
+      Optional<OrderEntity> findByUserIdWithItemCommandes(@Param("id") UUID id);
 
-     Optional<OrderEntity> findByUtilisateurId(UUID pIdUtilisateur);
+     Optional<OrderEntity> findByUserId(UUID userId);
 }

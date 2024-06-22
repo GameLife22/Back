@@ -65,7 +65,7 @@ public class OrderService implements IOrderService {
     @Override
     public List<GameResponse> getAllProduitsPanier(UUID userId) throws OrderNotFoundException {
 
-        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurIdWithItemCommandes(userId)
+        OrderEntity OrderEntity = IOrderRepository.findByUserIdWithItemCommandes(userId)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'identifiant de l'utilisateur : " + userId));
 
         List<GameResponse> produitsPanier = new ArrayList<>();
@@ -94,7 +94,7 @@ public class OrderService implements IOrderService {
 
     public OrderResponse getCommande(UUID id) throws OrderNotFoundException {
         try {
-            OrderEntity OrderEntity = IOrderRepository.findByUtilisateurId(id)
+            OrderEntity OrderEntity = IOrderRepository.findByUserId(id)
                     .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
             return IOrderConverter.EntityToDto(OrderEntity);
@@ -119,7 +119,7 @@ public class OrderService implements IOrderService {
         OrderEntity.setEtat(OrderStatus.NOUVELLE);
 
 
-        OrderEntity.setUtilisateur(utilisateur);
+        OrderEntity.setUser(utilisateur);
 
         OrderEntity savedOrderEntity = IOrderRepository.save(OrderEntity);
 
@@ -137,10 +137,10 @@ public class OrderService implements IOrderService {
 
         // Mettre à jour les informations de la commande avec les données fournies dans le DTO
         existingCommande.setEtat(commandeDto.getEtat());
-        existingCommande.setStreetNumberLivraison(commandeDto.getNumRueLivraison());
-        existingCommande.setStreetLivraison(commandeDto.getRueLivraison());
-        existingCommande.setCityLivraison(commandeDto.getVilleLivraison());
-        existingCommande.setZipCodeLivraison(commandeDto.getCodePostalLivraison());
+        existingCommande.setNumRueLivraison(commandeDto.getNumRueLivraison());
+        existingCommande.setRueLivraison(commandeDto.getRueLivraison());
+        existingCommande.setVilleLivraison(commandeDto.getVilleLivraison());
+        existingCommande.setCodePostalLivraison(commandeDto.getCodePostalLivraison());
         existingCommande.setDate(commandeDto.getDate());
 
         IOrderRepository.save(existingCommande);
@@ -151,7 +151,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteCommande(UUID id) throws OrderNotFoundException {
-        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurId(id)
+        OrderEntity OrderEntity = IOrderRepository.findByUserId(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
         IOrderRepository.delete(OrderEntity);
@@ -226,7 +226,7 @@ public class OrderService implements IOrderService {
     @Override
     public ItemOrderResponse ajoutProduit(UUID pIdUtilisateur, ItemOrderRequest pItemOrderRequest) throws SellerGameException, ParameterException, OrderNotFoundException, InvalidStatusOrderException {
         // Chercher la commande de l'utilisateur
-        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurId(pIdUtilisateur)
+        OrderEntity OrderEntity = IOrderRepository.findByUserId(pIdUtilisateur)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'identifiant : " + pIdUtilisateur));
 
         // Vérifier si la commande est dans un état permettant l'ajout de produit
@@ -281,7 +281,7 @@ public class OrderService implements IOrderService {
     @Override
     public OrderResponse validerCommande(UUID id) throws OrderNotFoundException {
         // Chercher la commande
-        OrderEntity OrderEntity = IOrderRepository.findByUtilisateurIdWithItemCommandes(id)
+        OrderEntity OrderEntity = IOrderRepository.findByUserIdWithItemCommandes(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
 
         // Changer l'état de la commande

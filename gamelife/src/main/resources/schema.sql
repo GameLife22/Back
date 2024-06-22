@@ -35,7 +35,7 @@ CREATE TABLE gamelife.glorder
     delivery_street_number INT         NOT NULL,
     delivery_street        VARCHAR(255) NOT NULL,
     delivery_city          VARCHAR(80)  NOT NULL,
-    delivery_postal_code   INT          NOT NULL,
+    delivery_zip_code      INT          NOT NULL,
     date                  DATE         NOT NULL,
     user_id               UUID         NOT NULL,
     FOREIGN KEY (user_id) REFERENCES gamelife.gluser (id)

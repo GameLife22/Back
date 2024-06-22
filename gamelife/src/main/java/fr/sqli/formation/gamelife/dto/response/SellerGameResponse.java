@@ -43,12 +43,12 @@ public class SellerGameResponse {
         etat = pEtat;
     }
 
-    public GameResponse recupererProduit() {
+    public GameResponse getProduit() {
         return produit;
     }
 
-    public void setProduit(GameResponse pProduit) {
-        produit = pProduit;
+    public void setProduit(GameResponse produit) {
+        this.produit = produit;
     }
 
     @Override

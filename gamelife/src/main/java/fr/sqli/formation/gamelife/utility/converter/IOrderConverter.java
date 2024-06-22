@@ -16,12 +16,12 @@ public interface IOrderConverter {
     public static OrderEntity DtoToEntity(OrderRequest dto) {
         OrderEntity OrderEntity = new OrderEntity();
         OrderEntity.setId(dto.getId());
-        OrderEntity.setUtilisateur(new UserEntity(dto.getIdUtilisateur()));
+        OrderEntity.setUser(new UserEntity(dto.getIdUtilisateur()));
         OrderEntity.setEtat(dto.getEtat());
-        OrderEntity.setStreetNumberLivraison(dto.getNumRueLivraison());
-        OrderEntity.setStreetLivraison(dto.getRueLivraison());
-        OrderEntity.setCityLivraison(dto.getVilleLivraison());
-        OrderEntity.setZipCodeLivraison(dto.getCodePostalLivraison());
+        OrderEntity.setNumRueLivraison(dto.getNumRueLivraison());
+        OrderEntity.setRueLivraison(dto.getRueLivraison());
+        OrderEntity.setVilleLivraison(dto.getVilleLivraison());
+        OrderEntity.setCodePostalLivraison(dto.getCodePostalLivraison());
         OrderEntity.setDate(dto.getDate());
 
         if (dto.getItemsCommande() != null) {
@@ -38,10 +38,10 @@ public interface IOrderConverter {
         OrderResponse OrderResponse = new OrderResponse();
         OrderResponse.setId(entity.getId());
         OrderResponse.setEtat(entity.getEtat());
-        OrderResponse.setNumRueLivraison(entity.getStreetNumberLivraison());
-        OrderResponse.setRueLivraison(entity.getStreetLivraison());
-        OrderResponse.setVilleLivraison(entity.getCityLivraison());
-        OrderResponse.setCodePostalLivraison(entity.getZipCodeLivraison());
+        OrderResponse.setNumRueLivraison(entity.getNumRueLivraison());
+        OrderResponse.setRueLivraison(entity.getRueLivraison());
+        OrderResponse.setVilleLivraison(entity.getVilleLivraison());
+        OrderResponse.setCodePostalLivraison(entity.getCodePostalLivraison());
         OrderResponse.setDate(entity.getDate());
 
         if (entity.getItemsCommande() != null) {
