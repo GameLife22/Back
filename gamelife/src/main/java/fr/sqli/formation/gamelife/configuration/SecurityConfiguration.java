@@ -49,6 +49,7 @@ public class SecurityConfiguration {
 
     private static final String ADMIN = "SCOPE_ROLE_ADMIN";
     private static final String SELLER = "SCOPE_ROLE_REVENDEUR";
+    private static final String BUYER = "SCOPE_ROLE_ACHETEUR";
 
 
     @Autowired
@@ -88,7 +89,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/inscription/siret").permitAll()
                 .requestMatchers("/inscription/activer").permitAll()
                 .requestMatchers("/inscription/validation").permitAll()
-                .requestMatchers("/commande/all").permitAll()
+                .requestMatchers("/commande/all").hasAuthority(BUYER)
                 .requestMatchers("/commande/creer").permitAll()
                 .requestMatchers("/commande/{idCommande}").permitAll()
                 .requestMatchers("/commande/{idCommande}/modif-quantite").permitAll()

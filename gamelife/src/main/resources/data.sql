@@ -16,7 +16,7 @@ VALUES
 -- Genres
 INSERT INTO gamelife.glgenre (game_id, genre)
 VALUES
-    ('6a4a4185-cdb4-418e-9249-a160e384d877', 'Sports');
+    ('6a4a4185-cdb4-418e-9249-a160e384d877', 'SPORTS');
 
 -- Platforms
 INSERT INTO gamelife.glplatform (game_id, platform)
