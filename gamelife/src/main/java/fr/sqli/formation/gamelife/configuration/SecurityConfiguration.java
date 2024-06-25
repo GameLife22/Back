@@ -74,7 +74,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/utilisateur/mdpoublie").permitAll()
                 .requestMatchers("/utilisateur/mdpreset").permitAll()
                 .requestMatchers("/utilisateur/getEmailByToken").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/games").hasAnyAuthority(ADMIN, SELLER)
+                .requestMatchers(HttpMethod.GET, "/api/v1/games").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/games/genres").hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.GET, "/api/v1/games/platforms").hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.GET,"/api/v1/games/search/{name}").hasAnyAuthority(ADMIN)
