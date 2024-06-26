@@ -1,6 +1,10 @@
 package fr.sqli.formation.gamelife.dto.request;
 
 import fr.sqli.formation.gamelife.enumeration.OrderStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,13 +12,31 @@ import java.util.UUID;
 
 public class OrderRequest {
     private UUID id;
+
+    @NotNull(message = "User ID is required")
     private UUID idUtilisateur;
+
+    @NotNull(message = "Order status is required")
     private OrderStatus etat;
+
+    @NotNull(message = "Street number is required")
     private Integer numRueLivraison;
+
+    @NotBlank(message = "Street name is required")
+    @Size(max = 255, message = "Street name must not exceed 255 characters")
     private String rueLivraison;
+
+    @NotBlank(message = "City is required")
+    @Size(max = 255, message = "City name must not exceed 255 characters")
     private String villeLivraison;
+
+    @NotNull(message = "Postal code is required")
     private Integer codePostalLivraison;
+
+    @NotNull(message = "Date is required")
     private LocalDate date;
+
+    @NotEmpty(message = "Items cannot be empty")
     private List<ItemOrderRequest> itemsCommande;
 
     public UUID getId() {

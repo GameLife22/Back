@@ -10,6 +10,11 @@ public class ItemOrderRequest {
     private UUID idProduitRevendeur;
     private Integer quantite;
 
+    // Ajout d'un constructeur avec arguments
+    public ItemOrderRequest(UUID idProduitRevendeur, Integer quantite) {
+        this.idProduitRevendeur = idProduitRevendeur;
+        this.quantite = quantite;
+    }
     public UUID getId() {
         return id;
     }

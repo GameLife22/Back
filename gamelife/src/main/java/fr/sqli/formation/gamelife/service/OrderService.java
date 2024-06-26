@@ -279,7 +279,7 @@ public class OrderService implements IOrderService {
 
     // Valider une commande, changer son état en EN_COURS_DE_TRAITEMENT
     @Override
-    public OrderResponse validerCommande(UUID id) throws OrderNotFoundException {
+    public  OrderResponse validerCommande(UUID id) throws OrderNotFoundException {
         // Chercher la commande
         OrderEntity OrderEntity = IOrderRepository.findByUserIdWithItemCommandes(id)
                 .orElseThrow(() -> new OrderNotFoundException("Commande non trouvée avec l'ID : " + id));
