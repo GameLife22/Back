@@ -196,7 +196,7 @@ class GameRestControllerIntegrationTest {
         gameRequest.setPlatforms(Set.of(Platform.ATARI_XEGS));
         gameRequest.setImages(List.of("https://image3.png", "file://image4.jpg"));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/{id}", gameResponse.getId())
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PREFIX_API_URL + "/games/{id}", gameResponse.getId())
                         .contentType("application/json")
                         .accept("application/json")
                         .header("Authorization", "Bearer " + adminToken)
@@ -213,7 +213,7 @@ class GameRestControllerIntegrationTest {
         gameRequest.setPlatforms(Set.of(Platform.ATARI_XEGS));
         gameRequest.setImages(List.of("https://image3.png", "file://image4.jpg"));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/{id}", UUID.randomUUID())
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PREFIX_API_URL + "/games/{id}", UUID.randomUUID())
                         .contentType("application/json")
                         .accept("application/json")
                         .header("Authorization", "Bearer " + adminToken)

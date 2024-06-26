@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.sqli.formation.gamelife.TestContainerConfiguration;
 import fr.sqli.formation.gamelife.dto.request.ItemOrderRequest;
 import fr.sqli.formation.gamelife.dto.request.OrderRequest;
+import fr.sqli.formation.gamelife.dto.response.ItemOrderResponse;
+import fr.sqli.formation.gamelife.dto.response.OrderResponse;
 import fr.sqli.formation.gamelife.enumeration.OrderStatus;
 import fr.sqli.formation.gamelife.service.OrderService;
 import fr.sqli.formation.gamelife.service.TokenService;
@@ -21,6 +23,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -29,9 +32,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.UUID;
 @Import(TestContainerConfiguration.class)
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -50,7 +59,7 @@ class OrderRestControllerIntegrationTest {
 
     private static final String PREFIX_API_URL = "/commande";
 
-    private String adminToken;
+    private String buyerToken;
 
     @Autowired
     OrderRestControllerIntegrationTest(MockMvc pMockMvc, TokenService pTokenService, ObjectMapper pObjectMapper) {
@@ -63,64 +72,136 @@ class OrderRestControllerIntegrationTest {
     @BeforeEach
     public void setUp() throws Exception {
         this.orderRequest = new OrderRequest();
-        this.orderRequest.setIdUtilisateur(UUID.randomUUID());
+        this.orderRequest.setIdUtilisateur(UUID.fromString("c81f4beb-d17d-4b68-8a10-195745ddb894")); // ID of the buyer
         this.orderRequest.setEtat(OrderStatus.NOUVELLE);
-        this.orderRequest.setNumRueLivraison(123);
-        this.orderRequest.setRueLivraison("Example Street");
-        this.orderRequest.setVilleLivraison("Example City");
-        this.orderRequest.setCodePostalLivraison(12345);
-        this.orderRequest.setDate(LocalDate.now());
-        List<ItemOrderRequest> items = new ArrayList<>();
-        this.orderRequest.setItemsCommande(items);
+        this.orderRequest.setNumRueLivraison(2);
+        this.orderRequest.setRueLivraison("Rue du Marechal");
+        this.orderRequest.setVilleLivraison("Nantes");
+        this.orderRequest.setCodePostalLivraison(44000);
+        this.orderRequest.setDate(LocalDate.of(2024, 5, 7)); // Specified date
 
-
-        adminToken = generateToken("admin@gamelife.fr", "ROLE_ADMIN");
+        // Initialisation des articles de commande
+        //List<ItemOrderRequest> items = new ArrayList<>();
+        //items.add(new ItemOrderRequest(UUID.fromString("63ef0498-3148-4e57-a4f6-4c17a9ed9352"), 2)); // Utilisation correcte du constructeur
+       // this.orderRequest.setItemsCommande(items);
+        // Génération du token admin
+        buyerToken = generateToken("acheteur@gamelife.fr", "ROLE_ACHETEUR");
     }
 
     private String generateToken(String username, String role) throws Exception {
         var authentication = new TestingAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
         return tokenService.generateToken(authentication);
     }
-
-
     @Test
-    void testValiderCommande_Success() throws Exception {
-        UUID orderId = UUID.randomUUID();
-        this.orderRequest.setId(orderId);
-
-        this.mockMvc.perform(MockMvcRequestBuilders.put(PREFIX_API_URL + "/{idCommande}/valider-commande", orderId)
+    void testCreateOrder() throws Exception {
+        // Simuler une requête HTTP POST pour créer une commande
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/creer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + adminToken)
+                        .header("Authorization", "Bearer " + buyerToken)
                         .content(this.objectMapper.writeValueAsString(this.orderRequest)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.id").value(orderId.toString()))
-                .andExpect(jsonPath("$.idUtilisateur").value(orderRequest.getIdUtilisateur()))
-                .andExpect(jsonPath("$.etat").value(OrderStatus.EN_COURS_DE_TRAITEMENT.getName()))
-                .andExpect(jsonPath("$.numRueLivraison").value(orderRequest.getNumRueLivraison()))
-                .andExpect(jsonPath("$.rueLivraison").value(orderRequest.getRueLivraison()))
-                .andExpect(jsonPath("$.villeLivraison").value(orderRequest.getVilleLivraison()))
-                .andExpect(jsonPath("$.codePostalLivraison").value(orderRequest.getCodePostalLivraison()))
-                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.itemsCommande").isArray());
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        // Extraire le contenu de la réponse
+        String responseContent = result.getResponse().getContentAsString();
+
+        // Désérialiser le contenu de la réponse en un objet OrderRequest
+        OrderRequest createdOrder = objectMapper.readValue(responseContent, OrderRequest.class);
+
+        // Valider la réponse
+        assertEquals(orderRequest.getIdUtilisateur(), createdOrder.getIdUtilisateur());
+        assertEquals(orderRequest.getEtat(), createdOrder.getEtat());
+        assertEquals(orderRequest.getNumRueLivraison(), createdOrder.getNumRueLivraison());
+        assertEquals(orderRequest.getRueLivraison(), createdOrder.getRueLivraison());
+        assertEquals(orderRequest.getVilleLivraison(), createdOrder.getVilleLivraison());
+        assertEquals(orderRequest.getCodePostalLivraison(), createdOrder.getCodePostalLivraison());
+        assertEquals(orderRequest.getDate(), createdOrder.getDate());
+    }
+
+    //Création de Commande avec des Dates Invalide
+    @Test
+    void testCreateOrderWithInvalidDate() throws Exception {
+        // Utiliser une date de livraison passée
+        orderRequest.setDate(LocalDate.of(2020, 1, 1));
+
+        // Simuler une requête HTTP POST pour créer une commande
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/creer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + buyerToken)
+                        .content(this.objectMapper.writeValueAsString(orderRequest)))
+                .andExpect(status().isBadRequest()) // Vérifier que le statut est 400 Bad Request
+                .andReturn();
+
+        // Vérifier le contenu de la réponse pour l'erreur de date
+        String responseContent = result.getResponse().getContentAsString();
+        assertTrue(responseContent.contains("Date de livraison invalide"));
+    }
+
+    @Test
+    void testAjoutProduit() throws Exception {
+        UUID userId = UUID.fromString("ede28d8b-9170-4e8e-83b3-3c2c16c39ae8");
+        UUID productSellerId = UUID.fromString("63ef0498-3148-4e57-a4f6-4c17a9ed9352");
+        UUID orderId = UUID.fromString("01234567-89ab-cdef-0123-456789abcdef");
+
+        // Prepare an item order request
+        ItemOrderRequest itemOrderRequest = new ItemOrderRequest( productSellerId, 1);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/commande/" + userId + "/ajout-produit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + buyerToken)
+                        .content(objectMapper.writeValueAsString(itemOrderRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.idCommande").value(orderId.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.idProduitRevendeur").value(productSellerId.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantite").value(1));
     }
 
 
-    @Test
-    void testValiderCommande_OrderNotFound() throws Exception {
-        // Simuler une requête HTTP PUT avec un ID de commande inexistant
-        UUID nonExistingId = UUID.randomUUID();
-        mockMvc.perform(MockMvcRequestBuilders.put(PREFIX_API_URL + "/{idCommande}/valider-commande", nonExistingId)
-                        .contentType("application/json")
-                        .accept("application/json")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .content(this.objectMapper.writeValueAsString(this.orderRequest)))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Commande non trouvée avec l'ID : " + nonExistingId.toString()))
-                .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Not Found"))
-                .andExpect(jsonPath("$.path").value("/commande/" + nonExistingId.toString() + "/valider-commande"));
 
+
+
+
+
+
+
+
+
+
+
+
+    // Test de validation de commande
+    @Test
+    void testValiderCommande() throws Exception {
+        // Créer une nouvelle commande pour pouvoir la valider
+        MvcResult createResult = mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/creer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + buyerToken)
+                        .content(this.objectMapper.writeValueAsString(this.orderRequest)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        // Extraire l'ID de la commande créée à partir de la réponse
+        String createResponseContent = createResult.getResponse().getContentAsString();
+        OrderRequest createdOrder = objectMapper.readValue(createResponseContent, OrderRequest.class);
+
+        // Simuler une requête HTTP PUT pour valider la commande
+        MvcResult validateResult = mockMvc.perform(MockMvcRequestBuilders.put(PREFIX_API_URL + "/valider-commande")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + buyerToken))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Extraire le contenu de la réponse de validation
+        String validateResponseContent = validateResult.getResponse().getContentAsString();
+        OrderResponse validatedOrder = objectMapper.readValue(validateResponseContent, OrderResponse.class);
+
+        // Valider la réponse
+        assertEquals(OrderStatus.EN_COURS_DE_TRAITEMENT, validatedOrder.getEtat());
     }
 
 

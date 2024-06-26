@@ -21,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -73,13 +75,21 @@ public class OrderRestController {
     // Crée une commande pour un utilisateur
     @PostMapping("/creer")
     public ResponseEntity<OrderRequest> creerCommande(@RequestBody OrderRequest commandeDto) {
+        // Validation de la date de livraison
+        LocalDate today = LocalDate.now();
+        if (commandeDto.getDate().isBefore(today)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date de livraison invalide");
+        }
+
+        // Logique de création de commande
         try {
-            OrderRequest creerdCommande = IOrderService.creerCommande(commandeDto);
-            return new ResponseEntity<>(creerdCommande, HttpStatus.CREATED);
+            OrderRequest createdCommande = IOrderService.creerCommande(commandeDto);
+            return new ResponseEntity<>(createdCommande, HttpStatus.CREATED);
         } catch (NonExistentUserException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur non existant", e);
         }
     }
+
 
     // Modifier une commande
     @PutMapping("/{id}")
@@ -124,25 +134,18 @@ public class OrderRestController {
     // Ajouter un produit dans une commande existante (id) sinon créer une nouvelle commande
     @PutMapping("/{id}/ajout-produit")
     public ResponseEntity<ItemOrderResponse> ajoutProduit(@PathVariable("id") UUID idUtilisateur,
-                                                            @RequestBody ItemOrderRequest itemCommandeDto) {
+                                                          @RequestBody ItemOrderRequest itemCommandeDto) {
         try {
-            // Utilisation du logger pour enregistrer des informations de débogage
             logger.info("Requête d'ajout de produit pour l'utilisateur avec l'ID : {}", idUtilisateur);
 
-            // Votre logique métier pour ajouter le produit à la commande
+            // Your business logic to add the product to the order
             ItemOrderResponse itemOrderResponse = IOrderService.ajoutProduit(idUtilisateur, itemCommandeDto);
 
-            // Utilisation du logger pour enregistrer des informations de débogage
             logger.info("Produit ajouté avec succès pour l'utilisateur avec l'ID : {}", idUtilisateur);
 
-            // Retourner une réponse avec le statut 201 Created
             return new ResponseEntity<>(itemOrderResponse, HttpStatus.CREATED);
-        } catch (SellerGameException | ParameterException  |
-                 OrderNotFoundException | InvalidStatusOrderException e) {
-            // Utilisation du logger pour enregistrer des informations sur l'erreur
+        } catch (Exception e) {
             logger.error("Une erreur s'est produite lors de l'ajout du produit pour l'utilisateur avec l'ID : {}", idUtilisateur, e);
-
-            // Retourner une réponse avec un code d'erreur
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
