@@ -16,6 +16,13 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "glgame", schema = "gamelife")
+@NamedStoredProcedureQuery(
+        name = "count_games",
+        procedureName = "count_games",
+        parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class, name = "p_count_games")
+        }
+)
 public class GameEntity {
 
     @Id

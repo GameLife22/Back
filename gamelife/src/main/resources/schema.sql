@@ -88,3 +88,11 @@ CREATE TABLE gamelife.glorder_item
     FOREIGN KEY (order_id) REFERENCES gamelife.glorder (id),
     FOREIGN KEY (product_seller_id) REFERENCES gamelife.glproduct_seller (id)
 );
+
+CREATE OR REPLACE FUNCTION gamelife.count_games()
+    RETURNS INT
+AS '
+    BEGIN
+        RETURN (SELECT COUNT(id) FROM gamelife.glgame);
+    END;
+' LANGUAGE PLPGSQL;

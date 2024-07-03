@@ -55,4 +55,6 @@ public interface IGameService {
      * Method to delete a game by its unique identifier.
      */
     public void deleteGameById(UUID pGameId);
+
+    int getTotalGames();
 }
