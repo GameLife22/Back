@@ -17,6 +17,7 @@
 		<java.version>21</java.version>
 		<sonar.organization>gamelife22</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.java.binaries>target/classes</sonar.java.binaries>
 	</properties>
 
 	<dependencies>
@@ -147,6 +148,10 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

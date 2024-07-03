@@ -10,16 +10,20 @@ jobs:
   Analysis:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+        run: mvn verify sonar:sonar
         env:
+          GITHUB_TOKEN: ${{ secrets._GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
         with:
-          #context: /home/runner/work/Back/Back/gamelife
+          context: /home/runner/work/Back/Back/gamelife
           args:
             -Dsonar.projectKey=GameLife22_Back
             -Dsonar.organization=gamelife22
-            -Dsonar.sources=src/main/java
             #-Dsonar.sources=src
             #-Dsonar.tests= # optional. For more info about Code Coverage, please refer to https://docs.sonarcloud.io/enriching/test-coverage/overview/
             #-Dsonar.verbose= # optional, default is false
