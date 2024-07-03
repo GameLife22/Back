@@ -15,7 +15,7 @@ jobs:
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
-        run: mvn verify sonar:sonar
+
         env:
           GITHUB_TOKEN: ${{ secrets._GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
@@ -24,8 +24,8 @@ jobs:
           args:
             -Dsonar.projectKey=GameLife22_Back
             -Dsonar.organization=gamelife22
-            #-Dsonar.sources=src
-            #-Dsonar.tests= # optional. For more info about Code Coverage, please refer to https://docs.sonarcloud.io/enriching/test-coverage/overview/
+            -Dsonar.java.binaries=target/classes
+            #-Dsonar.tests=src/test/java
             #-Dsonar.verbose= # optional, default is false
           projectBaseDir: .
 
