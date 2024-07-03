@@ -117,4 +117,10 @@ public class GameService implements IGameService {
 
         this.gameRepository.deleteById(pGameId);
     }
+
+    @Override
+    public int getTotalGames() {
+        LOGGER.info("toto");
+        return this.gameRepository.getTotalGames();
+    }
 }
