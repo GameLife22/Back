@@ -102,10 +102,10 @@ public class UserService {
         return repository.findByResetPasswordToken(token);
     }
 
-    public void modifierMotDePasse(UserEntity user, ResetPasswordRequest dto) {
+    public void modifierMotDePasse(UserEntity user, String pwd) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        LOGGER.info("MDP : {}",dto.getPassword());
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        LOGGER.info("MDP : {}", pwd);
+        String encodedPassword = passwordEncoder.encode(pwd);
         LOGGER.info("MDP Encoded : {}",encodedPassword);
         user.setPassword(encodedPassword);
         user.setResetPasswordToken(null);
