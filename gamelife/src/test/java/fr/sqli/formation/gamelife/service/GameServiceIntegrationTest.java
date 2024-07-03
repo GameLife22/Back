@@ -30,7 +30,7 @@ class GameServiceIntegrationTest {
     private GameRequest gameRequest;
 
     @BeforeEach
-    public void setUp() {;
+    public void setUp() {
         this.gameRequest = new GameRequest();
         this.gameRequest.setName("name");
         this.gameRequest.setDescription("description");
