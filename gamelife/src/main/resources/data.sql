@@ -1,2 +1,5 @@
 INSERT INTO gamelife.gluser (id, last_name, first_name, password, email, street_number, street, city, zip_code, role, siren_number, account_status, reset_password_token)
 VALUES ('ede28d8b-9170-4e8e-83b3-3c2c16c39ae8', 'admin', 'admin', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'admin@gamelife.fr', 2, 'rue de capucine', 'paris', 75000, 'ROLE_ADMIN', null, true, null);
+
+INSERT INTO gamelife.gluser (id, last_name, first_name, password, email, street_number, street, city, zip_code, role, siren_number, account_status, reset_password_token)
+VALUES ('7f3fe07c-47a6-41e8-9cf9-882ac5b7dfc5', 'AMETJAR', 'Yassine', '$2a$12$CPjNhkXJGvh05Q2RxbatceYvVem4LVBuKfm6vgh7KVHPxp0ZvXuCi', 'yassineametjar@gmail.com', 2, 'rue de capucine', 'paris', 75000, 'ROLE_REVENDEUR', 123456789, true, null);
