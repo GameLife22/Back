@@ -12,7 +12,7 @@ public class ResetPasswordRequest {
     }
 
     public String getPassword() {
-        return pwd;
+        return this.pwd;
     }
 
     public void setPassword(String pwd) {
