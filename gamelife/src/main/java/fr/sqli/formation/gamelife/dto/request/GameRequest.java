@@ -18,7 +18,7 @@ public class GameRequest {
 
         UUID id;
 
-        @Size(max = 50, message = "Name must not exceed 50 characters")
+        @Size(max = 100, message = "Name must not exceed 100 characters")
         @NotBlank(message = "Name is required")
         String name;
 

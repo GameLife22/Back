@@ -1,114 +1,101 @@
 package fr.sqli.formation.gamelife.exception;
 
 import fr.sqli.formation.gamelife.dto.response.ExceptionResponse;
-import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-
 @ControllerAdvice
 public class HandlerControllerException {
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(HandlerControllerException.class);
 
-    /**
-     * Gère les exceptions de type MethodArgumentNotValidException.
-     *
-     * @param pException L'exception de type MethodArgumentNotValidException à gérer.
-     * @return Une ResponseEntity contenant une map d'erreurs avec le nom du champ et le message d'erreur correspondant, ainsi que le code de statut HTTP BAD_REQUEST.
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> gererExceptionValidationArgumentsRequete(MethodArgumentNotValidException pException) {
-        var erreurs = new HashMap<String, String>();
-        pException.getBindingResult().getAllErrors()
-                .forEach(erreur -> {
-                    var nomChamp = ((FieldError) erreur).getField();
-                    var messageErreur = erreur.getDefaultMessage();
-                    erreurs.put(nomChamp, messageErreur);
-                    LOGGER.error("Erreur de validation du champ: {}, message: {}", nomChamp, messageErreur);
-                });
-        return new ResponseEntity<>(erreurs, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> exceptionHandler(Exception pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
+    }
+
+    @ExceptionHandler(ParameterException.class)
+    public ResponseEntity<ExceptionResponse> exceptionHandler(ParameterException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
     }
 
     @ExceptionHandler(ExistingUserException.class)
-    public ResponseEntity<ExistingUserException> exceptionHandler(ExistingUserException ex){
-        LOGGER.info("EXCEPTION HANDLER : UTILISATEUR EXISTANT EXCEPTION {}", ex.getMessage());
-        ResponseEntity<ExistingUserException> resu = new ResponseEntity<ExistingUserException>(ex, HttpStatus.BAD_REQUEST);
-        return resu;
+    public ResponseEntity<ExceptionResponse> exceptionHandler(ExistingUserException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
     }
+
     @ExceptionHandler(NonExistentUserException.class)
-    public ResponseEntity<NonExistentUserException> exceptionHandler(NonExistentUserException ex){
-        LOGGER.info("EXCEPTION HANDLER : UTILISATEUR NON EXISTANT EXCEPTION {}", ex.getMessage());
-        ResponseEntity<NonExistentUserException> resu = new ResponseEntity<NonExistentUserException>(ex, HttpStatus.NOT_FOUND);
-        return resu;
+    public ResponseEntity<ExceptionResponse> exceptionHandler(NonExistentUserException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(pException.getMessage()));
     }
+
     @ExceptionHandler(DisableAccountException.class)
-    public ResponseEntity<DisableAccountException> exceptionHandler(DisableAccountException ex){
-        LOGGER.info("EXCEPTION HANDLER : COMPTE DESACTIVE EXCEPTION {}", ex.getMessage());
-        ResponseEntity<DisableAccountException> resu = new ResponseEntity<DisableAccountException>(ex, HttpStatus.FORBIDDEN);
-        return resu;
+    public ResponseEntity<ExceptionResponse> exceptionHandler(DisableAccountException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(pException.getMessage()));
     }
+
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<AccessDeniedException> exceptionHandler(AccessDeniedException ex){
-        LOGGER.info("EXCEPTION HANDLER : ACCESS DENIED EXCEPTION", ex);
-        ResponseEntity<AccessDeniedException> resu = new ResponseEntity<AccessDeniedException>(ex, HttpStatus.UNAUTHORIZED);
-        return resu;
+    public ResponseEntity<ExceptionResponse> exceptionHandler(AccessDeniedException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(pException.getMessage()));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<BadCredentialsException> exceptionHandler(BadCredentialsException ex){
-        LOGGER.info("EXCEPTION HANDLER : BAD CREDENTIALS EXCEPTION", ex);
-        ResponseEntity<BadCredentialsException> resu = new ResponseEntity<BadCredentialsException>(ex, HttpStatus.BAD_REQUEST);
-        return resu;
+    public ResponseEntity<ExceptionResponse> exceptionHandler(BadCredentialsException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
     }
+
     @ExceptionHandler(OldPasswordException.class)
-    public ResponseEntity<OldPasswordException> exceptionHandler(OldPasswordException ex){
-        LOGGER.info("EXCEPTION HANDLER : OLD PASSWORD EXCEPTION", ex);
-        ResponseEntity<OldPasswordException> resu = new ResponseEntity<OldPasswordException>(ex, HttpStatus.BAD_REQUEST);
-        return resu;
-    }
-    @ExceptionHandler(ClientAbortException.class)
-    public void handleLockException(ClientAbortException exception, HttpServletRequest request) {
-        final String message = "ClientAbortException generated by request {} {} from remote address {} with X-FORWARDED-FOR {}";
-        final String headerXFF = request.getHeader("X-FORWARDED-FOR");
-        LOGGER.warn(message, request.getMethod(), request.getRequestURL(), request.getRemoteAddr(), headerXFF);
-    }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Exception> exceptionHandler(Exception ex){
-        LOGGER.info("EXCEPTION HANDLER : OTHER EXCEPTION", ex);
-        ResponseEntity<Exception> resu = new ResponseEntity<Exception>(ex, HttpStatus.BAD_REQUEST);
-        return resu;
+    public ResponseEntity<ExceptionResponse> exceptionHandler(OldPasswordException pException){
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
     }
 
     @ExceptionHandler(ItemOrderNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleItemCommandeNotFoundException(ItemOrderNotFoundException ex) {
-        LOGGER.info("ItemCommandeNotFoundException: {}", ex.getMessage());
-        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ExceptionResponse> exceptionHandler(ItemOrderNotFoundException pException) {
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(pException.getMessage()));
     }
 
     @ExceptionHandler(OrderNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleCommandeNotFoundException(OrderNotFoundException ex) {
-        LOGGER.info("CommandeNotFoundException: {}", ex.getMessage());
-        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ExceptionResponse> exceptionHandler(OrderNotFoundException pException) {
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(pException.getMessage()));
     }
 
     @ExceptionHandler(SellerGameException.class)
-    public ResponseEntity<String> handleProduitException(SellerGameException ex) {
-        LOGGER.info("Produit introuvable: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ExceptionResponse> exceptionHandler(SellerGameException pException) {
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(pException.getMessage()));
     }
+
     @ExceptionHandler(InvalidStatusOrderException.class)
-    public ResponseEntity<ExceptionResponse> handleEtatCommandeInvalideException(InvalidStatusOrderException ex) {
-        LOGGER.info("EtatCommandeInvalideException: {}", ex.getMessage());
-        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ExceptionResponse> exceptionHandler(InvalidStatusOrderException pException) {
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
+    }
+
+    @ExceptionHandler(GameNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> exceptionHandler(GameNotFoundException pException) {
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(pException.getMessage()));
+    }
+
+    @ExceptionHandler(GameExistsException.class)
+    public ResponseEntity<ExceptionResponse> exceptionHandler(GameExistsException pException) {
+        LOGGER.error("Exception Handler", pException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(pException.getMessage()));
     }
 }
