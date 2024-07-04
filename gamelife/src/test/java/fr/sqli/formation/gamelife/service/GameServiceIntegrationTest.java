@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.TestContainerConfiguration;
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
 import fr.sqli.formation.gamelife.enumeration.Genre;
@@ -9,31 +10,19 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.*;
 
-@Disabled("to fix")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(TestContainerConfiguration.class)
+@SpringBootTest
 @Transactional
 @Rollback
 @ActiveProfiles("test")
 class GameServiceIntegrationTest {
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.1");
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
 
     @Autowired
     private GameService gameService;
@@ -41,7 +30,7 @@ class GameServiceIntegrationTest {
     private GameRequest gameRequest;
 
     @BeforeEach
-    public void setUp() {;
+    public void setUp() {
         this.gameRequest = new GameRequest();
         this.gameRequest.setName("name");
         this.gameRequest.setDescription("description");

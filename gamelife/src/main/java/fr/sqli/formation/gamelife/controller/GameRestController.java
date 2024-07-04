@@ -181,4 +181,17 @@ public class GameRestController {
         Platform[] platforms = Platform.values();
         return ResponseEntity.ok(platforms);
     }
+
+    /**
+     * Retrieves the total number of games.
+     *
+     * @return ResponseEntity<Integer> The HTTP response entity containing the total number of games
+     */
+    @GetMapping("/games/total-games")
+    public ResponseEntity<Integer> getTotalGames() {
+        LOGGER.info("Retrieving total number of games");
+        int totalGames = this.service.getTotalGames();
+        LOGGER.info("Total number of games retrieved: {}", totalGames);
+        return ResponseEntity.ok(totalGames);
+    }
 }
