@@ -1,10 +1,10 @@
 version: "3.8"
-
+# add gitignore .env + prod github
 services:
   database:
     container_name: database
     image: postgres:16.1
-    restart: always
+    restart: no
     environment:
       - "POSTGRES_USER=admingamelife"
       - "POSTGRES_PASSWORD=postgresqlAdmin17"
@@ -22,7 +22,7 @@ services:
       - "SPRING_DATASOURCE_USERNAME=admingamelife"
       - "SPRING_DATASOURCE_PASSWORD=postgresqlAdmin17"
       - "SPRING_PROFILES_ACTIVE=dev"
-    restart: always
+    restart: no
     ports:
       - 8080:8080
     volumes:
@@ -32,7 +32,7 @@ services:
 
   front:
     build: ../../Front/gamelife
-    restart: always
+    restart: no
     ports:
       - 4200:80
     depends_on:

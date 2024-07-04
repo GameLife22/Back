@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.entity;
 
+import com.google.gson.annotations.Expose;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
 import jakarta.persistence.*;
@@ -24,26 +25,31 @@ public class GameEntity {
     private UUID id;
 
     @Column(name = "name", nullable = false)
+    @Expose
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
+    @Expose
     private String description;
 
     @ElementCollection(targetClass = Genre.class)
     @JoinTable(name = "glgenre", joinColumns = @JoinColumn(name = "game_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "genre")
+    @Expose
     private Set<Genre> genres;
 
     @ElementCollection(targetClass = Platform.class)
     @JoinTable(name = "glplatform", joinColumns = @JoinColumn(name = "game_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "platform")
+    @Expose
     private Set<Platform> platforms;
 
     @ElementCollection
     @CollectionTable(name = "glimage", joinColumns = @JoinColumn(name = "game_id"))
     @Column(name = "image_url")
+    @Expose
     private List<String> images = new ArrayList<>();
 
     public UUID getId() {

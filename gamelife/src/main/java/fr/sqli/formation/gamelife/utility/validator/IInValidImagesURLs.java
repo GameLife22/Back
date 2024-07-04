@@ -1,6 +1,5 @@
-package fr.sqli.formation.gamelife.utility.constraint;
+package fr.sqli.formation.gamelife.utility.validator;
 
-import fr.sqli.formation.gamelife.utility.validator.ImagesURLsValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -14,7 +13,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ImagesURLsValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IInValidImagesURLsConstraint {
+public @interface IInValidImagesURLs {
 
     /**
      * Specifies the default message for the constraint, which is "Images must be valid URLs".

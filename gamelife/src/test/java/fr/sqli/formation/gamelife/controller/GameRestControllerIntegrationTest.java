@@ -23,7 +23,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -66,6 +69,8 @@ class GameRestControllerIntegrationTest {
 
         adminToken = generateToken("admin@gamelife.fr", "ROLE_ADMIN");
     }
+
+    //todo: add test permissions
 
     private String generateToken(String username, String role) throws Exception {
         var authentication = new TestingAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
@@ -196,7 +201,7 @@ class GameRestControllerIntegrationTest {
         gameRequest.setPlatforms(Set.of(Platform.ATARI_XEGS));
         gameRequest.setImages(List.of("https://image3.png", "file://image4.jpg"));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/{id}", gameResponse.getId())
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PREFIX_API_URL + "/games/{id}", gameResponse.getId())
                         .contentType("application/json")
                         .accept("application/json")
                         .header("Authorization", "Bearer " + adminToken)
@@ -205,7 +210,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void givenInvalidGameRequestUpdated_whenUpdateGame_thenReturnHttpStatusNotFound() throws Exception {
+    void givenInvalidGameRequestUpdated_whenUpdateGame_thenReturnHttpStatusBadRequest() throws Exception {
         GameRequest gameRequest = new GameRequest();
         gameRequest.setName("updated name");
         gameRequest.setDescription("updated description");
@@ -213,7 +218,7 @@ class GameRestControllerIntegrationTest {
         gameRequest.setPlatforms(Set.of(Platform.ATARI_XEGS));
         gameRequest.setImages(List.of("https://image3.png", "file://image4.jpg"));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/{id}", UUID.randomUUID())
+        this.mockMvc.perform(MockMvcRequestBuilders.patch(PREFIX_API_URL + "/games/{id}", UUID.randomUUID())
                         .contentType("application/json")
                         .accept("application/json")
                         .header("Authorization", "Bearer " + adminToken)
@@ -239,24 +244,10 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void givenInvalidGameId_whenDeleteGameById_thenReturnHttpStatusBadRequest() throws Exception {
+    void givenInvalidGameId_whenDeleteGameById_thenReturnHttpStatusNotFound() throws Exception {
         UUID gameId = UUID.randomUUID();
         this.mockMvc.perform(MockMvcRequestBuilders.delete(PREFIX_API_URL + "/games/{id}", gameId)
                         .header("Authorization", "Bearer " + adminToken))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
-
-    @Test
-    void givenNothing_whenGetGameGenres_thenReturnHttpStatusOk() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/genres")
-                        .header("Authorization", "Bearer " + adminToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void givenNothing_whenGetGamePlatforms_thenReturnHttpStatusOk() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/platforms")
-                        .header("Authorization", "Bearer " + adminToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

@@ -35,6 +35,18 @@ class GameRequestUnitTest {
         Assertions.assertTrue(constraintViolations.isEmpty());
     }
 
+    @ParameterizedTest
+    @MethodSource("provideFieldAndNullValue")
+    void givenNullFieldsGameRequest_whenValidate_thenReturnConstraintViolation(String pFieldName, Object pInvalidValue) {
+        validateInvalidField(pFieldName, pInvalidValue);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideFieldAndInvalidValue")
+    void givenInvalidFieldsGameRequest_whenValidate_thenReturnConstraintViolation(String pFieldName, List<Object> pInvalidValues) {
+        pInvalidValues.forEach(invalidValue -> validateInvalidField(pFieldName, invalidValue));
+    }
+
     private static Stream<Arguments> provideFieldAndNullValue() {
         return Stream.of(
                 Arguments.of("name", null),
@@ -58,18 +70,6 @@ class GameRequestUnitTest {
                                 List.of("https://" + RandomStringUtils.randomAlphabetic(2084) + ".jpg")
                         ))
         );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideFieldAndNullValue")
-    void givenNullFieldsGameRequest_whenValidate_thenReturnConstraintViolation(String pFieldName, Object pInvalidValue) {
-        validateInvalidField(pFieldName, pInvalidValue);
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideFieldAndInvalidValue")
-    void givenInvalidFieldsGameRequest_whenValidate_thenReturnConstraintViolation(String pFieldName, List<Object> pInvalidValues) {
-        pInvalidValues.forEach(invalidValue -> validateInvalidField(pFieldName, invalidValue));
     }
 
     private void validateInvalidField(String pFieldName, Object pInvalidValue) {

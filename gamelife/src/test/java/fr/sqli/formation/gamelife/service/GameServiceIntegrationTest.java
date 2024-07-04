@@ -1,39 +1,34 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.TestContainerConfiguration;
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
-import jakarta.persistence.EntityNotFoundException;
+import fr.sqli.formation.gamelife.exception.GameExistsException;
+import fr.sqli.formation.gamelife.exception.GameNotFoundException;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Disabled("to fix")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(TestContainerConfiguration.class)
+@SpringBootTest
 @Transactional
 @Rollback
 @ActiveProfiles("test")
 class GameServiceIntegrationTest {
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.1");
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
 
     @Autowired
     private GameService gameService;
@@ -41,7 +36,7 @@ class GameServiceIntegrationTest {
     private GameRequest gameRequest;
 
     @BeforeEach
-    public void setUp() {;
+    public void setUp() {
         this.gameRequest = new GameRequest();
         this.gameRequest.setName("name");
         this.gameRequest.setDescription("description");
@@ -51,7 +46,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenGameRequest_whenCreateGame_thenReturnGameResponse() {
+    void givenGameRequest_whenCreateGame_thenReturnGameResponse() throws GameExistsException {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         Assertions.assertNotNull(createdGameResponse);
@@ -64,7 +59,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenGameRequest_whenFindByNameContainingIgnoreCase_thenReturnGamesResponses() {
+    void givenGameRequest_whenFindByNameContainingIgnoreCase_thenReturnGamesResponses() throws GameExistsException, GameNotFoundException {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         List<GameResponse> gameResponse = this.gameService.findByNameContainingIgnoreCase("nam");
@@ -75,7 +70,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenGameId_whenGetGameById_thenReturnGameResponse() {
+    void givenGameId_whenGetGameById_thenReturnGameResponse() throws GameNotFoundException, GameExistsException {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         GameResponse gameResponse = this.gameService.getGameById(createdGameResponse.getId());
@@ -91,7 +86,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenPageAndSizeOfGame_whenGetGamesByPage_thenReturnPageWithGames() {
+    void givenPageAndSizeOfGame_whenGetGamesByPage_thenReturnPageWithGames() throws GameExistsException {
         int page = 0;
         int size = 5;
         this.gameService.createGame(this.gameRequest);
@@ -103,7 +98,7 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenExistingGameRequest_whenUpdateGame_thenReturnUpdatedGameResponse() {
+    void givenExistingGameRequest_whenUpdateGame_thenReturnUpdatedGameResponse() throws GameExistsException, GameNotFoundException {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         GameRequest gameRequest2 = new GameRequest();
@@ -126,12 +121,12 @@ class GameServiceIntegrationTest {
     }
 
     @Test
-    void givenGameId_whenDeleteGameById_thenReturnNothing() {
+    void givenGameId_whenDeleteGameById_thenReturnNothing() throws GameNotFoundException, GameExistsException {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         this.gameService.deleteGameById(createdGameResponse.getId());
 
         Assertions.assertNotNull(createdGameResponse);
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gameService.getGameById(createdGameResponse.getId()));
+        Assertions.assertThrows(GameNotFoundException.class, () -> this.gameService.getGameById(createdGameResponse.getId()));
     }
 }

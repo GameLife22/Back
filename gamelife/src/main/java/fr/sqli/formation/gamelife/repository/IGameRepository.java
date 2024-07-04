@@ -2,6 +2,7 @@ package fr.sqli.formation.gamelife.repository;
 
 import fr.sqli.formation.gamelife.entity.GameEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,4 +36,12 @@ public interface IGameRepository extends JpaRepository<GameEntity, UUID> {
      * Deletes all entities with the specified IDs.
      */
     void deleteAllByIdIn(List<UUID> pGamesIds);
+
+    /**
+     * Retrieves the total number of games available in the database.
+     *
+     * @return the total number of games
+     */
+    @Query(value = "SELECT gamelife.count_games()", nativeQuery = true)
+    int getTotalGames();
 }
