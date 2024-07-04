@@ -3,7 +3,7 @@ package fr.sqli.formation.gamelife.dto.request;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
 
-import fr.sqli.formation.gamelife.utility.constraint.IInValidImagesURLsConstraint;
+import fr.sqli.formation.gamelife.utility.validator.IInValidImagesURLs;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class GameRequest {
 
         UUID id;
 
-        @Size(max = 50, message = "Name must not exceed 50 characters")
+        @Size(max = 100, message = "Name must not exceed 100 characters")
         @NotBlank(message = "Name is required")
         String name;
 
@@ -32,7 +32,7 @@ public class GameRequest {
         @NotEmpty(message = "Platforms must not be empty")
         Set<Platform> platforms;
 
-        @IInValidImagesURLsConstraint
+        @IInValidImagesURLs
         List<String> images;
 
         public UUID getId() {

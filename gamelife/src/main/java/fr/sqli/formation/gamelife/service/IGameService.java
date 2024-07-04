@@ -2,6 +2,8 @@ package fr.sqli.formation.gamelife.service;
 
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
+import fr.sqli.formation.gamelife.exception.GameExistsException;
+import fr.sqli.formation.gamelife.exception.GameNotFoundException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -20,13 +22,13 @@ public interface IGameService {
      * @param pGameName the name of the game to search for
      * @return a list of GameResponse objects that match the provided game name
      */
-    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName);
+    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName) throws GameNotFoundException;
 
     /**
      * Represents a service class for retrieving game information.
      * Includes methods to get a specific game by its ID and to retrieve a paginated list of games.
      */
-    public GameResponse getGameById(UUID pGameId);
+    public GameResponse getGameById(UUID pGameId) throws GameNotFoundException;
 
     /**
      * Retrieves a page of GameResponse objects representing games based on the provided page number and total number of pages.
@@ -40,7 +42,7 @@ public interface IGameService {
     /**
      * Defines the service methods for creating and updating a game.
      */
-    public GameResponse createGame(GameRequest pGameRequest);
+    public GameResponse createGame(GameRequest pGameRequest) throws GameExistsException;
 
     /**
      * Updates a game with the provided game ID and game request data.
@@ -49,10 +51,10 @@ public interface IGameService {
      * @param pGameRequest the request object containing the updated game information
      * @return the updated GameResponse object
      */
-    public GameResponse updateGame(UUID pGameId, GameRequest pGameRequest);
+    public GameResponse updateGame(UUID pGameId, GameRequest pGameRequest) throws GameNotFoundException;
 
     /**
      * Method to delete a game by its unique identifier.
      */
-    public void deleteGameById(UUID pGameId);
+    public void deleteGameById(UUID pGameId) throws GameNotFoundException;
 }

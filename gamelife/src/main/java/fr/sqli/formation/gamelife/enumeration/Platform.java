@@ -1,6 +1,7 @@
 package fr.sqli.formation.gamelife.enumeration;
 
 import com.fasterxml.jackson.annotation.*;
+import fr.sqli.formation.gamelife.exception.ParameterException;
 
 /**
  * Enum representing different gaming platforms with their names.
@@ -71,12 +72,12 @@ public enum Platform {
     }
 
     @JsonCreator
-    public static Platform findPlatformByName(String pName) {
+    public static Platform findPlatformByName(String pName) throws ParameterException {
         for (Platform platform : Platform.values()) {
             if (platform.getName().equalsIgnoreCase(pName)) {
                 return platform;
             }
         }
-        throw new IllegalArgumentException("Invalid Platform: " + pName);
+        throw new ParameterException("Invalid Platform: " + pName);
     }
 }

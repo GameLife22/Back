@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.utility.validator;
 
-import fr.sqli.formation.gamelife.utility.constraint.IInValidImagesURLsConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -11,7 +10,7 @@ import java.util.regex.Pattern;
  * This code snippet represents a part of a Java annotation interface definition.
  * It includes the declaration of the 'payload' method that returns an array of classes extending Payload.
  */
-public class ImagesURLsValidator implements ConstraintValidator<IInValidImagesURLsConstraint, List<String>> {
+public class ImagesURLsValidator implements ConstraintValidator<IInValidImagesURLs, List<String>> {
 
     private static final Pattern URL_PATTERN = Pattern.compile(
             "^(https|file)://" + // Scheme (https or file)
@@ -24,10 +23,20 @@ public class ImagesURLsValidator implements ConstraintValidator<IInValidImagesUR
             Pattern.CASE_INSENSITIVE
     );
 
+    /*
+    Attention ! la taille maximum d'url dépend du navigateur:
+    Microsoft Internet Explorer: 2,083 characters
+    Microsoft Edge: 2,083 characters
+    Google Chrome: 32,779 characters
+    Mozilla Firefox: more than 64,000 characters
+    Apple Safari: more than 64,000 characters
+    Google Android: 8,192 characters
+    */
+
     private static final int MAX_URL_LENGTH = 2083;
 
     @Override
-    public void initialize(IInValidImagesURLsConstraint constraintAnnotation) {
+    public void initialize(IInValidImagesURLs constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Collection;
 
-//todo: add service annotation
 public class UserSecurityService implements UserDetails {
 
     private final UserEntity user;

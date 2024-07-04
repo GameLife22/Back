@@ -13,9 +13,6 @@ public interface ISellerConverter {
         produitEntity.setId(pProduitReponse.getId());
         produitEntity.setName(pProduitReponse.getName());
         produitEntity.setDescription(pProduitReponse.getDescription());
-        produitEntity.setGenres(pProduitReponse.getGenres());
-        produitEntity.setPlatforms(pProduitReponse.getPlatforms());
-        produitEntity.setImages(pProduitReponse.getImages());
         return produitEntity;
     }
 
