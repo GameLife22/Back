@@ -1,5 +1,5 @@
 version: "3.8"
-# add gitignore .env + prod github
+
 services:
   database:
     container_name: database
