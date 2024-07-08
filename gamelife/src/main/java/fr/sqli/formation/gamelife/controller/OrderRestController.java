@@ -1,17 +1,12 @@
 package fr.sqli.formation.gamelife.controller;
 
 import fr.sqli.formation.gamelife.dto.request.OrderRequest;
+import fr.sqli.formation.gamelife.exception.*;
 import fr.sqli.formation.gamelife.utility.converter.IOrderConverter;
 import fr.sqli.formation.gamelife.dto.request.ItemOrderRequest;
 import fr.sqli.formation.gamelife.dto.response.OrderResponse;
 import fr.sqli.formation.gamelife.dto.response.ExceptionResponse;
 import fr.sqli.formation.gamelife.dto.response.ItemOrderResponse;
-import fr.sqli.formation.gamelife.exception.InvalidStatusOrderException;
-import fr.sqli.formation.gamelife.exception.ParameterException;
-import fr.sqli.formation.gamelife.exception.SellerGameException;
-import fr.sqli.formation.gamelife.exception.NonExistentUserException;
-import fr.sqli.formation.gamelife.exception.ItemOrderNotFoundException;
-import fr.sqli.formation.gamelife.exception.OrderNotFoundException;
 import fr.sqli.formation.gamelife.repository.IOrderRepository;
 import fr.sqli.formation.gamelife.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;

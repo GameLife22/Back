@@ -21,7 +21,7 @@ CREATE TABLE gamelife.gluser
     street_number         INT                  NOT NULL,
     street                VARCHAR(255)         NOT NULL,
     city                  VARCHAR(80)          NOT NULL,
-    zip_code           INT                  NOT NULL,
+    zip_code              INT                  NOT NULL,
     role                  VARCHAR(50)          NOT NULL,
     siren_number          CHAR(9) NULL DEFAULT NULL UNIQUE,
     account_status        BOOLEAN DEFAULT TRUE NOT NULL,
@@ -44,8 +44,8 @@ CREATE TABLE gamelife.glorder
 CREATE TABLE gamelife.glgame
 (
     id            UUID   PRIMARY KEY,
-    name          VARCHAR(50) NOT NULL,
-    description   TEXT         NOT NULL
+    name          VARCHAR(100)  NOT NULL,
+    description   TEXT          NOT NULL
 );
 
 CREATE TABLE gamelife.glgenre (

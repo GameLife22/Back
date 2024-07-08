@@ -1,5 +1,6 @@
 package fr.sqli.formation.gamelife.service;
 
+import fr.sqli.formation.gamelife.exception.*;
 import fr.sqli.formation.gamelife.utility.converter.IItemOrderConverter;
 import fr.sqli.formation.gamelife.dto.request.OrderRequest;
 import fr.sqli.formation.gamelife.utility.converter.IOrderConverter;
@@ -8,12 +9,6 @@ import fr.sqli.formation.gamelife.dto.response.OrderResponse;
 import fr.sqli.formation.gamelife.dto.response.ItemOrderResponse;
 import fr.sqli.formation.gamelife.entity.*;
 import fr.sqli.formation.gamelife.enumeration.OrderStatus;
-import fr.sqli.formation.gamelife.exception.InvalidStatusOrderException;
-import fr.sqli.formation.gamelife.exception.ParameterException;
-import fr.sqli.formation.gamelife.exception.SellerGameException;
-import fr.sqli.formation.gamelife.exception.NonExistentUserException;
-import fr.sqli.formation.gamelife.exception.ItemOrderNotFoundException;
-import fr.sqli.formation.gamelife.exception.OrderNotFoundException;
 import fr.sqli.formation.gamelife.repository.*;
 import fr.sqli.formation.gamelife.utility.validator.FieldValidator;
 import fr.sqli.formation.gamelife.utility.validator.OrderValidator;
@@ -172,7 +167,7 @@ public class OrderService implements IOrderService {
     // Ajouter un article dans une commande
     @Override
     public ItemOrderResponse modifierQuantite(UUID id, ItemOrderRequest itemCommandeDto)
-            throws OrderNotFoundException, ItemOrderNotFoundException, ParameterException, IllegalAccessException {
+            throws OrderNotFoundException, ItemOrderNotFoundException, ParameterException {
         // Vérifier l'existence de la commande avec l'ID spécifié
         OrderEntity orderEntity = iOrderRepository.findByIdWithItemCommandes(id)
                 .orElseThrow(() -> new OrderNotFoundException("La commande avec l'ID " + id + " n'a pas été trouvée."));

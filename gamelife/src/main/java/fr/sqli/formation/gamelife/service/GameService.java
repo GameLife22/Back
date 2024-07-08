@@ -1,10 +1,12 @@
 package fr.sqli.formation.gamelife.service;
 
-import fr.sqli.formation.gamelife.utility.converter.IGameConverter;
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
-import fr.sqli.formation.gamelife.repository.IGameRepository;
 import fr.sqli.formation.gamelife.entity.GameEntity;
+import fr.sqli.formation.gamelife.exception.GameExistsException;
+import fr.sqli.formation.gamelife.exception.GameNotFoundException;
+import fr.sqli.formation.gamelife.repository.IGameRepository;
+import fr.sqli.formation.gamelife.utility.converter.IGameConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
-
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service class that implements the IGameService interface.
@@ -24,7 +26,11 @@ import java.util.*;
  */
 @Service
 public class GameService implements IGameService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
+
+    private static final int TOTAL_GAMES = 100;
+
     private final IGameRepository gameRepository;
 
     @Autowired
@@ -33,24 +39,27 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName) {
+    @Transactional(readOnly = true)
+    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName) throws GameNotFoundException {
         LOGGER.info("Searching for game by name containing (case-insensitive): {}", pGameName);
         List<GameEntity> gamesEntities = this.gameRepository.findByNameContainingIgnoreCase(pGameName);
 
-        if(gamesEntities.isEmpty())
-            throw new EntityNotFoundException("No games found with the name: " + pGameName);
+        if (gamesEntities.isEmpty())
+            throw new GameNotFoundException("No games found with the name: " + pGameName);
 
         return IGameConverter.convertGamesEntitiesToGamesResponse(gamesEntities);
     }
 
     @Override
-    public GameResponse getGameById(UUID pGameId) {
+    @Transactional(readOnly = true)
+    public GameResponse getGameById(UUID pGameId) throws GameNotFoundException {
         LOGGER.info("Getting game by ID: {}", pGameId);
         return IGameConverter.convertGameEntityToGameResponse(this.gameRepository.findById(pGameId)
-                .orElseThrow(() -> new EntityNotFoundException("Game not found for ID: " + pGameId)));
+                .orElseThrow(() -> new GameNotFoundException("Game not found for ID: " + pGameId)));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<GameResponse> getGamesByPage(int pPage, int pTotalPages) {
         LOGGER.info("Getting games for page: {} with total pages: {}", pPage, pTotalPages);
         Pageable pageable = PageRequest.of(pPage, pTotalPages);
@@ -58,14 +67,16 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public GameResponse createGame(GameRequest pGameRequest) {
+    @Transactional(rollbackFor = Exception.class)
+    public GameResponse createGame(GameRequest pGameRequest) throws GameExistsException {
         LOGGER.info("Creating a new game with name: {}", pGameRequest.getName());
 
         Optional<GameEntity> optionalGameEntity = this.gameRepository.findByName(pGameRequest.getName());
-        optionalGameEntity.ifPresent(entite -> {
+
+        if (optionalGameEntity.isPresent()) {
             LOGGER.error("Game with name {} already exists", pGameRequest.getName());
-            throw new EntityExistsException("Game with name already exists");
-        });
+            throw new GameExistsException("Game with name already exists");
+        }
 
         GameEntity gameEntity = IGameConverter.convertGameRequestToGameEntity(pGameRequest);
         GameEntity savedGameEntity = this.gameRepository.save(gameEntity);
@@ -75,9 +86,30 @@ public class GameService implements IGameService {
     }
 
     /**
+     * Method to create games from the API Rawg.
+     */
+    public void createGamesFromApiRawg() throws GameExistsException {
+        for (int gameId = 1; gameId <= TOTAL_GAMES; gameId++) {
+            LOGGER.info("Processing game with ID: {}", gameId);
+
+            GameRequest gameRequest = IGameConverter.convertGameDetailsFromApiRawg(gameId).block();
+            List<String> imageRequest = IGameConverter.convertImagesFromApiRawg(gameId).block();
+
+            if (gameRequest == null || imageRequest == null) {
+                continue;
+            }
+
+            gameRequest.setImages(imageRequest);
+            this.createGame(gameRequest);
+
+            LOGGER.info("Game with ID {} processed successfully", gameId);
+        }
+    }
+
+    /**
      * Updates the fields of an existing GameEntity object with the values from a GameRequest object.
      *
-     * @param pGameRequest The GameRequest object containing the new values for the fields.
+     * @param pGameRequest       The GameRequest object containing the new values for the fields.
      * @param existingGameEntity The existing GameEntity object to be updated.
      * @return The updated GameEntity object with fields modified based on the GameRequest object.
      */
@@ -93,13 +125,14 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public GameResponse updateGame(UUID pGameId, GameRequest pGameRequest) {
+    @Transactional(rollbackFor = Exception.class)
+    public GameResponse updateGame(UUID pGameId, GameRequest pGameRequest) throws GameNotFoundException {
         LOGGER.info("Updating game with ID: {}", pGameRequest.getId());
 
         Optional<GameEntity> existingOptionalGameEntity = this.gameRepository.findById(pGameId);
 
         if (existingOptionalGameEntity.isEmpty())
-            throw new EntityNotFoundException("Game with ID " + pGameId + " not found");
+            throw new GameNotFoundException("Game not found for ID: " + pGameId);
 
         GameEntity gameEntity = updateGameEntityFromRequest(pGameRequest, existingOptionalGameEntity.get());
 
@@ -110,10 +143,11 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public void deleteGameById(UUID pGameId) {
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteGameById(UUID pGameId) throws GameNotFoundException {
         LOGGER.info("Deleting game with ID: {}", pGameId);
         this.gameRepository.findById(pGameId)
-                .orElseThrow(() -> new EntityNotFoundException("Game not found for ID: " + pGameId));
+                .orElseThrow(() -> new GameNotFoundException("Game not found for ID: " + pGameId));
 
         this.gameRepository.deleteById(pGameId);
     }
