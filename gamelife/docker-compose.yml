@@ -1,16 +1,16 @@
-version: "3.8"
+version: '3.8'
 
 services:
   database:
     container_name: database
     image: postgres:16.1
-    restart: no
+    restart: "no"
     environment:
-      - "POSTGRES_USER=admingamelife"
-      - "POSTGRES_PASSWORD=postgresqlAdmin17"
-      - "POSTGRES_DB=gamelife"
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5432:5432"
+      - "${DB_LOCAL_PORT}:${DB_DOCKER_PORT}"
 
   back:
     depends_on:
@@ -22,9 +22,9 @@ services:
       - "SPRING_DATASOURCE_USERNAME=admingamelife"
       - "SPRING_DATASOURCE_PASSWORD=postgresqlAdmin17"
       - "SPRING_PROFILES_ACTIVE=dev"
-    restart: no
+    restart: "no"
     ports:
-      - 8080:8080
+      - "8080:8080"
     volumes:
       - ../.m2:/root/.m2
     stdin_open: true
@@ -32,8 +32,8 @@ services:
 
   front:
     build: ../../Front/gamelife
-    restart: no
+    restart: "no"
     ports:
-      - 4200:80
+      - "4200:80"
     depends_on:
       - back

@@ -6,6 +6,7 @@ import fr.sqli.formation.gamelife.dto.response.GameResponse;
 import fr.sqli.formation.gamelife.entity.GameEntity;
 import fr.sqli.formation.gamelife.enumeration.Genre;
 import fr.sqli.formation.gamelife.enumeration.Platform;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,8 +30,6 @@ import java.util.*;
 public interface IGameConverter {
 
     static final Logger LOGGER = LoggerFactory.getLogger(IGameConverter.class);
-
-    static final String RAWG_API_KEY = "fc6fc9da02854e66b8d2d0115d28c680";
 
     static final String URL_RAWG = "https://api.rawg.io/api/games/";
     /**
@@ -105,7 +104,9 @@ public interface IGameConverter {
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
 
-        String url = URL_RAWG + pGameId + "?key=" + RAWG_API_KEY;
+        Dotenv dotenv = Dotenv.load();
+
+        String url = URL_RAWG + pGameId + "?key=" + dotenv.get("RAWG_API_KEY");
 
         WebClient client = WebClient.builder()
                 .baseUrl(URL_RAWG)
@@ -164,7 +165,9 @@ public interface IGameConverter {
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
 
-        String url = URL_RAWG + pGameId + "/screenshots?key=" + RAWG_API_KEY;
+        Dotenv dotenv = Dotenv.load();
+
+        String url = URL_RAWG + pGameId + "/screenshots?key=" + dotenv.get("RAWG_API_KEY");
 
         WebClient client = WebClient.builder()
                 .baseUrl(URL_RAWG)
