@@ -38,7 +38,7 @@ class GameServiceIntegrationTest {
     @BeforeEach
     public void setUp() {
         this.gameRequest = new GameRequest();
-        this.gameRequest.setName("name");
+        this.gameRequest.setTitle("name");
         this.gameRequest.setDescription("description");
         this.gameRequest.setGenres(new HashSet<>(Set.of(Genre.ARCADE)));
         this.gameRequest.setPlatforms(new HashSet<>(Set.of(Platform.XBOX)));
@@ -51,7 +51,7 @@ class GameServiceIntegrationTest {
 
         Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(createdGameResponse.getId());
-        Assertions.assertEquals(this.gameRequest.getName(), createdGameResponse.getName());
+        Assertions.assertEquals(this.gameRequest.getTitle(), createdGameResponse.getTitle());
         Assertions.assertEquals(this.gameRequest.getDescription(), createdGameResponse.getDescription());
         Assertions.assertEquals(this.gameRequest.getGenres(), createdGameResponse.getGenres());
         Assertions.assertEquals(this.gameRequest.getPlatforms(), createdGameResponse.getPlatforms());
@@ -62,7 +62,7 @@ class GameServiceIntegrationTest {
     void givenGameRequest_whenFindByNameContainingIgnoreCase_thenReturnGamesResponses() throws GameExistsException, GameNotFoundException {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
-        List<GameResponse> gameResponse = this.gameService.findByNameContainingIgnoreCase("nam");
+        List<GameResponse> gameResponse = this.gameService.findByTitleContainingIgnoreCase("nam");
 
         Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(gameResponse);
@@ -78,7 +78,7 @@ class GameServiceIntegrationTest {
         Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(gameResponse);
         Assertions.assertEquals(createdGameResponse.getId(), gameResponse.getId());
-        Assertions.assertEquals(gameRequest.getName(), gameResponse.getName());
+        Assertions.assertEquals(gameRequest.getTitle(), gameResponse.getTitle());
         Assertions.assertEquals(gameRequest.getDescription(), gameResponse.getDescription());
         Assertions.assertEquals(gameRequest.getGenres(), gameResponse.getGenres());
         Assertions.assertEquals(gameRequest.getPlatforms(), gameResponse.getPlatforms());
@@ -102,7 +102,7 @@ class GameServiceIntegrationTest {
         GameResponse createdGameResponse = this.gameService.createGame(this.gameRequest);
 
         GameRequest gameRequest2 = new GameRequest();
-        gameRequest2.setName("updated name");
+        gameRequest2.setTitle("updated name");
         gameRequest2.setDescription("updated description");
         gameRequest2.setGenres(new HashSet<>(Set.of(Genre.BOARD_GAMES)));
         gameRequest2.setPlatforms((new HashSet<>(Set.of(Platform.GAME_BOY))));
@@ -113,7 +113,7 @@ class GameServiceIntegrationTest {
         Assertions.assertNotNull(createdGameResponse);
         Assertions.assertNotNull(updatedGameResponse);
         Assertions.assertEquals(createdGameResponse.getId(), updatedGameResponse.getId());
-        Assertions.assertNotEquals(createdGameResponse.getName(), updatedGameResponse.getName());
+        Assertions.assertNotEquals(createdGameResponse.getTitle(), updatedGameResponse.getTitle());
         Assertions.assertNotEquals(createdGameResponse.getDescription(), updatedGameResponse.getDescription());
         Assertions.assertNotEquals(createdGameResponse.getGenres(), updatedGameResponse.getGenres());
         Assertions.assertNotEquals(createdGameResponse.getPlatforms(), updatedGameResponse.getPlatforms());

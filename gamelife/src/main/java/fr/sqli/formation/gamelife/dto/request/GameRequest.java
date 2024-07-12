@@ -20,8 +20,8 @@ public class GameRequest {
         UUID id;
 
         @Size(max = 100, message = "Name must not exceed 100 characters")
-        @NotBlank(message = "Name is required")
-        String name;
+        @NotBlank(message = "Title is required")
+        String title;
 
         @Size(max = 5000, message = "Description must not exceed 5000 characters")
         @NotBlank(message = "Description is required")
@@ -44,12 +44,12 @@ public class GameRequest {
                 id = pId;
         }
 
-        public String getName() {
-                return name;
+        public String getTitle() {
+                return title;
         }
 
-        public void setName(String pName) {
-                name = pName;
+        public void setTitle(String pTitle) {
+                title = pTitle;
         }
 
         public String getDescription() {
@@ -88,7 +88,7 @@ public class GameRequest {
         public String toString() {
                 final StringBuffer sb = new StringBuffer("GameRequest{");
                 sb.append("id=").append(id);
-                sb.append(", name='").append(name).append('\'');
+                sb.append(", title='").append(title).append('\'');
                 sb.append(", description='").append(description).append('\'');
                 sb.append(", genres=").append(genres);
                 sb.append(", platforms=").append(platforms);

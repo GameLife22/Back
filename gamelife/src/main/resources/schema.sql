@@ -44,7 +44,7 @@ CREATE TABLE gamelife.glorder
 CREATE TABLE gamelife.glgame
 (
     id            UUID   PRIMARY KEY,
-    name          VARCHAR(100)  NOT NULL,
+    title         VARCHAR(100)  NOT NULL,
     description   TEXT          NOT NULL
 );
 

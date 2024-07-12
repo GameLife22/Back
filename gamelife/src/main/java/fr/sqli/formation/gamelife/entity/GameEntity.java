@@ -24,9 +24,9 @@ public class GameEntity {
     @Column(name = "id", unique = true, nullable = false)
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "title", nullable = false)
     @Expose
-    private String name;
+    private String title;
 
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     @Expose
@@ -60,12 +60,12 @@ public class GameEntity {
         id = pId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String pName) {
-        name = pName;
+    public void setTitle(String pTitle) {
+        title = pTitle;
     }
 
     public String getDescription() {
@@ -104,7 +104,7 @@ public class GameEntity {
     public String toString() {
         final StringBuffer sb = new StringBuffer("GameEntity{");
         sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        sb.append(", title='").append(title).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", genres=").append(genres);
         sb.append(", platforms=").append(platforms);

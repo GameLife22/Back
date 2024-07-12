@@ -19,10 +19,10 @@ public interface IGameService {
     /**
      * Retrieves a list of GameResponse objects that contain the provided game name (case-insensitive).
      *
-     * @param pGameName the name of the game to search for
+     * @param pGameTitle the name of the game to search for
      * @return a list of GameResponse objects that match the provided game name
      */
-    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName) throws GameNotFoundException;
+    public List<GameResponse> findByTitleContainingIgnoreCase(String pGameTitle) throws GameNotFoundException;
 
     /**
      * Represents a service class for retrieving game information.

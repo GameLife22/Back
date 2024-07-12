@@ -11,7 +11,7 @@ public interface ISellerConverter {
     public static GameEntity entityFromDtoOut(GameResponse pProduitReponse) {
         var produitEntity = new GameEntity();
         produitEntity.setId(pProduitReponse.getId());
-        produitEntity.setName(pProduitReponse.getName());
+        produitEntity.setTitle(pProduitReponse.getTitle());
         produitEntity.setDescription(pProduitReponse.getDescription());
         return produitEntity;
     }

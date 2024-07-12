@@ -85,7 +85,7 @@ class GameRequestUnitTest {
     private GameRequest getValidGameRequest() {
         GameRequest gameRequest = new GameRequest();
         gameRequest.setId(UUID.randomUUID()); // uuid or null
-        gameRequest.setName("validName");
+        gameRequest.setTitle("validName");
         gameRequest.setDescription("validDescription");
         gameRequest.setGenres(Set.of(Genre.ARCADE, Genre.ADVENTURE));
         gameRequest.setPlatforms(Set.of(Platform.PC, Platform.PLAYSTATION));
@@ -97,7 +97,7 @@ class GameRequestUnitTest {
         GameRequest gameRequest = new GameRequest();
         switch (pFieldName) {
             case "name":
-                gameRequest.setName((String) pInvalidValue);
+                gameRequest.setTitle((String) pInvalidValue);
                 break;
             case "description":
                 gameRequest.setDescription((String) pInvalidValue);

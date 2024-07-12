@@ -37,7 +37,7 @@ class IGameRepositoryIntegrationTest {
     void setUp() {
         this.gameEntity = new GameEntity();
         this.gameEntity.setId(null);
-        this.gameEntity.setName("name");
+        this.gameEntity.setTitle("name");
         this.gameEntity.setDescription("description");
         this.gameEntity.setGenres(Set.of(Genre.ARCADE, Genre.ADVENTURE));
         this.gameEntity.setPlatforms(Set.of(Platform.PC, Platform.PLAYSTATION));
@@ -51,7 +51,7 @@ class IGameRepositoryIntegrationTest {
         Assertions.assertNotNull(this.gameEntity);
         Assertions.assertNotNull(gameEntitySaved);
         Assertions.assertEquals(this.gameEntity.getId(), gameEntitySaved.getId());
-        Assertions.assertEquals(this.gameEntity.getName(), gameEntitySaved.getName());
+        Assertions.assertEquals(this.gameEntity.getTitle(), gameEntitySaved.getTitle());
         Assertions.assertEquals(this.gameEntity.getDescription(), gameEntitySaved.getDescription());
         Assertions.assertEquals(this.gameEntity.getGenres(), gameEntitySaved.getGenres());
         Assertions.assertEquals(this.gameEntity.getPlatforms(), gameEntitySaved.getPlatforms());
@@ -67,7 +67,7 @@ class IGameRepositoryIntegrationTest {
         Assertions.assertTrue(optionalGameEntity.isPresent());
         Assertions.assertNotNull(optionalGameEntity.get().getId());
         Assertions.assertEquals(gameEntitySaved.getId(), optionalGameEntity.get().getId());
-        Assertions.assertEquals(gameEntitySaved.getName(), optionalGameEntity.get().getName());
+        Assertions.assertEquals(gameEntitySaved.getTitle(), optionalGameEntity.get().getTitle());
         Assertions.assertEquals(gameEntitySaved.getDescription(), optionalGameEntity.get().getDescription());
         Assertions.assertEquals(gameEntitySaved.getGenres(), optionalGameEntity.get().getGenres());
         Assertions.assertEquals(gameEntitySaved.getPlatforms(), optionalGameEntity.get().getPlatforms());
@@ -77,13 +77,13 @@ class IGameRepositoryIntegrationTest {
     @Test
     void givenGameName_whenFindByName_thenReturnExistingOptionalGameEntity() {
         GameEntity gameEntitySaved = this.iGameRepository.save(gameEntity);
-        Optional<GameEntity> optionalGameEntity = this.iGameRepository.findByName(gameEntitySaved.getName());
+        Optional<GameEntity> optionalGameEntity = this.iGameRepository.findByTitle(gameEntitySaved.getTitle());
 
         Assertions.assertNotNull(optionalGameEntity);
         Assertions.assertTrue(optionalGameEntity.isPresent());
         Assertions.assertNotNull(optionalGameEntity.get().getId());
         Assertions.assertEquals(gameEntitySaved.getId(), optionalGameEntity.get().getId());
-        Assertions.assertEquals(gameEntitySaved.getName(), optionalGameEntity.get().getName());
+        Assertions.assertEquals(gameEntitySaved.getTitle(), optionalGameEntity.get().getTitle());
         Assertions.assertEquals(gameEntitySaved.getDescription(), optionalGameEntity.get().getDescription());
         Assertions.assertEquals(gameEntitySaved.getGenres(), optionalGameEntity.get().getGenres());
         Assertions.assertEquals(gameEntitySaved.getPlatforms(), optionalGameEntity.get().getPlatforms());
@@ -106,7 +106,7 @@ class IGameRepositoryIntegrationTest {
 
         GameEntity gameEntityUpdated = new GameEntity();
         gameEntityUpdated.setId(gameEntitySaved.getId());
-        gameEntityUpdated.setName("updated name");
+        gameEntityUpdated.setTitle("updated name");
         gameEntityUpdated.setDescription("updated description");
         gameEntityUpdated.setGenres(Set.of(Genre.BOARD_GAMES, Genre.INDIE));
         gameEntityUpdated.setPlatforms(Set.of(Platform.GAME_BOY, Platform.XBOX));
@@ -116,7 +116,7 @@ class IGameRepositoryIntegrationTest {
         Assertions.assertNotNull(gameEntitySaved);
         Assertions.assertNotNull(gameEntityUpdated);
         Assertions.assertEquals(gameEntitySaved.getId(), gameEntityUpdated.getId());
-        Assertions.assertNotEquals(gameEntitySaved.getName(), gameEntityUpdated.getName());
+        Assertions.assertNotEquals(gameEntitySaved.getTitle(), gameEntityUpdated.getTitle());
         Assertions.assertNotEquals(gameEntitySaved.getDescription(), gameEntityUpdated.getDescription());
         Assertions.assertNotEquals(gameEntitySaved.getGenres(), gameEntityUpdated.getGenres());
         Assertions.assertNotEquals(gameEntitySaved.getPlatforms(), gameEntityUpdated.getPlatforms());
@@ -138,7 +138,7 @@ class IGameRepositoryIntegrationTest {
         GameEntity gameEntitySaved1 = this.iGameRepository.save(this.gameEntity);
 
         GameEntity gameEntitySaved2 = new GameEntity();
-        gameEntitySaved2.setName("name 2");
+        gameEntitySaved2.setTitle("name 2");
         gameEntitySaved2.setDescription("description 2");
         gameEntitySaved2.setGenres(Set.of(Genre.CARD, Genre.CASUAL));
         gameEntitySaved2.setPlatforms(Set.of(Platform.NES, Platform.SEGA_32X));

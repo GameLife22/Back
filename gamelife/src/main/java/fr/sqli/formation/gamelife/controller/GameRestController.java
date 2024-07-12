@@ -51,17 +51,17 @@ public class GameRestController {
     }
 
     /**
-     * Retrieves a list of GameResponse objects that contain the provided game name (case-insensitive).
+     * Retrieves a list of GameResponse objects that contain the provided game title (case-insensitive).
      *
-     * @param pGameName the name of the game to search for
-     * @return a ResponseEntity containing a list of GameResponse objects that match the provided game name
-     * @throws GameNotFoundException if no games are found with the provided name
+     * @param pGameTitle the title of the game to search for
+     * @return a ResponseEntity containing a list of GameResponse objects that match the provided game title
+     * @throws GameNotFoundException if no games are found with the provided title
      */
     @GetMapping("/games/search")
-    public ResponseEntity<List<GameResponse>> findByNameContainingIgnoreCase(@RequestParam("name") String pGameName) throws GameNotFoundException {
-        LOGGER.info("Fetching game by name: {}", pGameName);
-        List<GameResponse> gamesResponses = this.service.findByNameContainingIgnoreCase(pGameName);
-        LOGGER.info("Game(s) retrieved successfully by name: {}", pGameName);
+    public ResponseEntity<List<GameResponse>> findByTitleContainingIgnoreCase(@RequestParam("title") String pGameTitle) throws GameNotFoundException {
+        LOGGER.info("Fetching game by title: {}", pGameTitle);
+        List<GameResponse> gamesResponses = this.service.findByTitleContainingIgnoreCase(pGameTitle);
+        LOGGER.info("Game(s) retrieved successfully by title: {}", pGameTitle);
         return ResponseEntity.ok(gamesResponses);
     }
 

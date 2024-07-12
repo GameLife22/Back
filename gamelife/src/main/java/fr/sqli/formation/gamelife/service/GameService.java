@@ -40,12 +40,12 @@ public class GameService implements IGameService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameResponse> findByNameContainingIgnoreCase(String pGameName) throws GameNotFoundException {
-        LOGGER.info("Searching for game by name containing (case-insensitive): {}", pGameName);
-        List<GameEntity> gamesEntities = this.gameRepository.findByNameContainingIgnoreCase(pGameName);
+    public List<GameResponse> findByTitleContainingIgnoreCase(String pGameTitle) throws GameNotFoundException {
+        LOGGER.info("Searching for game by name containing (case-insensitive): {}", pGameTitle);
+        List<GameEntity> gamesEntities = this.gameRepository.findByTitleContainingIgnoreCase(pGameTitle);
 
         if (gamesEntities.isEmpty())
-            throw new GameNotFoundException("No games found with the name: " + pGameName);
+            throw new GameNotFoundException("No games found with the name: " + pGameTitle);
 
         return IGameConverter.convertGamesEntitiesToGamesResponse(gamesEntities);
     }
@@ -69,12 +69,12 @@ public class GameService implements IGameService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public GameResponse createGame(GameRequest pGameRequest) throws GameExistsException {
-        LOGGER.info("Creating a new game with name: {}", pGameRequest.getName());
+        LOGGER.info("Creating a new game with name: {}", pGameRequest.getTitle());
 
-        Optional<GameEntity> optionalGameEntity = this.gameRepository.findByName(pGameRequest.getName());
+        Optional<GameEntity> optionalGameEntity = this.gameRepository.findByTitle(pGameRequest.getTitle());
 
         if (optionalGameEntity.isPresent()) {
-            LOGGER.error("Game with name {} already exists", pGameRequest.getName());
+            LOGGER.error("Game with name {} already exists", pGameRequest.getTitle());
             throw new GameExistsException("Game with name already exists");
         }
 
@@ -93,11 +93,14 @@ public class GameService implements IGameService {
             LOGGER.info("Processing game with ID: {}", gameId);
 
             GameRequest gameRequest = IGameConverter.convertGameDetailsFromApiRawg(gameId).block();
+
+            if (gameRequest == null)
+                continue;
+
             List<String> imageRequest = IGameConverter.convertImagesFromApiRawg(gameId).block();
 
-            if (gameRequest == null || imageRequest == null) {
+            if (imageRequest == null)
                 continue;
-            }
 
             gameRequest.setImages(imageRequest);
             this.createGame(gameRequest);
@@ -115,7 +118,7 @@ public class GameService implements IGameService {
      */
     private static GameEntity updateGameEntityFromRequest(GameRequest pGameRequest, GameEntity existingGameEntity) {
         LOGGER.info("Updating game entity from request: {}", pGameRequest.getId());
-        existingGameEntity.setName(pGameRequest.getName());
+        existingGameEntity.setTitle(pGameRequest.getTitle());
         existingGameEntity.setDescription(pGameRequest.getDescription());
         existingGameEntity.setGenres(pGameRequest.getGenres());
         existingGameEntity.setPlatforms(pGameRequest.getPlatforms());

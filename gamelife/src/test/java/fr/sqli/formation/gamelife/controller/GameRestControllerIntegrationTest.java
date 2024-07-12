@@ -61,7 +61,7 @@ class GameRestControllerIntegrationTest {
     @BeforeEach
     public void setUp() throws Exception {;
         this.gameRequest = new GameRequest();
-        this.gameRequest.setName("name");
+        this.gameRequest.setTitle("title");
         this.gameRequest.setDescription("description");
         this.gameRequest.setGenres(Set.of(Genre.ARCADE, Genre.ADVENTURE));
         this.gameRequest.setPlatforms(Set.of(Platform.PC, Platform.PLAYSTATION));
@@ -86,7 +86,7 @@ class GameRestControllerIntegrationTest {
                         .content(this.objectMapper.writeValueAsString(this.gameRequest)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value(gameRequest.getName()))
+                .andExpect(jsonPath("$.title").value(gameRequest.getTitle()))
                 .andExpect(jsonPath("$.description").value(gameRequest.getDescription()))
                 .andExpect(jsonPath("$.genres").isArray())
                 .andExpect(jsonPath("$.genres").value(hasItem(Genre.ARCADE.getName())))
@@ -97,7 +97,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void givenGameName_whenCreateGame_thenReturnHttpStatusBadRequest() throws Exception {
+    void givenGameRequestExisting_whenCreateGame_thenReturnHttpStatusBadRequest() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + adminToken)
@@ -138,7 +138,7 @@ class GameRestControllerIntegrationTest {
     }
 
     @Test
-    void givenGameName_whenfindByNameContainingIgnoreCase_thenReturnHttpStatusOk() throws Exception {
+    void givenGameTitle_whenfindByTitleContainingIgnoreCase_thenReturnHttpStatusOk() throws Exception {
         var result = this.mockMvc.perform(MockMvcRequestBuilders.post(PREFIX_API_URL + "/games")
                         .contentType("application/json")
                         .header("Authorization", "Bearer " + adminToken)
@@ -149,16 +149,16 @@ class GameRestControllerIntegrationTest {
         String json = result.getResponse().getContentAsString();
         GameResponse gameResponse = this.objectMapper.readValue(json, GameResponse.class);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/search?name={name}", gameResponse.getName())
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/search?title={title}", gameResponse.getTitle())
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void givenInvalidGameName_whenFindByNameContainingIgnoreCase_thenReturnHttpStatusNotFound() throws Exception {
-        String gameName = RandomStringUtils.randomAlphabetic(4); // warning: max = 50
+    void givenInvalidGameTitle_whenFindByTitleContainingIgnoreCase_thenReturnHttpStatusNotFound() throws Exception {
+        String gameTitle = RandomStringUtils.randomAlphabetic(4); // warning: max = 50
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/search?name={name}", gameName)
+        this.mockMvc.perform(MockMvcRequestBuilders.get(PREFIX_API_URL + "/games/search?title={title}", gameTitle)
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
@@ -195,7 +195,7 @@ class GameRestControllerIntegrationTest {
         GameResponse gameResponse = this.objectMapper.readValue(jsonResponse, GameResponse.class);
 
         GameRequest gameRequest = new GameRequest();
-        gameRequest.setName("updated name");
+        gameRequest.setTitle("updated title");
         gameRequest.setDescription("updated description");
         gameRequest.setGenres(Set.of(Genre.PUZZLE));
         gameRequest.setPlatforms(Set.of(Platform.ATARI_XEGS));
@@ -212,7 +212,7 @@ class GameRestControllerIntegrationTest {
     @Test
     void givenInvalidGameRequestUpdated_whenUpdateGame_thenReturnHttpStatusBadRequest() throws Exception {
         GameRequest gameRequest = new GameRequest();
-        gameRequest.setName("updated name");
+        gameRequest.setTitle("updated title");
         gameRequest.setDescription("updated description");
         gameRequest.setGenres(Set.of(Genre.PUZZLE));
         gameRequest.setPlatforms(Set.of(Platform.ATARI_XEGS));

@@ -30,7 +30,7 @@ public interface IGameConverter {
 
     static final Logger LOGGER = LoggerFactory.getLogger(IGameConverter.class);
 
-    static final String RAWG_API_KEY = "fc6fc9da02854e66b8d2d0115d28c680";
+    static final String RAWG_API_KEY = "6a0ca8ac12b9425997ae25f1acd9d7bc";
 
     static final String URL_RAWG = "https://api.rawg.io/api/games/";
     /**
@@ -42,7 +42,7 @@ public interface IGameConverter {
     public static GameEntity convertGameRequestToGameEntity(GameRequest pGameRequest) {
         GameEntity gameEntity = new GameEntity();
         gameEntity.setId(pGameRequest.getId());
-        gameEntity.setName(pGameRequest.getName());
+        gameEntity.setTitle(pGameRequest.getTitle());
         gameEntity.setDescription(pGameRequest.getDescription());
         gameEntity.setGenres(pGameRequest.getGenres());
         gameEntity.setPlatforms(pGameRequest.getPlatforms());
@@ -59,7 +59,7 @@ public interface IGameConverter {
     public static GameResponse convertGameEntityToGameResponse(GameEntity pGameEntity) {
         GameResponse gameResponse = new GameResponse();
         gameResponse.setId(pGameEntity.getId());
-        gameResponse.setName(pGameEntity.getName());
+        gameResponse.setTitle(pGameEntity.getTitle());
         gameResponse.setDescription(pGameEntity.getDescription());
         gameResponse.setGenres(pGameEntity.getGenres());
         gameResponse.setPlatforms(pGameEntity.getPlatforms());
@@ -222,8 +222,15 @@ public interface IGameConverter {
         LOGGER.debug("Converting JSON object to GameEntity");
 
         GameRequest gameRequest = new GameRequest();
-        gameRequest.setName(pJsonObject.get("name").getAsString());
+        gameRequest.setTitle(pJsonObject.get("name").getAsString());
+
+        if (gameRequest.getTitle().isEmpty())
+            return null;
+
         gameRequest.setDescription(pJsonObject.get("description").getAsString().replaceAll("<[^>]*>", ""));
+
+        if (gameRequest.getDescription().isEmpty())
+            return null;
 
         Set<Genre> genres = new HashSet<>();
         JsonArray genresArray = pJsonObject.getAsJsonArray("genres");
@@ -235,6 +242,10 @@ public interface IGameConverter {
                     .toUpperCase();
             genres.add(Genre.valueOf(genre));
         }
+
+        if (genres.isEmpty())
+            return null;
+
         gameRequest.setGenres(genres);
 
         Set<Platform> platforms = new HashSet<>();
@@ -251,6 +262,10 @@ public interface IGameConverter {
                     .toUpperCase();
             platforms.add(Platform.valueOf(platform));
         }
+
+        if (platforms.isEmpty())
+            return null;
+
         gameRequest.setPlatforms(platforms);
 
         LOGGER.debug("Conversion completed successfully");
@@ -274,6 +289,9 @@ public interface IGameConverter {
                     .getAsString();
             images.add(image);
         }
+
+        if (images.isEmpty())
+            return null;
 
         LOGGER.debug("Images conversion completed successfully");
         return images;

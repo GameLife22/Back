@@ -14,7 +14,7 @@ import java.util.UUID;
 public class GameResponse {
 
     UUID id;
-    String name;
+    String title;
     String description;
     Set<Genre> genres;
     Set<Platform> platforms;
@@ -28,12 +28,12 @@ public class GameResponse {
         id = pId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String pName) {
-        name = pName;
+    public void setTitle(String pTitle) {
+        title = pTitle;
     }
 
     public String getDescription() {
@@ -72,7 +72,7 @@ public class GameResponse {
     public String toString() {
         final StringBuffer sb = new StringBuffer("GameResponse{");
         sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        sb.append(", title='").append(title).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", genres=").append(genres);
         sb.append(", platforms=").append(platforms);
