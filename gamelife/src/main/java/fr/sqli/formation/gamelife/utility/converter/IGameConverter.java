@@ -41,7 +41,6 @@ public interface IGameConverter {
      */
     public static GameEntity convertGameRequestToGameEntity(GameRequest pGameRequest) {
         GameEntity gameEntity = new GameEntity();
-        gameEntity.setId(pGameRequest.getId());
         gameEntity.setTitle(pGameRequest.getTitle());
         gameEntity.setDescription(pGameRequest.getDescription());
         gameEntity.setGenres(pGameRequest.getGenres());
