@@ -40,6 +40,64 @@ jobs:
         run: |
           cd gamelife
           mvn clean verify sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+    
+  analyze_pr:
+    needs: ["code-analysis"]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install required Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests jq
+
+      - name: Analyser PR avec Claude AI
+        id: analyse_claude
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_BODY="${{ github.event.pull_request.body }}"
+
+          CLAUDE_PAYLOAD=$(cat <<EOF
+          {
+            "text": "Analyse cette PR:\nTitre: $PR_TITLE\nDescription: $PR_BODY"
+          }
+          EOF
+          )
+
+          response=$(curl -X POST https://api.claude.ai/analyze \
+                        -H "Authorization: Bearer $CLAUDE_API_KEY" \
+                        -H "Content-Type: application/json" \
+                        -d "$CLAUDE_PAYLOAD")
+
+          echo "Réponse de Claude AI: $response"
+
+          # Extraire les informations pour commenter
+          SUMMARY=$(echo $response | jq -r '.analysis.summary')
+          SUGGESTIONS=$(echo $response | jq -r '.analysis.suggestions[]')
+          APPROVAL=$(echo $response | jq -r '.analysis.approval')
+
+          echo "résumé=$SUMMARY" >> $GITHUB_ENV
+          echo "suggestions=$SUGGESTIONS" >> $GITHUB_ENV
+          echo "approbation=$APPROVAL" >> $GITHUB_ENV
+
+      - name: Commenter sur la PR avec l'Analyse de Claude AI
+        run: |
+          COMMENT_BODY="**Analyse par Claude AI**\n\n**Résumé:** ${{ env.résumé }}\n\n**Suggestions:**\n${{ env.suggestions }}\n\n**Recommandation:** ${{ env.approbation }}\n\n@${{ github.actor }}, veuillez examiner l'analyse et prendre les mesures appropriées."
+
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d "{\"body\":\"$COMMENT_BODY\"}" \
+          "${{ github.event.pull_request.comments_url }}"
 
   build-image:
     needs: ["backend-tests", "code-analysis"]
