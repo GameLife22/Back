@@ -10,9 +10,11 @@ import fr.sqli.formation.gamelife.utility.converter.IGameConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +64,7 @@ public class GameService implements IGameService {
     @Transactional(readOnly = true)
     public Page<GameResponse> getGamesByPage(int pPage, int pTotalPages) {
         LOGGER.info("Getting games for page: {} with total pages: {}", pPage, pTotalPages);
-        Pageable pageable = PageRequest.of(pPage, pTotalPages);
+        Pageable pageable = PageRequest.of(pPage, pTotalPages, Sort.by("title").ascending());
         return IGameConverter.convertGamesEntitiesToPageGamesResponses(this.gameRepository.findAll(pageable));
     }
 

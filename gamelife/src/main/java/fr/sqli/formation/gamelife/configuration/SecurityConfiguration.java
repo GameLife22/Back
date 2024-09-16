@@ -1,6 +1,5 @@
 package fr.sqli.formation.gamelife.configuration;
 
-
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -34,7 +33,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -49,7 +47,7 @@ public class SecurityConfiguration {
 
     private static final String ADMIN = "SCOPE_ROLE_ADMIN";
     private static final String SELLER = "SCOPE_ROLE_REVENDEUR";
-
+    private static final String BUYER = "SCOPE_ROLE_ACHETEUR";
 
     @Autowired
     public SecurityConfiguration(AuthenticationDetailsService pAuthenticationDetailsService) {
@@ -74,24 +72,26 @@ public class SecurityConfiguration {
                 .requestMatchers("/utilisateur/mdpoublie").permitAll()
                 .requestMatchers("/utilisateur/mdpreset").permitAll()
                 .requestMatchers("/utilisateur/getEmailByToken").permitAll()
-                .requestMatchers(HttpMethod.GET, "/games/search?title={title}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/games").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/v1/games/{id}").hasAnyAuthority(ADMIN, SELLER)
+                .requestMatchers(HttpMethod.GET, "/games/search?title={title}").hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/v1/games").hasAnyAuthority(SELLER, ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/v1/games/genres").hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/v1/games/platforms").hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.GET,"/api/v1/games/{id}").hasAnyAuthority(SELLER, ADMIN)
                 .requestMatchers(HttpMethod.POST, "/api/v1/games").hasAuthority(ADMIN)
-                .requestMatchers(HttpMethod.PATCH,"/api/v1/games").hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.PATCH,"/api/v1/games/{id}").hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/games/{id}").hasAuthority(ADMIN)
                 .requestMatchers("/inscription/inscription").permitAll()
                 .requestMatchers("/inscription/siret").permitAll()
                 .requestMatchers("/inscription/activer").permitAll()
                 .requestMatchers("/inscription/validation").permitAll()
-                .requestMatchers("/commande/all").permitAll()
-                .requestMatchers("/commande/creer").permitAll()
-                .requestMatchers("/commande/{idCommande}").permitAll()
-                .requestMatchers("/commande/{idCommande}/modif-quantite").permitAll()
-                .requestMatchers("/commande/{idCommande}/prix-total").permitAll()
-                .requestMatchers("/commande/{idCommande}/ajout-produit").permitAll()
-                .requestMatchers("/commande/{idCommande}/valider-commande").permitAll()
-                .requestMatchers("/commande/{idCommande}/supp-article/{idProduit}").permitAll()
+                .requestMatchers("/commande/all").hasAuthority(BUYER)
+                .requestMatchers("/commande/creer").hasAuthority(BUYER)
+                .requestMatchers("/commande/{idCommande}").hasAuthority(BUYER)
+                .requestMatchers("/commande/{idCommande}/modif-quantite").hasAuthority(BUYER)
+                .requestMatchers("/commande/{idCommande}/prix-total").hasAuthority(BUYER)
+                .requestMatchers("/commande/{idCommande}/ajout-produit").hasAuthority(BUYER)
+                .requestMatchers("/commande/{idCommande}/valider-commande").hasAuthority(BUYER)
+                .requestMatchers("/commande/{idCommande}/supp-article/{idProduit}").hasAuthority(BUYER)
                 .anyRequest().authenticated()
         )
         .oauth2ResourceServer((pOAuth2ResourceServerConfigurer) -> pOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
@@ -122,8 +122,8 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8100"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:4000", "http://localhost:8100"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Content-Type");

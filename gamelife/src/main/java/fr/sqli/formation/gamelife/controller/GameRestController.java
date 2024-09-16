@@ -2,6 +2,8 @@ package fr.sqli.formation.gamelife.controller;
 
 import fr.sqli.formation.gamelife.dto.request.GameRequest;
 import fr.sqli.formation.gamelife.dto.response.GameResponse;
+import fr.sqli.formation.gamelife.enumeration.Genre;
+import fr.sqli.formation.gamelife.enumeration.Platform;
 import fr.sqli.formation.gamelife.exception.GameExistsException;
 import fr.sqli.formation.gamelife.exception.GameNotFoundException;
 import fr.sqli.formation.gamelife.service.IGameService;
@@ -129,5 +131,17 @@ public class GameRestController {
         this.service.deleteGameById(pGameId);
         LOGGER.info("Game deleted successfully with ID: {}", pGameId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/games/genres")
+    public ResponseEntity<Genre[]> getGenres() {
+        LOGGER.info("Retrieving all genres");
+        return ResponseEntity.ok(Genre.values());
+    }
+
+    @GetMapping("/games/platforms")
+    public ResponseEntity<Platform[]> getPlatforms() {
+        LOGGER.info("Retrieving all platforms");
+        return ResponseEntity.ok(Platform.values());
     }
 }

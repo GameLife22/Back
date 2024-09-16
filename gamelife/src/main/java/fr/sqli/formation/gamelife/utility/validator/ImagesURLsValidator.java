@@ -14,12 +14,12 @@ public class ImagesURLsValidator implements ConstraintValidator<IInValidImagesUR
 
     private static final Pattern URL_PATTERN = Pattern.compile(
             "^(https|file)://" + // Scheme (https or file)
-                    "([\\w.-]+)?" + // Host (e.g., domain or IP) - optional for file scheme
+                    "([\\w.-]+)" + // Host (e.g., domain or IP)
                     "(:\\d+)?" + // Port (optional)
-                    "(/[\\w/]*)?" + // Path (optional)
-                    "(\\?([\\w=&]+)(&[\\w=&]+)*)?" + // Query (optional)
+                    "(/[\\w%./-]*)?" + // Path (allows encoded characters like %2F, optional)
+                    "(\\?(.*))?" + // Query parameters (optional)
                     "(#\\w*)?" + // Fragment (optional)
-                    "(\\.(jpg|jpeg|png))$", // Image file extension (required)
+                    "(\\.(jpg|jpeg|png))?$", // Image file extension (optional)
             Pattern.CASE_INSENSITIVE
     );
 

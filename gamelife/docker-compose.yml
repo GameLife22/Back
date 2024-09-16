@@ -1,5 +1,4 @@
 version: "3.8"
-# add gitignore .env + prod github
 services:
   database:
     container_name: database
@@ -12,7 +11,8 @@ services:
     ports:
       - "5432:5432"
 
-  back:
+  api:
+    container_name: api
     depends_on:
       - database
     build:
@@ -30,10 +30,19 @@ services:
     stdin_open: true
     tty: true
 
-  front:
+  website:
+    container_name: website
     build: ../../Front/gamelife
     restart: no
     ports:
       - 4200:80
     depends_on:
-      - back
+      - api
+
+  back-office:
+    container_name: back-office
+    build: ../../back-office
+    restart: no
+    ports:
+      - 4000:4000
+

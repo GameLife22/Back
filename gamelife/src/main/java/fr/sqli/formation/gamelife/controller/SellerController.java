@@ -22,9 +22,6 @@ public class SellerController {
     @Autowired
     private  SellerService service;
 
-    
-    
-
     @GetMapping("/produits_revendeur/{id}")
     public ResponseEntity<List<GameEntity>> recupererProduitsRevendeur(@PathVariable("id") UUID id) {
         try {

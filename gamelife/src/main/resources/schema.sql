@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS gamelife.gluser CASCADE;
 DROP TABLE IF EXISTS gamelife.glorder CASCADE;
 DROP TABLE IF EXISTS gamelife.glgame CASCADE;
 DROP TABLE IF EXISTS gamelife.glgenre CASCADE;
-DROP TABLE IF EXISTS gamelife.glplatform;
+DROP TABLE IF EXISTS gamelife.glplatform CASCADE;
 DROP TABLE IF EXISTS gamelife.glimage CASCADE;
 DROP TABLE IF EXISTS gamelife.glorder_item CASCADE;
 DROP TABLE IF EXISTS gamelife.glproduct_seller CASCADE;
@@ -51,20 +51,20 @@ CREATE TABLE gamelife.glgame
 CREATE TABLE gamelife.glgenre (
     game_id UUID NOT NULL,
     genre VARCHAR(25) NOT NULL,
-    CONSTRAINT fk_glgenre_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_glgenre_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id)
 );
 
 CREATE TABLE gamelife.glplatform(
     game_id UUID NOT NULL,
-    platform VARCHAR(255) NOT NULL,
-    CONSTRAINT fk_glplatform_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
+    platform VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_glplatform_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id)
 );
 
 CREATE TABLE gamelife.glimage
 (
     image_url VARCHAR(2083) NOT NULL,
     game_id UUID NOT NULL,
-    CONSTRAINT fk_glimage_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_glimage_glgame FOREIGN KEY (game_id) REFERENCES gamelife.glgame (id)
 );
 
 CREATE TABLE gamelife.glproduct_seller
