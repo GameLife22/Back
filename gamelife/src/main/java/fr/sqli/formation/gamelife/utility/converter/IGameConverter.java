@@ -30,7 +30,7 @@ public interface IGameConverter {
 
     static final Logger LOGGER = LoggerFactory.getLogger(IGameConverter.class);
 
-    static final String RAWG_API_KEY = "29e9f5c3b72b44b3809613c3e39b1ea2";
+    static final String RAWG_API_KEY = "63f5ecc75d904500b7ea2f0f75eda9da";
 
     static final String URL_RAWG = "https://api.rawg.io/api/games/";
     /**
