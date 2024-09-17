@@ -49,6 +49,8 @@ public class SecurityConfiguration {
     private static final String SELLER = "SCOPE_ROLE_REVENDEUR";
     private static final String BUYER = "SCOPE_ROLE_ACHETEUR";
 
+    private static final String API_V1_GAMES_ID = "/api/v1/games{id}";
+
     @Autowired
     public SecurityConfiguration(AuthenticationDetailsService pAuthenticationDetailsService) {
         authenticationDetailsService = pAuthenticationDetailsService;
@@ -64,7 +66,8 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/utilisateur/auth").permitAll()
@@ -73,13 +76,13 @@ public class SecurityConfiguration {
                 .requestMatchers("/utilisateur/mdpreset").permitAll()
                 .requestMatchers("/utilisateur/getEmailByToken").permitAll()
                 .requestMatchers(HttpMethod.GET, "/games/search?title={title}").hasAuthority(ADMIN)
-                .requestMatchers(HttpMethod.GET, "/api/v1/games").hasAnyAuthority(SELLER, ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/v1/games").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/games/genres").hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.GET, "/api/v1/games/platforms").hasAuthority(ADMIN)
-                .requestMatchers(HttpMethod.GET,"/api/v1/games/{id}").hasAnyAuthority(SELLER, ADMIN)
+                .requestMatchers(HttpMethod.GET,API_V1_GAMES_ID).hasAnyAuthority(SELLER, ADMIN)
                 .requestMatchers(HttpMethod.POST, "/api/v1/games").hasAuthority(ADMIN)
-                .requestMatchers(HttpMethod.PATCH,"/api/v1/games/{id}").hasAuthority(ADMIN)
-                .requestMatchers(HttpMethod.DELETE,"/api/v1/games/{id}").hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.PATCH,API_V1_GAMES_ID).hasAuthority(ADMIN)
+                .requestMatchers(HttpMethod.DELETE,API_V1_GAMES_ID).hasAuthority(ADMIN)
                 .requestMatchers("/inscription/inscription").permitAll()
                 .requestMatchers("/inscription/siret").permitAll()
                 .requestMatchers("/inscription/activer").permitAll()
@@ -94,7 +97,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/commande/{idCommande}/supp-article/{idProduit}").hasAuthority(BUYER)
                 .anyRequest().authenticated()
         )
-        .oauth2ResourceServer((pOAuth2ResourceServerConfigurer) -> pOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
+        .oauth2ResourceServer(pOAuth2ResourceServerConfigurer -> pOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .userDetailsService(authenticationDetailsService);
         return http.build();
