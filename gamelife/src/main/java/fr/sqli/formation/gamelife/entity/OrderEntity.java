@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "glcommande", schema = "gamelife")
+@Table(name = "glorder", schema = "gamelife")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,33 +17,31 @@ public class OrderEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "utilisateur_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
     private List<ItemOrderEntity> itemsCommande;
 
-    @Column(name = "etat", nullable = false, length = 80)
+    @Column(name = "status", nullable = false, length = 80)
     @Enumerated(EnumType.STRING)
     private OrderStatus etat;
 
-    @Column(name = "num_rue_livraison", nullable = false)
+    @Column(name = "delivery_street_number", nullable = false)
     private Integer numRueLivraison;
 
-    @Column(name = "rue_livraison", nullable = false)
+    @Column(name = "delivery_street", nullable = false)
     private String rueLivraison;
 
-    @Column(name = "ville_livraison", nullable = false, length = 80)
+    @Column(name = "delivery_city", nullable = false, length = 80)
     private String villeLivraison;
 
-    @Column(name = "code_postal_livraison", nullable = false)
+    @Column(name = "delivery_postal_code", nullable = false)
     private Integer codePostalLivraison;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    public OrderEntity() {
-    }
 
     public UUID getId() {
         return id;
@@ -132,15 +130,13 @@ public class OrderEntity {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("CommandeEntity{");
-        sb.append("id=").append(id);
-        sb.append(", etat=").append(etat);
-        sb.append(", numRueLivraison=").append(numRueLivraison);
-        sb.append(", rueLivraison='").append(rueLivraison).append('\'');
-        sb.append(", villeLivraison='").append(villeLivraison).append('\'');
-        sb.append(", codePostalLivraison=").append(codePostalLivraison);
-        sb.append(", date=").append(date);
-        sb.append('}');
-        return sb.toString();
+        return "CommandeEntity{" + "id=" + id +
+                ", etat=" + etat +
+                ", numRueLivraison=" + numRueLivraison +
+                ", rueLivraison='" + rueLivraison + '\'' +
+                ", villeLivraison='" + villeLivraison + '\'' +
+                ", codePostalLivraison=" + codePostalLivraison +
+                ", date=" + date +
+                '}';
     }
 }
