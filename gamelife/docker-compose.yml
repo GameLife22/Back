@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  database:
+    container_name: database
+    image: postgres:16.1
+    restart: no
+    environment:
+      - "POSTGRES_USER=admingamelife"
+      - "POSTGRES_PASSWORD=postgresqlAdmin17"
+      - "POSTGRES_DB=gamelife"
+    ports:
+      - "5432:5432"
+
+  api:
+    container_name: api
+    depends_on:
+      - database
+    build:
+      context: ../gamelife
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/gamelife?ssl=false&sslmode=disable&TimeZone=Europe/Paris"
+      - "SPRING_DATASOURCE_USERNAME=admingamelife"
+      - "SPRING_DATASOURCE_PASSWORD=postgresqlAdmin17"
+      - "SPRING_PROFILES_ACTIVE=dev"
+    restart: no
+    ports:
+      - 8080:8080
+    volumes:
+      - ../.m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+  website:
+    container_name: website
+    build: ../../Front/gamelife
+    restart: no
+    ports:
+      - 4200:80
+    depends_on:
+      - api
+
+  back-office:
+    container_name: back-office
+    build: ../../back-office
+    restart: no
+    ports:
+      - 4000:4000
+    depends_on:
+      - api

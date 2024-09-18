@@ -1,0 +1,119 @@
+package fr.sqli.formation.gamelife.dto.response;
+
+public class LoginResponse {
+    private Integer id;
+    private String email;
+
+    private Boolean etat;
+
+    private String nom;
+
+    private int num_rue;
+
+    private String num_siren;
+
+    private String prenom;
+
+    private String rue;
+
+    private String ville;
+
+    private  int code_postal;
+
+    public LoginResponse() {
+    }
+
+    public LoginResponse(Integer id, String email, Boolean etat, String nom, int num_rue, String num_siren, String prenom, String rue, String ville, int code_postal) {
+        this.id = id;
+        this.email = email;
+        this.etat = etat;
+        this.nom = nom;
+        this.num_rue = num_rue;
+        this.num_siren = num_siren;
+        this.prenom = prenom;
+        this.rue = rue;
+        this.ville = ville;
+        this.code_postal = code_postal;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getEtat() {
+        return etat;
+    }
+
+    public void setEtat(Boolean etat) {
+        this.etat = etat;
+    }
+
+    public String getLastName() {
+        return nom;
+    }
+
+    public void setLastName(String nom) {
+        this.nom = nom;
+    }
+
+    public int getNum_rue() {
+        return num_rue;
+    }
+
+    public void setNum_rue(int num_rue) {
+        this.num_rue = num_rue;
+    }
+
+    public String getNum_siren() {
+        return num_siren;
+    }
+
+    public void setNum_siren(String num_siren) {
+        this.num_siren = num_siren;
+    }
+
+    public String getFirstName() {
+        return prenom;
+    }
+
+    public void setFirstName(String prenom) {
+        this.prenom = prenom;
+    }
+
+
+    public String getStreet() {
+        return rue;
+    }
+
+    public void setStreet(String rue) {
+        this.rue = rue;
+    }
+
+    public String getCity() {
+        return ville;
+    }
+
+    public void setCity(String ville) {
+        this.ville = ville;
+    }
+
+    public int getCode_postal() {
+        return code_postal;
+    }
+
+    public void setCode_postal(int code_postal) {
+        this.code_postal = code_postal;
+    }
+}
